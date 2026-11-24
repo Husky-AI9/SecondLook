@@ -9,6 +9,7 @@
 
 package expo.modules.secondlookai
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.google.firebase.Firebase
@@ -64,6 +65,20 @@ class SecondLookAIModule : Module() {
     return text?.takeIf { it.isNotBlank() }
   }
 
+  /**
+   * A build can carry a fixed App Check debug token (registered in the Firebase console), so
+   * every install passes App Check without anyone reading logcat. The debug provider keeps its
+   * secret in this store and only makes up a random one, printed to logcat, when it is empty.
+   */
+  private fun seedDebugToken(ctx: Context) {
+    val token = meta("secondlook.appcheck.debug_token")?.trim()?.takeIf { it.isNotEmpty() } ?: return
+    val app = FirebaseApp.getInstance()
+    ctx.getSharedPreferences("com.google.firebase.appcheck.debug.store.${app.persistenceKey}", Context.MODE_PRIVATE)
+      .edit()
+      .putString("com.google.firebase.appcheck.debug.DEBUG_SECRET", token)
+      .commit()
+  }
+
   /** Gemini Nano 4 is the PREVIEW category (needs the AICore developer preview). */
   private fun modelOption(): OnDeviceModelOption = when (meta("secondlook.ondevice.option")?.uppercase()) {
     "STABLE" -> OnDeviceModelOption.STABLE
@@ -82,8 +97,9 @@ class SecondLookAIModule : Module() {
         if (FirebaseApp.getApps(ctx).isEmpty()) FirebaseApp.initializeApp(ctx)
         if (FirebaseApp.getApps(ctx).isNotEmpty()) {
           // App Check: debug provider for development and the hackathon APK (the rules accept
-          // debug tokens; the token is printed to logcat on first run). Play Integrity otherwise.
+          // debug tokens). Play Integrity otherwise.
           val debug = meta("secondlook.appcheck.debug") != "false"
+          if (debug) seedDebugToken(ctx)
           Firebase.appCheck.installAppCheckProviderFactory(
             if (debug) DebugAppCheckProviderFactory.getInstance() else PlayIntegrityAppCheckProviderFactory.getInstance(),
           )
