@@ -1,0 +1,6 @@
+# Keep Unix line endings in the repository, so scripts and workflows run on GitHub's
+# Linux and macOS machines even when the code is committed from Windows.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.woff2 binary

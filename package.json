@@ -1,0 +1,50 @@
+{
+  "name": "secondlook",
+  "version": "1.0.0",
+  "description": "A loan-focused negotiator: check a lender's text on-device, reply inside limits only you know. Built with Firebase AI Logic hybrid inference.",
+  "license": "Apache-2.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "web": "expo start --web",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "export:web": "expo export -p web",
+    "deploy:web": "npm run export:web && firebase deploy --only hosting",
+    "test": "tsx --test src/engine/__tests__/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "preview:build": "bash tools/preview/build-all.sh",
+    "preview:test": "python3 tools/preview/tests/flows.py",
+    "setup:deps": "node scripts/setup-deps.mjs",
+    "doctor": "expo-doctor"
+  },
+  "dependencies": {
+    "@expo-google-fonts/dm-sans": "^0.4.2",
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "expo": "~58.0.0",
+    "expo-build-properties": "~58.0.0",
+    "expo-clipboard": "~58.0.0",
+    "expo-dev-client": "~58.0.0",
+    "expo-font": "~58.0.0",
+    "expo-secure-store": "~58.0.0",
+    "expo-splash-screen": "~58.0.0",
+    "expo-status-bar": "~58.0.0",
+    "firebase": "^12.5.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-native": "0.88.0",
+    "react-native-safe-area-context": "^5.6.0",
+    "react-native-svg": "^15.12.0",
+    "react-native-web": "^0.21.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.0",
+    "esbuild": "^0.27.0",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.0"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}

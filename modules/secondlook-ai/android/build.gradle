@@ -1,0 +1,32 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'expo.modules.secondlookai'
+version = '1.0.0'
+
+android {
+  namespace "expo.modules.secondlookai"
+  defaultConfig {
+    // firebase-ai-ondevice needs API 26. app.config.ts raises the app's minSdk to match.
+    minSdkVersion 26
+    versionCode 1
+    versionName "1.0.0"
+  }
+  lintOptions {
+    abortOnError false
+  }
+}
+
+dependencies {
+  // Versions from firebase.google.com/docs/ai-logic/hybrid/android/get-started (Nov 2026).
+  // The on-device SDK is not in the Firebase BoM yet, so these are pinned by hand.
+  implementation "com.google.firebase:firebase-ai:18.2.0"
+  implementation "com.google.firebase:firebase-ai-ondevice:16.0.0-beta08"
+  implementation "com.google.firebase:firebase-appcheck-debug:20.1.0"
+  implementation "com.google.firebase:firebase-appcheck-playintegrity:20.1.0"
+  // Pin this once the first build has resolved it (see the build log).
+  implementation "com.google.firebase:firebase-config:latest.release"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0"
+}

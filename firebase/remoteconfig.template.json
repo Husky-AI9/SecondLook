@@ -1,0 +1,24 @@
+{
+  "parameters": {
+    "cloud_model": {
+      "defaultValue": { "value": "gemini-3.5-flash-lite" },
+      "description": "Cloud model used when no on-device model is available. Only ever sees redacted text.",
+      "valueType": "STRING"
+    },
+    "benchmark_model": {
+      "defaultValue": { "value": "gemini-3.8-flash" },
+      "description": "Cloud model used for today's market range, with Grounding with Google Search.",
+      "valueType": "STRING"
+    },
+    "benchmark_enabled": {
+      "defaultValue": { "value": "true" },
+      "description": "Kill switch for market range lookups.",
+      "valueType": "STRING"
+    },
+    "scam_rules": {
+      "defaultValue": { "value": "" },
+      "description": "JSON merged over the built-in scam rules. Example: {\"rules\":[{\"id\":\"tax-refund\",\"label\":\"Mentions a tax refund advance\",\"pattern\":\"tax refund advance\",\"weight\":3}]}",
+      "valueType": "STRING"
+    }
+  }
+}

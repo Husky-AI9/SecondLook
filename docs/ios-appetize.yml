@@ -1,0 +1,78 @@
+name: iOS simulator build (Appetize)
+# Builds an iOS Simulator .app, zips it, and (if the APPETIZE_API_TOKEN secret is set) uploads
+# it to Appetize so the app runs in a browser. Appetize takes only simulator builds.
+#
+# What this can show: every screen, the rules, and the Firebase AI Logic cloud path.
+# What it cannot: Apple's on-device model. In a simulator that model needs a host Mac with
+# Apple Intelligence turned on, so expect "Not on this device" and "Cloud · redacted" badges.
+on:
+  workflow_dispatch:
+    inputs:
+      keyboard:
+        description: Include the keyboard extension
+        type: boolean
+        default: false
+
+jobs:
+  simulator:
+    runs-on: macos-latest
+    env:
+      HAS_PLIST: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_B64 != '' }}
+      HAS_APPETIZE: ${{ secrets.APPETIZE_API_TOKEN != '' }}
+      EXPO_PUBLIC_KEYBOARD: ${{ inputs.keyboard && '1' || '0' }}
+      IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID || 'com.secondlook.app' }}
+      # The simulator uses the App Check debug provider; this fixed token is registered once
+      # in the Firebase console (same secret as the device build).
+      APPCHECK_DEBUG_TOKEN_IOS: ${{ secrets.APPCHECK_DEBUG_TOKEN_IOS }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - uses: ./.github/actions/install
+      - name: Keyboard extension tooling
+        if: env.EXPO_PUBLIC_KEYBOARD == '1'
+        run: npx expo install @bacons/apple-targets
+      - name: Firebase config (from a secret, never from the repo)
+        if: env.HAS_PLIST == 'true'
+        run: echo "${{ secrets.GOOGLE_SERVICE_INFO_PLIST_B64 }}" | base64 -d > GoogleService-Info.plist
+      - run: npx expo prebuild --platform ios --clean
+      - name: Build for the iOS Simulator (Release, so the JavaScript is embedded)
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/SecondLook.xcworkspace -scheme SecondLook \
+            -configuration Release -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' ARCHS=arm64 \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO \
+            > xcodebuild.log 2>&1 || { grep -E "error:|fatal error|\*\* BUILD FAILED|ld: |Undefined symbol" xcodebuild.log | sort -u | head -80; tail -n 60 xcodebuild.log; exit 1; }
+          tail -n 5 xcodebuild.log
+      - name: Zip the .app
+        run: |
+          cd build/Build/Products/Release-iphonesimulator
+          test -f SecondLook.app/main.jsbundle && echo "JavaScript bundle is embedded"
+          zip -qry "$GITHUB_WORKSPACE/SecondLook-simulator.zip" SecondLook.app
+          ls -lh "$GITHUB_WORKSPACE/SecondLook-simulator.zip"
+      - name: Upload to Appetize
+        if: env.HAS_APPETIZE == 'true'
+        env:
+          APPETIZE_API_TOKEN: ${{ secrets.APPETIZE_API_TOKEN }}
+          APPETIZE_PUBLIC_KEY: ${{ vars.APPETIZE_PUBLIC_KEY }}
+        run: |
+          # Set the APPETIZE_PUBLIC_KEY variable after the first upload to keep the same link.
+          URL="https://api.appetize.io/v1/apps${APPETIZE_PUBLIC_KEY:+/$APPETIZE_PUBLIC_KEY}"
+          curl -sS --fail-with-body -X POST "$URL" \
+            -H "X-API-KEY: $APPETIZE_API_TOKEN" \
+            -F "file=@SecondLook-simulator.zip" \
+            -F "platform=ios" \
+            -F "appPermissions.run=public" > appetize.json
+          KEY=$(jq -r '.publicKey' appetize.json)
+          echo "Appetize public key: $KEY"
+          echo "### Appetize: https://appetize.io/app/$KEY" >> "$GITHUB_STEP_SUMMARY"
+          echo "Save \`$KEY\` as the repository variable APPETIZE_PUBLIC_KEY to keep this link on the next upload." >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: secondlook-ios-simulator
+          path: |
+            SecondLook-simulator.zip
+            xcodebuild.log

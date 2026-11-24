@@ -1,0 +1,22 @@
+name: Tests
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install
+      - name: Engine unit tests
+        run: npm test
+      - name: Type check
+        run: npm run typecheck
+      - name: Browser tests (screens, state, AI routing against a fake Firebase)
+        run: |
+          python3 -m pip install --quiet playwright
+          npm run preview:build
+          npm run preview:test
+        env:
+          CHROME: /usr/bin/google-chrome

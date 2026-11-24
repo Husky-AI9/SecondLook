@@ -1,0 +1,29 @@
+name: Resolve dependencies
+# package.json was first written without access to the npm registry. This job lets npm and
+# Expo settle the real versions and hands back package.json + package-lock.json to commit.
+on:
+  workflow_dispatch:
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install (as written), or let Expo choose versions
+        run: npm install --no-audit --no-fund || npm run setup:deps
+      - name: Align with the installed Expo SDK
+        run: npx expo install --fix || true
+      - name: Report
+        run: |
+          npx expo install --check || true
+          npx expo-doctor@latest || true
+          node -e "const p=require('./package.json');console.log(JSON.stringify({...p.dependencies,...p.devDependencies},null,1))"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: resolved-deps
+          path: |
+            package.json
+            package-lock.json

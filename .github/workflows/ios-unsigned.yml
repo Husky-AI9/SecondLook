@@ -1,0 +1,68 @@
+name: iOS unsigned .ipa
+# Builds on a free macOS runner (public repo) and produces an unsigned .ipa to install with
+# Sideloadly on Windows using a free Apple ID. With "keyboard" on (the default) the build
+# includes the keyboard extension and its T1–T4 test bench: this is the build half of T1.
+on:
+  workflow_dispatch:
+    inputs:
+      keyboard:
+        description: Include the keyboard extension (Plan A, tests T1–T4)
+        type: boolean
+        default: true
+  push:
+    branches: [ci-ios]
+
+jobs:
+  ipa:
+    runs-on: macos-latest
+    env:
+      HAS_PLIST: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_B64 != '' }}
+      EXPO_PUBLIC_KEYBOARD: ${{ (github.event_name == 'push' || inputs.keyboard) && '1' || '0' }}
+      IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID || 'com.secondlook.app' }}
+      APPCHECK_DEBUG_TOKEN_IOS: ${{ secrets.APPCHECK_DEBUG_TOKEN_IOS }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - run: xcodebuild -version && sw_vers
+      - uses: ./.github/actions/install
+      - name: Keyboard extension tooling
+        if: env.EXPO_PUBLIC_KEYBOARD == '1'
+        run: npx expo install @bacons/apple-targets
+      - name: Firebase config (from a secret, never from the repo)
+        if: env.HAS_PLIST == 'true'
+        run: echo "${{ secrets.GOOGLE_SERVICE_INFO_PLIST_B64 }}" | base64 -d > GoogleService-Info.plist
+      - run: npx expo prebuild --platform ios --clean
+      - name: Build without signing
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/SecondLook.xcworkspace -scheme SecondLook \
+            -configuration Release -sdk iphoneos -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            > xcodebuild.log 2>&1 || { grep -E "error:|error :|fatal error|\*\* BUILD FAILED|ld: |Undefined symbol" xcodebuild.log | sort -u | head -80; tail -n 60 xcodebuild.log; exit 1; }
+          tail -n 5 xcodebuild.log
+      - name: Check the build (T1, build half)
+        run: |
+          APP=build/Build/Products/Release-iphoneos/SecondLook.app
+          echo "App bundle id: $(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Info.plist")"
+          ls "$APP/PlugIns" 2>/dev/null || echo "no extensions in this build"
+          for X in "$APP"/PlugIns/*.appex; do
+            [ -e "$X" ] || continue
+            echo "Extension: $(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$X/Info.plist") · $(/usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$X/Info.plist")"
+          done
+          if [ "$EXPO_PUBLIC_KEYBOARD" = "1" ]; then ls "$APP"/PlugIns/*.appex >/dev/null; fi
+          test -f "$APP/main.jsbundle" && echo "JavaScript bundle is embedded"
+      - name: Package .ipa
+        run: |
+          mkdir Payload
+          cp -R build/Build/Products/Release-iphoneos/SecondLook.app Payload/
+          zip -qry SecondLook-unsigned.ipa Payload
+          ls -lh SecondLook-unsigned.ipa
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: secondlook-ios-unsigned
+          path: |
+            SecondLook-unsigned.ipa
+            xcodebuild.log
