@@ -14,7 +14,7 @@ run(
     'expo-build-properties expo-clipboard expo-dev-client expo-font expo-secure-store expo-splash-screen expo-status-bar ' +
     'react-native-safe-area-context react-native-svg @react-native-async-storage/async-storage @expo-google-fonts/dm-sans',
 );
-run('npm install firebase@^12.5.0 --no-audit --no-fund');
+run('npm install firebase@^12.19.0 --no-audit --no-fund');
 run('npx expo install --dev typescript @types/react');
 run('npm install -D tsx esbuild --no-audit --no-fund');
 run('npx expo install --check');

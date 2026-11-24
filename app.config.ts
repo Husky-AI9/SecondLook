@@ -58,6 +58,7 @@ const config: ExpoConfig = {
   plugins: [
     'expo-font',
     'expo-secure-store',
+    'expo-status-bar',
     ['expo-splash-screen', { image: './assets/splash-icon.png', imageWidth: 160, backgroundColor: '#3D4A45' }],
     // firebase-ai-ondevice needs Android API 26.
     ['expo-build-properties', { android: { minSdkVersion: 26 } }],
