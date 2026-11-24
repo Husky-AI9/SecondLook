@@ -38,7 +38,7 @@ export async function removeItem(key: string): Promise<void> {
 export async function getSecret(key: string): Promise<string | null> {
   if (!hasSecureStore) return getItem('secret.' + key);
   try {
-    return await SecureStore.getItemAsync(key, ACCESS_GROUP ? { keychainAccessGroup: ACCESS_GROUP } : undefined);
+    return await SecureStore.getItemAsync(key, ACCESS_GROUP ? { accessGroup: ACCESS_GROUP } : undefined);
   } catch {
     return null;
   }
@@ -50,7 +50,7 @@ export async function setSecret(key: string, value: string): Promise<boolean> {
     return true;
   }
   try {
-    await SecureStore.setItemAsync(key, value, ACCESS_GROUP ? { keychainAccessGroup: ACCESS_GROUP } : undefined);
+    await SecureStore.setItemAsync(key, value, ACCESS_GROUP ? { accessGroup: ACCESS_GROUP } : undefined);
     return true;
   } catch {
     try {
@@ -67,7 +67,7 @@ export async function setSecret(key: string, value: string): Promise<boolean> {
 export async function removeSecret(key: string): Promise<void> {
   if (!hasSecureStore) return removeItem('secret.' + key);
   try {
-    await SecureStore.deleteItemAsync(key, ACCESS_GROUP ? { keychainAccessGroup: ACCESS_GROUP } : undefined);
+    await SecureStore.deleteItemAsync(key, ACCESS_GROUP ? { accessGroup: ACCESS_GROUP } : undefined);
     await SecureStore.deleteItemAsync(key);
   } catch {
     /* already gone */

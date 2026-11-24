@@ -3,7 +3,7 @@ description: Node 22 and npm packages. Uses the lockfile when there is one; othe
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v5
       with:
         node-version: 22
     - shell: bash
