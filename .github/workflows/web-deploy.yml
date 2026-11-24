@@ -10,7 +10,7 @@ jobs:
     # Skips quietly until the Firebase secrets exist (see SETUP.md).
     if: ${{ vars.FIREBASE_PROJECT_ID != '' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/install
       - run: npx expo export -p web
         env:

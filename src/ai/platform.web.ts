@@ -1,5 +1,5 @@
 import { getApps, initializeApp, type FirebaseApp } from 'firebase/app';
-import { getAI, getGenerativeModel, GoogleAIBackend, InferenceMode, type AI } from 'firebase/ai';
+import { getAI, getGenerativeModel, GoogleAIBackend, InferenceMode, type AI, type GenerationConfig } from 'firebase/ai';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { fetchAndActivate, getRemoteConfig, getValue } from 'firebase/remote-config';
 import { getAuth, signInAnonymously } from 'firebase/auth';
@@ -77,7 +77,7 @@ export function createProvider(): AiProvider {
       const instance = ensure();
       if (!instance) throw new Error('Firebase is not configured.');
 
-      const generationConfig: Record<string, unknown> = { temperature: 0.2 };
+      const generationConfig: GenerationConfig = { temperature: 0.2 };
       // JSON mode cannot be combined with the Google Search tool, so grounded calls parse text.
       if (req.json && !req.grounded) generationConfig.responseMimeType = 'application/json';
 

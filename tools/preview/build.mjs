@@ -9,7 +9,7 @@
 //
 // This is a test harness. The shipped web build is `npx expo export -p web`.
 import { build } from 'esbuild';
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -82,7 +82,30 @@ await build({
   },
 });
 
-const font = fontPath && existsSync(fontPath) ? `@font-face{font-family:'DM Sans';font-weight:100 1000;font-style:normal;src:url(data:font/woff2;base64,${readFileSync(fontPath).toString('base64')}) format('woff2')}` : '';
+// The font: a variable .woff2 passed with --font, or else the four DM Sans weights from the
+// installed @expo-google-fonts/dm-sans package (so CI lays text out like the app).
+function findFile(dir, name, depth = 0) {
+  if (depth > 3 || !existsSync(dir)) return null;
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = resolve(dir, e.name);
+    if (e.isFile() && e.name === name) return p;
+    if (e.isDirectory()) {
+      const hit = findFile(p, name, depth + 1);
+      if (hit) return hit;
+    }
+  }
+  return null;
+}
+let font = '';
+if (fontPath && existsSync(fontPath)) {
+  font = `@font-face{font-family:'DM Sans';font-weight:100 1000;font-style:normal;src:url(data:font/woff2;base64,${readFileSync(fontPath).toString('base64')}) format('woff2')}`;
+} else {
+  const pkg = resolve(root, 'node_modules/@expo-google-fonts/dm-sans');
+  for (const [w, n] of [[400, 'Regular'], [500, 'Medium'], [600, 'SemiBold'], [700, 'Bold']]) {
+    const f = findFile(pkg, `DMSans_${w}${n}.ttf`);
+    if (f) font += `@font-face{font-family:'DM Sans';font-weight:${w};font-style:normal;src:url(data:font/ttf;base64,${readFileSync(f).toString('base64')}) format('truetype')}`;
+  }
+}
 writeFileSync(
   resolve(out, 'index.html'),
   `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>SecondLook preview</title><style>
