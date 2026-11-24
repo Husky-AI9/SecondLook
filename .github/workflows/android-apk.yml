@@ -23,6 +23,7 @@ jobs:
         env:
           ANDROID_PACKAGE: ${{ vars.ANDROID_PACKAGE || 'com.secondlook.app' }}
           ANDROID_ONDEVICE_OPTION: ${{ vars.ANDROID_ONDEVICE_OPTION || 'PREVIEW' }}
+          APPCHECK_DEBUG_TOKEN_ANDROID: ${{ secrets.APPCHECK_DEBUG_TOKEN_ANDROID }}
       - name: Build release APK (signed with the debug keystore, for testers)
         working-directory: android
         run: ./gradlew assembleRelease --no-daemon

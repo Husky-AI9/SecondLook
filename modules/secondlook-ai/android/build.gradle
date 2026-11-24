@@ -19,6 +19,13 @@ android {
   }
 }
 
+// firebase-ai-ondevice (and the ML Kit GenAI libraries under it) are built with Kotlin 2.4.
+// Expo SDK 58 compiles with Kotlin 2.2, which reads library metadata only up to 2.3, so this
+// module tells its own compiler to accept the newer metadata. Other modules are unaffected.
+tasks.matching { it.name.startsWith('compile') && it.name.endsWith('Kotlin') }.configureEach {
+  compilerOptions.freeCompilerArgs.add('-Xskip-metadata-version-check')
+}
+
 dependencies {
   // Versions from firebase.google.com/docs/ai-logic/hybrid/android/get-started (Nov 2026).
   // The on-device SDK is not in the Firebase BoM yet, so these are pinned by hand.

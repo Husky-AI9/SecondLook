@@ -62,7 +62,14 @@ const config: ExpoConfig = {
     ['expo-splash-screen', { image: './assets/splash-icon.png', imageWidth: 160, backgroundColor: '#3D4A45' }],
     // firebase-ai-ondevice needs Android API 26.
     ['expo-build-properties', { android: { minSdkVersion: 26 } }],
-    ['./plugins/withSecondLookAndroid', { appCheckDebug, onDeviceOption: process.env.ANDROID_ONDEVICE_OPTION || 'PREVIEW' }],
+    [
+      './plugins/withSecondLookAndroid',
+      {
+        appCheckDebug,
+        appCheckDebugToken: process.env.APPCHECK_DEBUG_TOKEN_ANDROID || '',
+        onDeviceOption: process.env.ANDROID_ONDEVICE_OPTION || 'PREVIEW',
+      },
+    ],
     // Plan A: the iOS keyboard extension in targets/keyboard. Off unless EXPO_PUBLIC_KEYBOARD=1,
     // so an untested extension can never break the main build (see SETUP.md §7).
     ...(withKeyboard ? ['@bacons/apple-targets'] : []),

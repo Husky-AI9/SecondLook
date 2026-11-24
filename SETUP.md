@@ -71,8 +71,13 @@ from the browser console, and add it under App Check → your web app → Manage
 and save the same value as the GitHub secret `APPCHECK_DEBUG_TOKEN_IOS`. The build bakes it
 into the app so a sideloaded iPhone does not need Xcode logs.
 
-☐ **Android**: run the app once, find `DebugAppCheckProvider` in logcat, copy the token it
-prints, and add it under App Check → Android app → Manage debug tokens.
+☐ **Android**: add a token under App Check → Android app → Manage debug tokens (Generate
+token), and save the same value as the GitHub secret `APPCHECK_DEBUG_TOKEN_ANDROID`. The APK
+build bakes it in. Without the secret, the app makes its own token on first run and prints it
+to logcat (`DebugAppCheckProvider`); add that one instead.
+
+Debug tokens let anyone holding the build call your project, so delete them in the console
+after judging.
 
 ☐ In App Check → APIs, check that **Firebase AI Logic** shows as enforced.
 
@@ -163,6 +168,7 @@ The same applies to `SecondLookAIModule.kt` on Android (`FirebaseAIOnDevice`, `O
 | `GOOGLE_SERVICE_INFO_PLIST_B64` | iOS build |
 | `APPCHECK_DEBUG_TOKEN_IOS` | iOS build |
 | `GOOGLE_SERVICES_JSON_B64` | Android build |
+| `APPCHECK_DEBUG_TOKEN_ANDROID` | Android build (optional) |
 | `FIREBASE_WEB_API_KEY`, `FIREBASE_SERVICE_ACCOUNT` | Web deploy |
 | `APPETIZE_API_TOKEN` | iOS simulator build → Appetize (optional) |
 
