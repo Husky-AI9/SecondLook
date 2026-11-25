@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { DMSans_400Regular, DMSans_500Medium, DMSans_600SemiBold, DMSans_700Bold } from '@expo-google-fonts/dm-sans';
 import { getAi } from './src/ai';
+import { announceReady, inExtension, onPageText } from './src/platform/extension';
 import { onIncomingText, takeIncomingText } from './src/platform/incoming';
 import { runCheck } from './src/state/flows';
 import { actions, currentRoute, getState, persistNow, useStore } from './src/state/store';
@@ -83,8 +84,14 @@ export default function App() {
       // Android "select text → SecondLook": the selected text may have launched the app.
       const incoming = takeIncomingText();
       if (incoming) void runCheck(incoming);
+      // Chrome extension side panel: open on the keyboard panel and ask for the page's text.
+      if (inExtension) {
+        if (!getState().page) actions.tab('keyboard');
+        announceReady();
+      }
     });
     const offText = onIncomingText((text) => void runCheck(text));
+    const offPage = onPageText((m) => actions.setPage(m.kind, m.text));
     const fontTimer = setTimeout(() => setGaveUp(true), 2500);
 
     const back = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -103,6 +110,7 @@ export default function App() {
     });
     return () => {
       offText();
+      offPage();
       clearTimeout(fontTimer);
       back.remove();
       app.remove();

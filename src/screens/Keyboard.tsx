@@ -8,6 +8,7 @@ import {
 import { nativeAi } from '../../modules/secondlook-ai';
 import { keyboardExtensionEnabled } from '../config';
 import { writeClipboard } from '../platform/clipboard';
+import { inExtension, typeIntoPage } from '../platform/extension';
 import { pipelineCtx } from '../state/flows';
 import { actions, activeDeal, useStore } from '../state/store';
 import { Icon, type IconName } from '../ui/icons';
@@ -90,7 +91,11 @@ export function Keyboard() {
   const [filled, setFilled] = useState(false);
   const [sent, setSent] = useState<string[]>([]);
   const [panel, setPanel] = useState<Panel>({ kind: 'ready' });
-  const [showSetup, setShowSetup] = useState(false);
+  const [showSetup, setShowSetup] = useState(inExtension);
+  // Chrome extension: the lender's message the user selected on a web page, if any.
+  const page = useStore((s) => s.page);
+  const [pageTheirs, setPageTheirs] = useState<string | null>(null);
+  const [autoCheck, setAutoCheck] = useState(false);
   // Android: whether the SecondLook keyboard is turned on / in use (refreshed on return from Settings).
   const [kb, setKb] = useState<{ enabled: boolean; selected: boolean } | null>(null);
   useEffect(() => {
@@ -107,12 +112,17 @@ export function Keyboard() {
     return () => sub.remove();
   }, [showSetup]);
 
-  const deal = useMemo(() => (sample.id === 'scam' ? undefined : matchDeal(sample.text, deals, active?.id)), [sample, deals, active?.id]);
+  const theirs = pageTheirs ?? sample.text;
+  const deal = useMemo(
+    () => (pageTheirs ? matchDeal(pageTheirs, deals, active?.id) : sample.id === 'scam' ? undefined : matchDeal(sample.text, deals, active?.id)),
+    [pageTheirs, sample, deals, active?.id],
+  );
   const source: InferenceSource | null =
     panel.kind === 'verdict' ? panel.result.source : panel.kind === 'drafts' ? panel.source : panel.kind === 'explain' ? panel.source : panel.kind === 'scam' ? panel.result.source : panel.kind === 'leak' || panel.kind === 'ok-own' ? panel.own.source : null;
 
   const pick = (id: (typeof SAMPLES)[number]['id']) => {
     setSampleId(id);
+    setPageTheirs(null);
     setCopied(false);
     setMessage('');
     setFilled(false);
@@ -136,32 +146,62 @@ export function Keyboard() {
     }
     if (needCopy()) return;
     setPanel({ kind: 'busy', label: 'Reading on this phone' });
-    const result = await checkMessage(sample.text, pipelineCtx(deal));
+    const result = await checkMessage(theirs, pipelineCtx(deal));
     setPanel(result.kind === 'scam' ? { kind: 'scam', result, help: false } : { kind: 'verdict', result });
   };
 
   const doCounter = async () => {
     if (needCopy()) return;
     setPanel({ kind: 'busy', label: 'Writing three replies' });
-    const result = await checkMessage(sample.text, pipelineCtx(deal));
+    const result = await checkMessage(theirs, pipelineCtx(deal));
     if (result.kind === 'scam') return setPanel({ kind: 'scam', result, help: false });
     if (!deal) return setPanel({ kind: 'needs-setup', why: 'No deal matches this message. Add one in the SecondLook app.' });
     if (!deal.limits || !hasPin) return setPanel({ kind: 'needs-setup', why: 'Set your limits in the SecondLook app. Replies are written to stay inside them.' });
-    const c = await draftCounter(deal, result.offer, sample.text, pipelineCtx(deal));
+    const c = await draftCounter(deal, result.offer, theirs, pipelineCtx(deal));
     setPanel({ kind: 'drafts', result, drafts: c.drafts, source: c.source === 'offline-rules' ? 'offline-rules' : c.source });
   };
 
   const doExplain = async () => {
     if (needCopy()) return;
     setPanel({ kind: 'busy', label: 'Putting it in plain words' });
-    const e = await explainMessage(sample.text, pipelineCtx(deal));
+    const e = await explainMessage(theirs, pipelineCtx(deal));
     setPanel({ kind: 'explain', points: e.points, source: e.source });
   };
+
+  useEffect(() => {
+    if (!autoCheck) return;
+    setAutoCheck(false);
+    void doCheck();
+  }, [autoCheck]);
 
   const insert = (text: string) => {
     setMessage(text);
     setFilled(true);
+    // In the Chrome extension the reply goes into the reply box on the page. The user sends it.
+    if (inExtension) {
+      void typeIntoPage(text).then(async (ok) => {
+        if (!ok) await writeClipboard(text);
+        actions.toast(ok ? 'Typed into the page. Read it, then press send.' : 'Copied. Paste it into the reply box on the page.');
+      });
+    }
   };
+
+  // Chrome extension: text sent from a page. Their message is checked at once; the user's own
+  // draft goes through the leak guard.
+  useEffect(() => {
+    if (!page) return;
+    if (page.kind === 'theirs') {
+      setPageTheirs(page.text);
+      setCopied(true);
+      setMessage('');
+      setSent([]);
+    } else {
+      setMessage(page.text);
+    }
+    setFilled(false);
+    setShowSetup(false);
+    setAutoCheck(true);
+  }, [page?.at]);
 
   const send = () => {
     if (!message.trim()) return;
@@ -234,13 +274,13 @@ export function Keyboard() {
         {/* chat header */}
         <View style={{ paddingTop: Math.max(insets.top, Platform.OS === 'web' ? 12 : 0) + 8, paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: t.border, gap: 10 }}>
           <Row gap={12}>
-            <Avatar size={40} letter={sample.id === 'scam' ? '?' : initial(sample.from)} />
+            <Avatar size={40} letter={pageTheirs || sample.id === 'scam' ? '?' : initial(sample.from)} />
             <View style={{ flex: 1, gap: 1 }}>
               <T size={16} w={700} lines={1}>
-                {sample.from}
+                {pageTheirs ? 'Their message' : sample.from}
               </T>
               <T size={12} color={t.muted} lines={1}>
-                {sample.sub} · practice chat
+                {pageTheirs ? 'Selected on the page' : `${sample.sub} · practice chat`}
               </T>
             </View>
             <Pressable testID="kb-setup" accessibilityRole="button" accessibilityLabel="How to use SecondLook where you type" onPress={() => setShowSetup(!showSetup)} hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: t.card, borderWidth: 1, borderColor: t.border, alignItems: 'center', justifyContent: 'center' }}>
@@ -302,29 +342,38 @@ export function Keyboard() {
                 </>
               ) : Platform.OS === 'ios' ? (
                 <T size={13} lh={1.45}>Copy their message in Messages, open SecondLook and tap "Check copied text". After you pick a reply, Messages reopens with it filled in.</T>
+              ) : inExtension ? (
+                <>
+                  <T size={13} lh={1.45}>1. On any page (Gmail, Messages for web, Facebook Marketplace…), select the lender's message, right-click and choose "SecondLook: check their message". The verdict shows here.</T>
+                  <T size={13} lh={1.45}>2. Tap Counter and pick a reply. SecondLook types it into the reply box on the page. You press send.</T>
+                  <T size={13} lh={1.45}>3. Before you send your own words, select them and choose "SecondLook: check my reply before sending".</T>
+                  <T size={12} color={t.muted} lh={1.45}>Your limits stay in this browser. With Chrome's built-in Gemini Nano, the message is read on this computer.</T>
+                </>
               ) : (
                 <T size={13} lh={1.45}>Copy their message, come back to this tab and paste it into the box on the Deals screen. On iPhone and Android the app picks up copied text for you.</T>
               )}
-              <T size={12} color={t.muted} lh={1.45}>
-                This screen is a practice chat with made-up messages. Nothing here is sent to anyone.
-              </T>
+              {inExtension ? null : (
+                <T size={12} color={t.muted} lh={1.45}>
+                  This screen is a practice chat with made-up messages. Nothing here is sent to anyone.
+                </T>
+              )}
             </View>
           ) : null}
 
           <Pressable
             testID="kb-bubble"
             accessibilityRole="button"
-            accessibilityLabel={`Message: ${sample.text}. Tap to copy.`}
+            accessibilityLabel={`Message: ${theirs}. Tap to copy.`}
             onPress={() => {
               // A real copy, so the SecondLook keyboard can practise on it too.
-              void writeClipboard(sample.text);
+              void writeClipboard(theirs);
               setCopied(true);
               if (panel.kind === 'needs-setup') setPanel({ kind: 'ready' });
             }}
             style={{ alignSelf: 'flex-start', maxWidth: 300, paddingVertical: 12, paddingHorizontal: 14, borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomRightRadius: 20, borderBottomLeftRadius: 6, backgroundColor: t.card, borderWidth: 1, borderColor: t.border }}
           >
             <T size={15} lh={1.45}>
-              {sample.text}
+              {theirs}
             </T>
           </Pressable>
           <Row gap={6}>

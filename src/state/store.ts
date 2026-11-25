@@ -47,6 +47,8 @@ export interface AppState {
   toast: string | null;
   ai: AiStatusView;
   packShared: boolean | null;
+  /** Chrome extension: the latest text the user sent from a web page (see src/platform/extension.ts). */
+  page: { kind: 'theirs' | 'own'; text: string; at: number } | null;
 }
 
 const MAIN_KEY = 'secondlook.v1';
@@ -68,6 +70,7 @@ let state: AppState = {
   toast: null,
   ai: { configured: false, onDevice: 'unknown' },
   packShared: null,
+  page: null,
 };
 
 const listeners = new Set<() => void>();
@@ -189,6 +192,9 @@ export const actions = {
 
   setBusy(busy: string | null) {
     set({ busy });
+  },
+  setPage(kind: 'theirs' | 'own', text: string) {
+    set({ page: { kind, text, at: Date.now() }, stack: [{ name: 'keyboard' }] });
   },
   toast(msg: string | null) {
     set({ toast: msg });

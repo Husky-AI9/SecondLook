@@ -9,10 +9,12 @@ import android.content.pm.PackageManager
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.ai.OnDeviceModelOption
+import com.google.firebase.ai.type.PublicPreviewAPI
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 
+@OptIn(PublicPreviewAPI::class)
 internal object SecondLookShared {
   /** App-private storage the keyboard reads: the limits pack written by the app. */
   const val KEYBOARD_PREFS = "secondlook.keyboard"

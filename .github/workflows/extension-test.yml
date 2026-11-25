@@ -1,0 +1,36 @@
+name: Chrome extension test
+# Loads extension/ in Chromium with a local build of the web app, and walks the flow:
+# their message → verdict → Counter → a reply typed into the page; own reply → leak guard.
+on:
+  workflow_dispatch:
+  push:
+    branches: [android-emulator-test]
+
+jobs:
+  extension:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/install
+      - name: Build the web app (no Firebase keys: offline rules)
+        run: |
+          npx expo export -p web
+          mkdir -p dist/__e2e && cp tools/extension-e2e/page.html dist/__e2e/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --quiet playwright pillow && python -m playwright install --with-deps chromium
+      - name: Run the extension test
+        run: |
+          python -m http.server 8081 -d dist >/dev/null 2>&1 &
+          sleep 2
+          python tools/extension-e2e/test_extension.py ext-out
+      - name: Screenshots into the log (small JPEGs)
+        if: always()
+        run: python tools/android-e2e/print_shots.py ext-out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: extension-results
+          path: ext-out
