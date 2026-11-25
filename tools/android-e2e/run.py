@@ -50,7 +50,7 @@ def shot(name):
     return os.path.basename(path)
 
 
-def dump():
+def _raw_dump():
     for _ in range(4):
         # One string: adb joins arguments, so the remote shell must get the whole command at once.
         r = adb('exec-out', 'uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; cat /sdcard/ui.xml')
@@ -63,6 +63,31 @@ def dump():
                 pass
         time.sleep(1)
     return None
+
+
+system_dialogs = []
+
+
+def dump():
+    """UI tree, after dismissing any "X isn't responding" system dialog from a slow emulator."""
+    root = _raw_dump()
+    for _ in range(3):
+        if root is None:
+            return None
+        title = next((n.get('text') for n in root.iter('node') if "isn't responding" in (n.get('text') or '')), None)
+        if not title:
+            return root
+        system_dialogs.append(title)
+        pick = 'Close app' if 'SecondLook' not in title else 'Wait'
+        btn = next((n for n in root.iter('node') if (n.get('text') or '') == pick), None)
+        if btn is None:
+            shell('am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS')
+        else:
+            a = list(map(int, re.findall(r'\d+', btn.get('bounds'))))
+            shell(f'input tap {(a[0] + a[2]) // 2} {(a[1] + a[3]) // 2}')
+        time.sleep(2)
+        root = _raw_dump()
+    return root
 
 
 def all_nodes(root):
@@ -250,6 +275,11 @@ def source_line():
 
 @step('Install the APK')
 def s_install(e):
+    # Let a freshly booted emulator settle (the launcher is slow on shared CI machines).
+    shell('settings put global window_animation_scale 0; settings put global transition_animation_scale 0')
+    time.sleep(25)
+    shell('input keyevent 82')
+    dump()
     r = adb('install', '-r', '-g', APK, timeout=300)
     if 'Success' not in (r.stdout + r.stderr):
         raise Fail((r.stdout + r.stderr).strip()[-400:])
@@ -528,4 +558,5 @@ with open(f'{OUT}/results.md', 'w') as f:
             f.write(f'- {s}\n')
         f.write('\n')
     f.write(f"Crash buffer: {'empty' if not crash.strip() else 'NOT EMPTY, see crash-buffer.txt'}\n")
+    f.write(f"System 'not responding' dialogs dismissed: {len(system_dialogs)} {sorted(set(system_dialogs))}\n")
 print(open(f'{OUT}/results.md').read())
