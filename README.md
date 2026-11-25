@@ -49,8 +49,15 @@ rules and model names can change without a release), **Anonymous Auth** (web), *
 - **Scam gate**: fee-before-funds, pressure, unknown links and similar patterns. No reply is
   offered for a scam, and the message is never sent to any model.
 - **Rounds**: a timeline of offers and counters with what you have won so far.
-- **Where you type**: on Android, highlight text in any app and pick "SecondLook". On iPhone,
-  copy the message and tap "Check copied text"; Send reopens Messages with the reply filled in.
+- **Where you type**: the same Check · Counter · Explain panel on every platform.
+
+  | Platform | How you reach it |
+  |---|---|
+  | iPhone | **SecondLook keyboard** (switch with the globe key in any app; `targets/keyboard`). Also "Check copied text"; Send reopens Messages with the reply filled in. |
+  | Android | **SecondLook keyboard** (an Android keyboard; turn it on from the Keyboard tab). Also highlight text in any app → "SecondLook" next to Copy and Share. |
+  | Web / Chrome | **SecondLook for Chrome** ([extension/](extension/README.md)): select a lender's message on any site → right-click → SecondLook. The side panel shows the verdict and types the reply you pick into the page. A website cannot install a keyboard, so this is the web's equivalent. |
+
+  In every case you press send yourself, and the walk-away rate is never typed or sent.
 
 ## Screens
 
@@ -139,8 +146,10 @@ numbers but not the user's name, the lender's name, a phone number or any limit.
 | Engine (TypeScript) | Unit-tested. Reproduces the worked example in the plan to the cent. |
 | Screens and state | Tested in headless Chrome through a small stand-in for React Native (`tools/preview`). |
 | Web adapter (`firebase/ai`) | Written against the current docs; exercised against a fake SDK, not yet against a live project. |
-| iOS and Android native module | Written against the current docs; **not yet compiled**. The hybrid APIs are marked Experimental by Firebase. |
-| iOS keyboard extension | In `targets/keyboard` with a T1–T4 test bench ([docs/T1-T4.md](docs/T1-T4.md)); built only by the iOS workflow. |
+| iOS and Android native module | Compiled on GitHub Actions (iOS .ipa, Android APK). The hybrid APIs are marked Experimental by Firebase. |
+| iOS keyboard extension | In `targets/keyboard` with a T1–T4 test bench ([docs/T1-T4.md](docs/T1-T4.md)); built by the iOS workflow; phone test pending. |
+| Android app and keyboard | Driven end to end on an Android 14 emulator by `.github/workflows/android-emulator.yml` (screenshots in the job log). No Gemini Nano on emulators, so AI runs as the redacted cloud fallback there. |
+| Chrome extension | Driven end to end in Chromium by `.github/workflows/extension-test.yml`: right-click → verdict → reply typed into the page; leak guard. |
 
 ## Privacy, in one place
 
