@@ -92,12 +92,21 @@ def find(key, root=None, exact_only=False):
     return None
 
 
-def subtree_text(nd):
+def bounds(nd):
+    return list(map(int, re.findall(r'\d+', nd.get('bounds') or '[0,0][0,0]')))
+
+
+def subtree_text(nd, root=None):
+    """Text of every node drawn inside this node's box (the tree can be flattened)."""
+    root = dump() if root is None else root
+    b = bounds(nd)
     parts = []
-    for x in nd.iter('node'):
-        for v in (x.get('text'), x.get('content-desc')):
-            if v and v not in parts:
-                parts.append(v)
+    for x in all_nodes(root):
+        c = bounds(x)
+        if c[0] >= b[0] and c[1] >= b[1] and c[2] <= b[2] and c[3] <= b[3]:
+            for v in (x.get('text'), x.get('content-desc')):
+                if v and v not in parts:
+                    parts.append(v)
     return ' | '.join(parts)
 
 
@@ -166,6 +175,16 @@ def clear_focused_field():
     time.sleep(0.5)
 
 
+def keyboard_shown():
+    return 'mInputShown=true' in shell('dumpsys input_method | grep mInputShown').stdout
+
+
+def hide_keyboard():
+    if keyboard_shown():
+        shell('input keyevent 4')  # Back closes the on-screen keyboard first
+        time.sleep(1)
+
+
 def back():
     shell('input keyevent 4')
     time.sleep(1.2)
@@ -202,6 +221,11 @@ def step(name):
 
 
 def go_tab(name):
+    hide_keyboard()
+    for _ in range(4):
+        if find(f'nav-{name}', exact_only=True) is not None:
+            break
+        back()  # pushed screens (Limits, Settings, verdicts) hide the tab bar
     tap(f'nav-{name}', scroll=False, exact_only=True)
 
 
@@ -326,8 +350,8 @@ def s_lock(e):
         return 'already locked'
     tap('pin-input', exact_only=True)
     type_text(PIN)
-    shell('input keyevent 111')  # dismiss the soft keyboard (ESC)
-    time.sleep(1)
+    hide_keyboard()  # the number pad covers the Lock limits button
+    e['shots'].append(shot('limits-pin-entered'))
     tap('lock-limits', exact_only=True)
     time.sleep(2)
     e['shots'].append(shot('limits-locked'))
@@ -394,8 +418,7 @@ def s_kb_leak(e):
     tap('kb-input', exact_only=True)
     clear_focused_field()  # remove the draft that Counter filled in
     type_text(LEAK)
-    shell('input keyevent 111')
-    time.sleep(1)
+    hide_keyboard()
     tap('kb-check', exact_only=True)
     k, nd = wait_for(['kb-leak', 'kb-own-ok', 'kb-needs-setup'], 90, exact_only=True)
     time.sleep(1)
