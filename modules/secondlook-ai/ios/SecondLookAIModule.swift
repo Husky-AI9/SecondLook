@@ -4,7 +4,7 @@
 // Apple Intelligence on). Cloud: Gemini through the same Firebase AI Logic SDK.
 //
 // NOTE: written against the Firebase AI Logic documentation as of November 2026
-// (firebase.google.com/docs/ai-logic/hybrid/ios) and NOT yet compiled. The hybrid API is
+// (firebase.google.com/docs/ai-logic/hybrid/ios); compiled by the GitHub Actions builds. The hybrid API is
 // marked Experimental by Firebase; if a name has moved, the three places to look are tagged
 // "API:" below. Keep this file small: every change here needs a native build.
 
