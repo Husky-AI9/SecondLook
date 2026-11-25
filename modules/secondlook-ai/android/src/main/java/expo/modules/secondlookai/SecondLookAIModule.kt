@@ -4,7 +4,7 @@
 // Cloud: Gemini through the same Firebase AI Logic SDK.
 //
 // NOTE: written against the Firebase AI Logic documentation as of November 2026
-// (firebase.google.com/docs/ai-logic/hybrid/android) and NOT yet compiled. The hybrid API is
+// (firebase.google.com/docs/ai-logic/hybrid/android); compiled by the GitHub Actions builds. The hybrid API is
 // marked Experimental by Firebase; places most likely to need a tweak are tagged "API:".
 
 package expo.modules.secondlookai
