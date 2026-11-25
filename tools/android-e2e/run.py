@@ -478,6 +478,38 @@ def s_kb_scam(e):
     return subtree_text(nd)[:300]
 
 
+def ocr_words():
+    """Words on screen with their boxes, read with Tesseract from a full-size screenshot."""
+    png = subprocess.run(['adb', 'exec-out', 'screencap', '-p'], capture_output=True, timeout=60).stdout
+    with open('/tmp/ocr.png', 'wb') as f:
+        f.write(png)
+    r = subprocess.run(['tesseract', '/tmp/ocr.png', 'stdout', 'tsv'], capture_output=True, text=True, timeout=120)
+    words = []
+    for line in r.stdout.splitlines()[1:]:
+        c = line.split('\t')
+        if len(c) >= 12 and c[11].strip():
+            x, y, w, h = map(int, c[6:10])
+            words.append((c[11].strip(), x, y, w, h))
+    return words
+
+
+def ocr_find(text):
+    for wtxt, x, y, w, h in ocr_words():
+        if wtxt.lower().startswith(text.lower()):
+            return x, y, w, h
+    return None
+
+
+def popup_dump():
+    """The selection toolbar is its own window; ask uiautomator for every window if it can."""
+    r = adb('exec-out', 'uiautomator dump --windows /sdcard/w.xml >/dev/null 2>&1; cat /sdcard/w.xml')
+    i = r.stdout.find('<')
+    try:
+        return ET.fromstring(r.stdout[i:]) if i >= 0 else None
+    except ET.ParseError:
+        return None
+
+
 @step('Text-selection menu shows "SecondLook" (long-press in a text box)')
 def s_selection_menu(e):
     tap('kb-globe', exact_only=True)
@@ -488,32 +520,55 @@ def s_selection_menu(e):
     nd = find('kb-input', exact_only=True)
     if nd is None:
         raise Fail('message box not found')
-    a = list(map(int, re.findall(r'\d+', nd.get('bounds'))))
+    a = bounds(nd)
     x, y = a[0] + 60, (a[1] + a[3]) // 2
-    shell(f'input swipe {x} {y} {x} {y} 900')  # long press selects a word
+    shell(f'input swipe {x} {y} {x} {y} 900')  # long press selects a word and opens the menu
     time.sleep(1.5)
-    root = dump()
     e['shots'].append(shot('selection-menu'))
-    found = find('SecondLook', root, exact_only=True)
-    if found is None:
-        more = find('More options', root) or find('More', root, exact_only=True)
-        if more is not None:
-            x2, y2 = center(more)
-            shell(f'input tap {x2} {y2}')
-            time.sleep(1.2)
-            root = dump()
-            e['shots'].append(shot('selection-menu-more'))
-            found = find('SecondLook', root, exact_only=True)
-    if found is None:
-        items = [n.get('text') or n.get('content-desc') for n in all_nodes(root)
-                 if (n.get('text') or n.get('content-desc')) in ('Cut', 'Copy', 'Paste', 'Share', 'Select all')]
-        raise Fail('menu items seen: ' + ', '.join(filter(None, items)) if items else 'no selection menu seen')
-    x3, y3 = center(found)
-    shell(f'input tap {x3} {y3}')
+    how = ''
+    target = None
+    root = popup_dump()
+    if root is not None:
+        n = find('SecondLook', root, exact_only=True)
+        if n is not None:
+            target, how = center(n), 'menu (uiautomator)'
+    if target is None:
+        b = ocr_find('SecondLook')
+        if b:
+            target, how = (b[0] + b[2] // 2, b[1] + b[3] // 2), 'menu (OCR)'
+    if target is None:
+        # open the overflow: the vertical dots sit just right of "Select all"
+        sa = ocr_find('Select') or ocr_find('all')
+        more = None
+        if root is not None:
+            m = find('More options', root)
+            if m is not None:
+                more = center(m)
+        if more is None and sa:
+            more = (sa[0] + sa[2] + int(0.085 * 1080), sa[1] + sa[3] // 2)
+        if more is None:
+            raise Fail('selection menu not found on screen')
+        shell(f'input tap {more[0]} {more[1]}')
+        time.sleep(1.5)
+        e['shots'].append(shot('selection-menu-more'))
+        root = popup_dump()
+        n = find('SecondLook', root, exact_only=True) if root is not None else None
+        if n is not None:
+            target, how = center(n), 'overflow menu (uiautomator)'
+        else:
+            b = ocr_find('SecondLook')
+            if b:
+                target, how = (b[0] + b[2] // 2, b[1] + b[3] // 2), 'overflow menu (OCR)'
+    if target is None:
+        words = ' '.join(w[0] for w in ocr_words())[:300]
+        raise Fail('"SecondLook" not seen in the menu. Screen text: ' + words)
+    shell(f'input tap {target[0]} {target[1]}')
     k, _ = wait_for(['screen-verdict', 'screen-scam', 'Start a deal from this'], 90)
     time.sleep(2)
     e['shots'].append(shot('selection-menu-result'))
-    return f'"SecondLook" was in the menu; tapping it opened: {k or "nothing"}'
+    if not k:
+        raise Fail(f'"SecondLook" was in the {how}, but tapping it opened nothing')
+    return f'"SecondLook" found in the {how}; tapping it opened {k}. ' + source_line()
 
 
 # ---------------------------------------------------------------- run
