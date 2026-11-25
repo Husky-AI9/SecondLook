@@ -24,3 +24,7 @@ google-services.json
 *.p8
 *.p12
 *.mobileprovision
+
+# Python caches (test tools)
+__pycache__/
+*.pyc

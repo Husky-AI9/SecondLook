@@ -47,6 +47,8 @@ export interface AppState {
   toast: string | null;
   ai: AiStatusView;
   packShared: boolean | null;
+  /** Chrome extension: the latest text the user sent from a web page (see src/platform/extension.ts). */
+  page: { kind: 'theirs' | 'own'; text: string; at: number } | null;
 }
 
 const MAIN_KEY = 'secondlook.v1';
@@ -68,6 +70,7 @@ let state: AppState = {
   toast: null,
   ai: { configured: false, onDevice: 'unknown' },
   packShared: null,
+  page: null,
 };
 
 const listeners = new Set<() => void>();
@@ -122,7 +125,8 @@ export function persistNow(): Promise<void> {
     });
     await setItem(MAIN_KEY, JSON.stringify({ profile: s.profile, deals, activeDealId: s.activeDealId, settings: s.settings, remote: s.remote }));
     await setSecret(SECRET_KEY, JSON.stringify({ pin: s.pin, limits }));
-    const packJson = JSON.stringify(buildPack(s.deals, s.activeDealId));
+    // The keyboard also needs to know whether the redacted cloud fallback is allowed.
+    const packJson = JSON.stringify({ ...buildPack(s.deals, s.activeDealId), cloudFallback: s.settings.cloudFallback });
     // iOS: the keyboard reads the pack from a keychain group shared with the app. The group
     // depends on who signed the build, so the native module works it out at run time.
     let shared = await setSecret(PACK_KEY, packJson);
@@ -188,6 +192,9 @@ export const actions = {
 
   setBusy(busy: string | null) {
     set({ busy });
+  },
+  setPage(kind: 'theirs' | 'own', text: string) {
+    set({ page: { kind, text, at: Date.now() }, stack: [{ name: 'keyboard' }] });
   },
   toast(msg: string | null) {
     set({ toast: msg });

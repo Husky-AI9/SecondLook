@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "SecondLook",
+  "version": "1.0.0",
+  "description": "Check a lender's message and reply inside limits only you know. Select their message, right-click, SecondLook.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtuADZWWHF9JaipAnKwYAivVGiPVYaSOceVHruDD+uLCYDMtYeyZ+0HBZ8XlNXVay3+3Cb13UB6B/Rjh7bzUtCYXVDAZT1UH6oMQTBgTEg9DE83KrO9eEMq5Px7XJVJOfRUcvUMOLeQ5vvor/sasS6Jz+vA52yM2tpG1JkcT6pLn2hkEGFZbqI5c8e67BrBZ134Gt/jzxbqHg3HT8tc+cRS23U3LvjZDWn/wWJw/g6KvtISDVGHA86cA7m39AXKmeaNEA2249VJ2mGaWzZYPIyqbTWtbVBwG1aDvfhdVBrjCZ1x47yYjNV56rZJx7Uyuvaeofl5UOies/AX5NUQ4rGwIDAQAB",
+  "minimum_chrome_version": "138",
+  "permissions": [
+    "contextMenus",
+    "sidePanel",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "panel.html"
+  },
+  "action": {
+    "default_title": "Open SecondLook",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

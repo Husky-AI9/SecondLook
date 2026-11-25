@@ -12,6 +12,8 @@ package expo.modules.secondlookai
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.provider.Settings
+import android.view.inputmethod.InputMethodManager
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.ai.InferenceMode
@@ -23,9 +25,6 @@ import com.google.firebase.ai.ondevice.OnDeviceModelStatus
 import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.PublicPreviewAPI
 import com.google.firebase.ai.type.Tool
-import com.google.firebase.appcheck.appCheck
-import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
-import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.remoteconfig.remoteConfig
 import expo.modules.kotlin.functions.Coroutine
 import expo.modules.kotlin.modules.Module
@@ -44,12 +43,7 @@ class SecondLookAIModule : Module() {
 
   private fun meta(key: String): String? {
     val ctx = appContext.reactContext ?: return null
-    return try {
-      val info = ctx.packageManager.getApplicationInfo(ctx.packageName, PackageManager.GET_META_DATA)
-      info.metaData?.get(key)?.toString()
-    } catch (e: Exception) {
-      null
-    }
+    return SecondLookShared.meta(ctx, key)
   }
 
   private fun configured(): Boolean {
@@ -65,25 +59,9 @@ class SecondLookAIModule : Module() {
     return text?.takeIf { it.isNotBlank() }
   }
 
-  /**
-   * A build can carry a fixed App Check debug token (registered in the Firebase console), so
-   * every install passes App Check without anyone reading logcat. The debug provider keeps its
-   * secret in this store and only makes up a random one, printed to logcat, when it is empty.
-   */
-  private fun seedDebugToken(ctx: Context) {
-    val token = meta("secondlook.appcheck.debug_token")?.trim()?.takeIf { it.isNotEmpty() } ?: return
-    val app = FirebaseApp.getInstance()
-    ctx.getSharedPreferences("com.google.firebase.appcheck.debug.store.${app.persistenceKey}", Context.MODE_PRIVATE)
-      .edit()
-      .putString("com.google.firebase.appcheck.debug.DEBUG_SECRET", token)
-      .commit()
-  }
-
-  /** Gemini Nano 4 is the PREVIEW category (needs the AICore developer preview). */
-  private fun modelOption(): OnDeviceModelOption = when (meta("secondlook.ondevice.option")?.uppercase()) {
-    "STABLE" -> OnDeviceModelOption.STABLE
-    "PREVIEW_FAST" -> OnDeviceModelOption.PREVIEW_FAST
-    else -> OnDeviceModelOption.PREVIEW
+  private fun modelOption(): OnDeviceModelOption {
+    val ctx = appContext.reactContext ?: return OnDeviceModelOption.PREVIEW
+    return SecondLookShared.modelOption(ctx)
   }
 
   override fun definition() = ModuleDefinition {
@@ -91,25 +69,46 @@ class SecondLookAIModule : Module() {
     Events("onSharedText")
 
     OnCreate {
-      val ctx = appContext.reactContext
-      if (ctx != null) {
-        // With google-services.json present Firebase starts itself; this covers a late start.
-        if (FirebaseApp.getApps(ctx).isEmpty()) FirebaseApp.initializeApp(ctx)
-        if (FirebaseApp.getApps(ctx).isNotEmpty()) {
-          // App Check: debug provider for development and the hackathon APK (the rules accept
-          // debug tokens). Play Integrity otherwise.
-          val debug = meta("secondlook.appcheck.debug") != "false"
-          if (debug) seedDebugToken(ctx)
-          Firebase.appCheck.installAppCheckProviderFactory(
-            if (debug) DebugAppCheckProviderFactory.getInstance() else PlayIntegrityAppCheckProviderFactory.getInstance(),
-          )
-        }
-      }
+      // Firebase and App Check, shared with the SecondLook keyboard (same process).
+      appContext.reactContext?.let { SecondLookShared.ensureFirebase(it) }
       pendingShared = takeProcessText(appContext.currentActivity?.intent)
     }
 
     OnNewIntent { intent ->
       takeProcessText(intent)?.let { sendEvent("onSharedText", mapOf("text" to it)) }
+    }
+
+    // Same name as the iOS function: the app writes the limits pack here, and the SecondLook
+    // keyboard (same app, same sandbox) reads it. App-private storage, never synced or shared.
+    Function("sharedKeychainSet") { key: String, value: String ->
+      val ctx = appContext.reactContext
+      val ok = ctx != null && SecondLookShared.writeKeyboard(ctx, key, value)
+      mapOf("ok" to ok, "status" to (if (ok) 0 else -1), "group" to "app-private")
+    }
+
+    // Is the SecondLook keyboard turned on, and is it the keyboard in use right now?
+    Function("keyboardStatus") {
+      val ctx = appContext.reactContext ?: return@Function mapOf("enabled" to false, "selected" to false)
+      val imm = ctx.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+      val enabled = imm.enabledInputMethodList.any { it.packageName == ctx.packageName }
+      val current = Settings.Secure.getString(ctx.contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD) ?: ""
+      mapOf("enabled" to enabled, "selected" to current.startsWith(ctx.packageName + "/"))
+    }
+
+    // Opens Settings → Keyboards, where the user turns the SecondLook keyboard on.
+    Function("openKeyboardSettings") {
+      val ctx = appContext.currentActivity ?: appContext.reactContext ?: return@Function false
+      val intent = Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)
+      if (ctx !is android.app.Activity) intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      ctx.startActivity(intent)
+      true
+    }
+
+    // The system "Choose input method" sheet, to switch to SecondLook.
+    Function("showKeyboardPicker") {
+      val ctx = appContext.reactContext ?: return@Function false
+      (ctx.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).showInputMethodPicker()
+      true
     }
 
     Function("consumeSharedText") {

@@ -104,7 +104,7 @@ function CheckCard() {
             {typed ? 'Check this message' : hasCopied ? 'You copied a message' : 'Check a message'}
           </T>
           <T size={14} color={t.muted} lh={1.4}>
-            {hasCopied && !typed ? 'Tap below and SecondLook reads it on this phone.' : 'Copy a text from a lender or dealer, or paste it here.'}
+            {hasCopied && !typed ? Platform.OS === 'web' ? 'Tap below and SecondLook reads it in this browser.' : 'Tap below and SecondLook reads it on this phone.' : 'Copy a text from a lender or dealer, or paste it here.'}
           </T>
         </View>
       </Row>
