@@ -39,9 +39,15 @@ jobs:
           profile: pixel_6
           ram-size: 4096M
           disk-size: 6000M
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           script: python3 tools/android-e2e/run.py "$(ls apk/*.apk | head -1)" e2e-out
+      - name: Screenshots into the log (small JPEGs)
+        if: always()
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 tools/android-e2e/print_shots.py e2e-out
+          cat e2e-out/results.md
       - uses: actions/upload-artifact@v4
         if: always()
         with:

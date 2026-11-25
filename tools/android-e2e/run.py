@@ -191,7 +191,7 @@ def step(name):
                 except Exception:  # noqa: BLE001
                     pass
             entry['seconds'] = round(time.time() - t0, 1)
-            if not alive():
+            if name != 'Install the APK' and not alive():
                 entry['detail'] += ' [app process is NOT running after this step]'
                 if entry['status'] == 'PASS':
                     entry['status'] = 'FAIL'
