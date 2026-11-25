@@ -11,6 +11,10 @@ permissions:
   actions: read
   contents: read
 
+concurrency:
+  group: emulator-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   emulator:
     runs-on: ubuntu-latest
