@@ -171,10 +171,33 @@ def wait_for(keys, timeout=30, scroll=False, exact_only=False):
     return None, None
 
 
+SCREEN = [1080, 2400]
+
+
+def screen_size():
+    m = re.search(r'(\d+)x(\d+)', shell('wm size').stdout)
+    if m:
+        SCREEN[0], SCREEN[1] = int(m.group(1)), int(m.group(2))
+
+
+def visible(nd):
+    b = bounds(nd)
+    # keep clear of the status bar and of the floating tab bar at the bottom
+    return b[3] > b[1] and b[1] >= 120 and b[3] <= SCREEN[1] - 330
+
+
 def tap(key, timeout=20, scroll=True, exact_only=False):
     k, nd = wait_for(key, timeout, scroll=scroll, exact_only=exact_only)
     if nd is None:
         raise Fail(f'could not find "{key}" on screen')
+    for _ in range(5):  # bring it into view before tapping
+        if visible(nd):
+            break
+        if bounds(nd)[1] < 120:
+            swipe_down()
+        else:
+            swipe_up()
+        nd = find(key, exact_only=exact_only) or nd
     x, y = center(nd)
     shell(f'input tap {x} {y}')
     time.sleep(1.2)
@@ -275,6 +298,7 @@ def source_line():
 
 @step('Install the APK')
 def s_install(e):
+    screen_size()
     # Let a freshly booted emulator settle (the launcher is slow on shared CI machines).
     shell('settings put global window_animation_scale 0; settings put global transition_animation_scale 0')
     time.sleep(25)
