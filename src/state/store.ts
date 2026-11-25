@@ -122,7 +122,8 @@ export function persistNow(): Promise<void> {
     });
     await setItem(MAIN_KEY, JSON.stringify({ profile: s.profile, deals, activeDealId: s.activeDealId, settings: s.settings, remote: s.remote }));
     await setSecret(SECRET_KEY, JSON.stringify({ pin: s.pin, limits }));
-    const packJson = JSON.stringify(buildPack(s.deals, s.activeDealId));
+    // The keyboard also needs to know whether the redacted cloud fallback is allowed.
+    const packJson = JSON.stringify({ ...buildPack(s.deals, s.activeDealId), cloudFallback: s.settings.cloudFallback });
     // iOS: the keyboard reads the pack from a keychain group shared with the app. The group
     // depends on who signed the build, so the native module works it out at run time.
     let shared = await setSecret(PACK_KEY, packJson);

@@ -1,5 +1,5 @@
 name: Android emulator test
-# Installs the latest APK built on main on an Android emulator and walks through the app:
+# Builds the APK from this commit, installs it on an Android emulator and walks through the app:
 # Settings, select text → SecondLook, the keyboard panel (check, counter, explain, leak guard,
 # scam) and the text-selection menu. Screenshots and a redacted log are uploaded.
 on:
@@ -14,17 +14,30 @@ permissions:
 jobs:
   emulator:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 75
+    env:
+      HAS_JSON: ${{ secrets.GOOGLE_SERVICES_JSON_B64 != '' }}
     steps:
       - uses: actions/checkout@v5
-      - name: Get the latest APK built on main
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: ./.github/actions/install
+      - name: Firebase config (from a secret, never from the repo)
+        if: env.HAS_JSON == 'true'
+        run: echo "$GOOGLE_SERVICES_JSON_B64" | base64 -d > google-services.json
         env:
-          GH_TOKEN: ${{ github.token }}
+          GOOGLE_SERVICES_JSON_B64: ${{ secrets.GOOGLE_SERVICES_JSON_B64 }}
+      - name: Build the APK from this commit
         run: |
-          id=$(gh run list -R "${{ github.repository }}" --workflow android-apk.yml --branch main --status success --limit 1 --json databaseId -q '.[0].databaseId')
-          echo "APK from run $id"
-          gh run download "$id" -R "${{ github.repository }}" -n secondlook-android -D apk
-          ls -l apk
+          npx expo prebuild --platform android --clean
+          cd android && ./gradlew assembleRelease --no-daemon
+          mkdir -p ../apk && cp app/build/outputs/apk/release/*.apk ../apk/
+        env:
+          ANDROID_PACKAGE: com.secondlook.app
+          ANDROID_ONDEVICE_OPTION: ${{ vars.ANDROID_ONDEVICE_OPTION || 'PREVIEW' }}
+          APPCHECK_DEBUG_TOKEN_ANDROID: ${{ secrets.APPCHECK_DEBUG_TOKEN_ANDROID }}
       - name: Text recognition for pop-up menus
         run: sudo apt-get install -y -qq tesseract-ocr >/dev/null
       - name: Enable KVM

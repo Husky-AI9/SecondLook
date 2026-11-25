@@ -595,11 +595,184 @@ def s_selection_menu(e):
     return f'"SecondLook" found in the {how}; tapping it opened {k}. ' + source_line()
 
 
+IME = f'{PKG}/expo.modules.secondlookai.SecondLookKeyboardService'
+
+
+def ime_nodes():
+    """Nodes in the lower part of the screen, where the keyboard is (all windows)."""
+    root = popup_dump()
+    top = int(SCREEN[1] * 0.42)
+    return [n for n in all_nodes(root) if bounds(n)[1] >= top]
+
+
+def ime_text():
+    parts = []
+    for n in ime_nodes():
+        for v in (n.get('text'), n.get('content-desc')):
+            if v and v not in parts:
+                parts.append(v)
+    return ' | '.join(parts)
+
+
+def ime_wait(words, timeout=30):
+    words = [words] if isinstance(words, str) else words
+    end = time.time() + timeout
+    while time.time() < end:
+        t = ime_text()
+        for w in words:
+            if w.lower() in t.lower():
+                return w, t
+        o = ' '.join(x[0] for x in ocr_words() if x[2] > SCREEN[1] * 0.42)
+        for w in words:
+            if all(part.lower() in o.lower() for part in w.split()[:3]):
+                return w, o
+        time.sleep(1.5)
+    return None, ime_text()
+
+
+def ime_tap(label, timeout=20):
+    end = time.time() + timeout
+    while time.time() < end:
+        for n in ime_nodes():
+            if label in ((n.get('text') or ''), (n.get('content-desc') or '')):
+                x, y = center(n)
+                shell(f'input tap {x} {y}')
+                time.sleep(1.5)
+                return
+        for w, x, y, ww, hh in ocr_words():
+            if y > SCREEN[1] * 0.42 and w.lower() == label.lower():
+                shell(f'input tap {x + ww // 2} {y + hh // 2}')
+                time.sleep(1.5)
+                return
+        time.sleep(1.5)
+    raise Fail(f'keyboard key "{label}" not found')
+
+
+def field_text():
+    nd = find('paste-input', exact_only=True)
+    return (nd.get('text') or '') if nd is not None else ''
+
+
+def clear_field():
+    tap('paste-input', exact_only=True)
+    clear_focused_field()
+
+
+@step('Android keyboard: turn on, switch to SecondLook, panel appears')
+def s_ime_on(e):
+    shell(f'am force-stop {PKG}')
+    launch_home()
+    time.sleep(2)
+    go_tab('keyboard')
+    tap('kb-sample-lender', exact_only=True)
+    tap('kb-bubble', exact_only=True)  # copies the practice lender message
+    go_tab('home')
+    out = shell(f'ime enable {IME}').stdout.strip() + ' / ' + shell(f'ime set {IME}').stdout.strip()
+    current = shell('settings get secure default_input_method').stdout.strip()
+    if current != IME:
+        raise Fail(f'could not select the keyboard: {out}; current = {current}')
+    tap('paste-input', exact_only=True)
+    w, t = ime_wait(['Copy their message, then pick one', 'Set your limits in the SecondLook app'], 20)
+    e['shots'].append(shot('ime-ready'))
+    if not w:
+        raise Fail('SecondLook keyboard did not appear: ' + t[:300])
+    if 'Set your limits' in w:
+        raise Fail('keyboard has no limits pack from the app')
+    return f'selected {current}; panel: {t[:200]}'
+
+
+@step('Android keyboard: Check the copied lender message')
+def s_ime_check(e):
+    ime_tap('Check')
+    w, t = ime_wait(['overpriced', 'Competitive offer', 'not compared yet', 'Likely a scam'], 20)
+    e['shots'].append(shot('ime-check'))
+    if w != 'overpriced':
+        raise Fail(f'expected "Real offer, but overpriced", got: {t[:300]}')
+    return t[:300]
+
+
+@step('Android keyboard: Counter, then tap a reply into the box')
+def s_ime_counter(e):
+    ime_tap('Counter')
+    w, t = ime_wait(['FRIENDLY'], 20)
+    e['shots'].append(shot('ime-counter'))
+    if not w:
+        raise Fail('no replies: ' + t[:300])
+    if '6.25' in t:
+        raise Fail('a reply mentions the walk-away rate 6.25%')
+    ime_tap('FRIENDLY')
+    time.sleep(1)
+    typed = field_text()
+    e['shots'].append(shot('ime-reply-typed'))
+    if not typed or 'Thanks' not in typed and 'Could you' not in typed:
+        raise Fail(f'reply was not typed into the box (box has: {typed!r})')
+    return f'box now has: {typed}'
+
+
+@step('Android keyboard: leak guard on my own reply ("highest I can go is 6.25%")')
+def s_ime_leak(e):
+    clear_field()
+    type_text(LEAK)
+    ime_tap('Check')
+    w, t = ime_wait(['Hold on before you send'], 15)
+    e['shots'].append(shot('ime-leak'))
+    if not w:
+        raise Fail('no leak warning: ' + t[:300])
+    ime_tap('SAFER VERSION')
+    time.sleep(1)
+    typed = field_text()
+    e['shots'].append(shot('ime-safer-typed'))
+    if '6.25' in typed or not typed:
+        raise Fail(f'safer version not typed or still leaks: {typed!r}')
+    return f'warning shown; box now has: {typed}'
+
+
+@step('Android keyboard: Explain (Firebase AI Logic)')
+def s_ime_explain(e):
+    clear_field()
+    ime_tap('Explain')
+    w, t = ime_wait(['Cloud · redacted', 'On-device', 'Offline rules'], 45)
+    time.sleep(1)
+    e['shots'].append(shot('ime-explain'))
+    if not w:
+        raise Fail('no answer: ' + t[:300])
+    return f'source: {w}; {t[:400]}'
+
+
+@step('Android keyboard: scam message')
+def s_ime_scam(e):
+    clear_field()
+    type_text(SCAM)
+    shell('input keycombination 113 29')  # select all
+    shell('input keycombination 113 31')  # copy
+    shell('input keyevent 67')
+    time.sleep(1)
+    ime_tap('Check')
+    w, t = ime_wait(['Likely a scam'], 15)
+    e['shots'].append(shot('ime-scam'))
+    if not w:
+        raise Fail('scam not caught: ' + t[:300])
+    return t[:300]
+
+
+@step('Android keyboard: globe key switches back to the normal keyboard')
+def s_ime_globe(e):
+    ime_tap('Switch keyboard')
+    time.sleep(2)
+    current = shell('settings get secure default_input_method').stdout.strip()
+    e['shots'].append(shot('ime-globe'))
+    shell('ime reset')
+    if current == IME:
+        raise Fail('still on the SecondLook keyboard')
+    return f'now using {current}'
+
+
 # ---------------------------------------------------------------- run
 
 for fn in (s_install, s_launch, s_settings, s_registered, s_process_lender, s_process_scam,
            s_samples, s_lock, s_kb_check, s_kb_counter, s_kb_explain, s_kb_leak, s_kb_scam,
-           s_selection_menu):
+           s_selection_menu, s_ime_on, s_ime_check, s_ime_counter, s_ime_leak, s_ime_explain, s_ime_scam,
+           s_ime_globe):
     fn()
     if results[-1]['step'] == 'Install the APK' and results[-1]['status'] == 'FAIL':
         break

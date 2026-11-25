@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
-import { Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { AppState, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BLOCK_AND_REPORT, buildPack, checkMessage, checkOwnDraft, draftCounter, effectiveRate, explainMessage, initial, latestOffer, matchDeal, packCode, pct, revealsLine,
   SAMPLE_MESSAGES, shortDealLabel, type CheckResult, type Draft, type InferenceSource, type OwnDraftResult,
 } from '../engine';
+import { nativeAi } from '../../modules/secondlook-ai';
 import { keyboardExtensionEnabled } from '../config';
 import { writeClipboard } from '../platform/clipboard';
 import { pipelineCtx } from '../state/flows';
@@ -90,6 +91,21 @@ export function Keyboard() {
   const [sent, setSent] = useState<string[]>([]);
   const [panel, setPanel] = useState<Panel>({ kind: 'ready' });
   const [showSetup, setShowSetup] = useState(false);
+  // Android: whether the SecondLook keyboard is turned on / in use (refreshed on return from Settings).
+  const [kb, setKb] = useState<{ enabled: boolean; selected: boolean } | null>(null);
+  useEffect(() => {
+    if (Platform.OS !== 'android' || !nativeAi?.keyboardStatus) return;
+    const read = () => {
+      try {
+        setKb(nativeAi?.keyboardStatus?.() ?? null);
+      } catch {
+        setKb(null);
+      }
+    };
+    read();
+    const sub = AppState.addEventListener('change', (s) => s === 'active' && read());
+    return () => sub.remove();
+  }, [showSetup]);
 
   const deal = useMemo(() => (sample.id === 'scam' ? undefined : matchDeal(sample.text, deals, active?.id)), [sample, deals, active?.id]);
   const source: InferenceSource | null =
@@ -269,7 +285,21 @@ export function Keyboard() {
                   </Row>
                 </>
               ) : Platform.OS === 'android' ? (
-                <T size={13} lh={1.45}>In any app, press and hold their message to select it. "SecondLook" appears next to Copy and Share, and opens the verdict directly.</T>
+                <>
+                  <T size={13} lh={1.45}>1. Tap "Turn on the keyboard" and switch on SecondLook. Android warns that any keyboard could collect what you type. SecondLook reads only your reply box and the message you copied, and only when you tap a key. Nothing is sent.</T>
+                  <T size={13} lh={1.45}>2. In any chat, press and hold their message, tap Copy, then tap the keyboard button at the bottom of the screen and pick SecondLook. The globe key takes you back.</T>
+                  <T size={13} lh={1.45}>3. Or press and hold their message: "SecondLook" is next to Copy and Share, and opens the verdict in the app.</T>
+                  <Row gap={8} style={{ flexWrap: 'wrap' }}>
+                    <Pressable testID="kb-enable" accessibilityRole="button" accessibilityLabel="Turn on the keyboard" onPress={() => nativeAi?.openKeyboardSettings?.()} hitSlop={6}>
+                      <Pill label="Turn on the keyboard" icon="settings" />
+                    </Pressable>
+                    <Pressable testID="kb-pick" accessibilityRole="button" accessibilityLabel="Switch keyboard" onPress={() => nativeAi?.showKeyboardPicker?.()} hitSlop={6}>
+                      <Pill label="Switch keyboard" icon="globe" />
+                    </Pressable>
+                    {kb ? <Pill testID="kb-status" label={kb.selected ? 'SecondLook keyboard in use' : kb.enabled ? 'Keyboard on' : 'Keyboard off'} tone={kb.enabled ? 'ok' : 'warn'} /> : null}
+                  </Row>
+                  <T size={12} color={t.muted} lh={1.45}>Try it here: tap the message above to copy it, tap the message box below, and switch to SecondLook.</T>
+                </>
               ) : Platform.OS === 'ios' ? (
                 <T size={13} lh={1.45}>Copy their message in Messages, open SecondLook and tap "Check copied text". After you pick a reply, Messages reopens with it filled in.</T>
               ) : (
@@ -286,6 +316,8 @@ export function Keyboard() {
             accessibilityRole="button"
             accessibilityLabel={`Message: ${sample.text}. Tap to copy.`}
             onPress={() => {
+              // A real copy, so the SecondLook keyboard can practise on it too.
+              void writeClipboard(sample.text);
               setCopied(true);
               if (panel.kind === 'needs-setup') setPanel({ kind: 'ready' });
             }}
