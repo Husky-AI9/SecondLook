@@ -145,7 +145,7 @@ export function Keyboard() {
       return setPanel(own.guard.ok ? { kind: 'ok-own', own } : { kind: 'leak', own });
     }
     if (needCopy()) return;
-    setPanel({ kind: 'busy', label: 'Reading on this phone' });
+    setPanel({ kind: 'busy', label: Platform.OS === 'web' ? 'Reading it' : 'Reading on this phone' });
     const result = await checkMessage(theirs, pipelineCtx(deal));
     setPanel(result.kind === 'scam' ? { kind: 'scam', result, help: false } : { kind: 'verdict', result });
   };
@@ -288,7 +288,14 @@ export function Keyboard() {
             </Pressable>
           </Row>
           <Row gap={8}>
-            {SAMPLES.map((s) => {
+            {pageTheirs ? (
+              <Pressable testID="kb-practice" accessibilityRole="button" accessibilityLabel="Back to the practice messages" onPress={() => pick(sampleId)} style={{ height: 30, paddingHorizontal: 12, borderRadius: 15, backgroundColor: t.surface, justifyContent: 'center' }}>
+                <T size={12} w={700} lh={1.2}>
+                  Practice messages
+                </T>
+              </Pressable>
+            ) : null}
+            {pageTheirs ? null : SAMPLES.map((s) => {
               const on = s.id === sampleId;
               return (
                 <Pressable key={s.id} testID={`kb-sample-${s.id}`} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={`Practise with a ${s.label.toLowerCase()} message`} onPress={() => pick(s.id)} style={{ height: 30, paddingHorizontal: 12, borderRadius: 15, backgroundColor: on ? t.primary : t.surface, justifyContent: 'center' }}>

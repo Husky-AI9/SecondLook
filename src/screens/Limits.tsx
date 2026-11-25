@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, TextInput, View } from 'react-native';
+import { Platform, Pressable, TextInput, View } from 'react-native';
 import { isValidPin, pct, shortDealLabel, type Deal } from '../engine';
 import { actions, activeDeal, findDeal, useStore } from '../state/store';
 import { hasSecureStore } from '../platform/storage';
@@ -124,7 +124,7 @@ export function Limits({ dealId }: { dealId?: string }) {
     if (hasPin && pin && !isValidPin(pin)) return setError('A new PIN needs exactly 4 digits.');
     const res = actions.saveLimits(deal.id, { maxRate: m, maxFees: f, targetRate: a }, reveal, pin || undefined);
     if (res === 'ok') {
-      actions.toast('Limits locked on this phone.');
+      actions.toast(Platform.OS === 'web' ? 'Limits locked in this browser.' : 'Limits locked on this phone.');
       setError(null);
     } else setError(res === 'need-pin' ? 'Unlock with your PIN first.' : 'That PIN needs exactly 4 digits.');
   };
@@ -157,7 +157,7 @@ export function Limits({ dealId }: { dealId?: string }) {
           <Row gap={8}>
             <Icon name="phone" size={14} color={t.okText} stroke={2.2} />
             <T size={13} w={600} color={t.okText}>
-              These never leave this phone
+              {Platform.OS === 'web' ? 'These never leave this browser' : 'These never leave this phone'}
             </T>
           </Row>
         </View>

@@ -598,11 +598,32 @@ def s_selection_menu(e):
 IME = f'{PKG}/expo.modules.secondlookai.SecondLookKeyboardService'
 
 
+def inside(b, r):
+    return b[0] >= r[0] and b[1] >= r[1] and b[2] <= r[2] and b[3] <= r[3] and b[3] > b[1]
+
+
+def ime_region(root):
+    """Box of the SecondLook keyboard panel: the outermost view around its globe key."""
+    parents = {c: p for p in root.iter() for c in p}
+    globe = next((n for n in root.iter('node') if (n.get('content-desc') or '') == 'Switch keyboard'), None)
+    if globe is None:
+        return None
+    top = cur = globe
+    while cur in parents:
+        cur = parents[cur]
+        if cur.tag != 'node' or bounds(cur)[1] < SCREEN[1] * 0.3:
+            break
+        top = cur
+    return bounds(top)
+
+
 def ime_nodes():
-    """Nodes in the lower part of the screen, where the keyboard is (all windows)."""
+    """Nodes of the SecondLook keyboard only (all windows dumped; app nodes left out)."""
     root = popup_dump()
-    top = int(SCREEN[1] * 0.42)
-    return [n for n in all_nodes(root) if bounds(n)[1] >= top]
+    region = ime_region(root) if root is not None else None
+    if not region:
+        return []
+    return [n for n in all_nodes(root) if inside(bounds(n), region)]
 
 
 def ime_text():
@@ -617,35 +638,36 @@ def ime_text():
 def ime_wait(words, timeout=30):
     words = [words] if isinstance(words, str) else words
     end = time.time() + timeout
+    t = ''
     while time.time() < end:
         t = ime_text()
         for w in words:
             if w.lower() in t.lower():
                 return w, t
-        o = ' '.join(x[0] for x in ocr_words() if x[2] > SCREEN[1] * 0.42)
-        for w in words:
-            if all(part.lower() in o.lower() for part in w.split()[:3]):
-                return w, o
         time.sleep(1.5)
-    return None, ime_text()
+    return None, t or '(SecondLook keyboard not on screen)'
 
 
 def ime_tap(label, timeout=20):
     end = time.time() + timeout
     while time.time() < end:
-        for n in ime_nodes():
-            if label in ((n.get('text') or ''), (n.get('content-desc') or '')):
-                x, y = center(n)
-                shell(f'input tap {x} {y}')
-                time.sleep(1.5)
-                return
-        for w, x, y, ww, hh in ocr_words():
-            if y > SCREEN[1] * 0.42 and w.lower() == label.lower():
-                shell(f'input tap {x + ww // 2} {y + hh // 2}')
-                time.sleep(1.5)
-                return
+        nodes = ime_nodes()
+        exact = [n for n in nodes if label in ((n.get('text') or ''), (n.get('content-desc') or ''))]
+        loose = [n for n in nodes if (n.get('content-desc') or '').startswith(label + '.')]
+        for n in exact + loose:
+            x, y = center(n)
+            shell(f'input tap {x} {y}')
+            time.sleep(1.5)
+            return
         time.sleep(1.5)
-    raise Fail(f'keyboard key "{label}" not found')
+    raise Fail(f'keyboard key "{label}" not found in the SecondLook keyboard')
+
+
+def open_box():
+    """With something copied, Home hides its text box behind "Type or paste it instead"."""
+    if find('paste-input', exact_only=True) is None and find('paste-instead', exact_only=True) is not None:
+        tap('paste-instead', exact_only=True)
+    tap('paste-input', exact_only=True)
 
 
 def field_text():
@@ -654,7 +676,7 @@ def field_text():
 
 
 def clear_field():
-    tap('paste-input', exact_only=True)
+    open_box()
     clear_focused_field()
 
 
@@ -671,8 +693,8 @@ def s_ime_on(e):
     current = shell('settings get secure default_input_method').stdout.strip()
     if current != IME:
         raise Fail(f'could not select the keyboard: {out}; current = {current}')
-    tap('paste-input', exact_only=True)
-    w, t = ime_wait(['Copy their message, then pick one', 'Set your limits in the SecondLook app'], 20)
+    open_box()
+    w, t = ime_wait(['Copy their message, then pick one', 'Set your limits in the SecondLook app', 'Copy their message first'], 25)
     e['shots'].append(shot('ime-ready'))
     if not w:
         raise Fail('SecondLook keyboard did not appear: ' + t[:300])
