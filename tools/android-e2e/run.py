@@ -27,6 +27,7 @@ PIN = "2580"  # made-up PIN for this throwaway emulator
 
 results = []
 shots = [0]
+ime_range = []  # today's range as the keyboard shows it, from the Check step
 
 
 class Fail(Exception):
@@ -710,6 +711,9 @@ def s_ime_check(e):
     e['shots'].append(shot('ime-check'))
     if w != 'overpriced':
         raise Fail(f'expected "Real offer, but overpriced", got: {t[:300]}')
+    m = re.search(r"today's (\d+\.\d+)%[–-](\d+\.\d+)%", t)
+    if m:
+        ime_range[:] = [float(m.group(1)), float(m.group(2))]
     return t[:300]
 
 
@@ -761,13 +765,36 @@ def s_ime_explain(e):
     return f'source: {w}; {t[:400]}'
 
 
-@step('Android keyboard: scam message')
-def s_ime_scam(e):
+@step('Android keyboard: a rate below today\'s range says "Below", not "Inside"')
+def s_ime_below(e):
+    if not ime_range:
+        raise Fail('the Check step showed no market range to compare with')
+    low = ime_range[0]
+    rate = round((low - 0.5) * 8) / 8  # mortgage rates come in eighths
+    msg = f'Okay Alex, I can do {rate:g}% with $1,200 in fees.'
     clear_field()
-    type_text(SCAM)
+    type_text(msg)
     shell('input keycombination 113 29')  # select all
     shell('input keycombination 113 31')  # copy
     shell('input keyevent 67')
+    time.sleep(1)
+    ime_tap('Check')
+    w, t = ime_wait(["Below today's", "Inside today's", "Above today's", 'Likely a scam'], 15)
+    e['shots'].append(shot('ime-below'))
+    if w != "Below today's":
+        raise Fail(f'{rate:g}% vs a range starting at {low}%: expected "Below today\'s", got: {t[:300]}')
+    return f'{rate:g}%: {t[:300]}'
+
+
+@step('Android keyboard: scam message')
+def s_ime_scam(e):
+    # Copy the practice scam message from the app instead of typing it: long typed text is slow
+    # and flaky while the screen is being recorded.
+    go_tab('keyboard')
+    tap('kb-sample-scam', exact_only=True)
+    tap('kb-bubble', exact_only=True)
+    go_tab('home')
+    clear_field()
     time.sleep(1)
     ime_tap('Check')
     w, t = ime_wait(['Likely a scam'], 15)
@@ -793,7 +820,7 @@ def s_ime_globe(e):
 
 for fn in (s_install, s_launch, s_settings, s_registered, s_process_lender, s_process_scam,
            s_samples, s_lock, s_kb_check, s_kb_counter, s_kb_explain, s_kb_leak, s_kb_scam,
-           s_selection_menu, s_ime_on, s_ime_check, s_ime_counter, s_ime_leak, s_ime_explain, s_ime_scam,
+           s_selection_menu, s_ime_on, s_ime_check, s_ime_counter, s_ime_leak, s_ime_explain, s_ime_below, s_ime_scam,
            s_ime_globe):
     fn()
     if results[-1]['step'] == 'Install the APK' and results[-1]['status'] == 'FAIL':
