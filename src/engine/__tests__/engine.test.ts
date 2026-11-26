@@ -350,6 +350,10 @@ test('benchmark answers are parsed and sanity-checked', () => {
   assert.equal(parseBenchmark('{"low": 0.06, "high": 0.07}'), null);
   assert.equal(parseBenchmark('{"low": 2, "high": 19}'), null);
   assert.equal(parseBenchmark('no idea'), null);
+  // A grounded answer: notes from the search, then the JSON line. Ranges in the notes are ignored.
+  assert.deepEqual(parseBenchmark('Bankrate shows 7.10% to 7.19% for top credit.\n\n{"low": 6.875, "high": 7.5}'), { low: 6.88, high: 7.5 });
+  const p = benchmarkPrompt(cloudQuery(refi));
+  assert.ok(/Search Google now/.test(p) && /Do not answer from memory/.test(p) && /End your answer with one line of JSON/.test(p), p);
   assert.ok(sampleBenchmark(refi).sample);
 });
 

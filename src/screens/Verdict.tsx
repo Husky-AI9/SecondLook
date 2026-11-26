@@ -76,6 +76,7 @@ function RangeCard({ deal, theirs, unit }: { deal: Deal; theirs?: number; unit: 
   const seg = (b.high - b.low) / total;
   const mark = theirs !== undefined ? ((theirs - min) / total) * 100 : undefined;
   const above = theirs !== undefined && theirs > b.high + 0.0005;
+  const below = theirs !== undefined && theirs < b.low - 0.0005;
 
   return (
     <Card style={{ gap: 10 }} testID="range-card">
@@ -87,7 +88,7 @@ function RangeCard({ deal, theirs, unit }: { deal: Deal; theirs?: number; unit: 
           <Pill label="Sample range" tone="neutral" icon="list" />
         ) : (
           <Pressable accessibilityRole="button" accessibilityLabel="Show sources" onPress={() => setShowSources(!showSources)} hitSlop={8}>
-            <Pill label={`Cloud · ${b.sources.length} source${b.sources.length === 1 ? '' : 's'}`} tone="cloud" icon="cloud" />
+            <Pill label={b.sources.length ? `Cloud · ${b.sources.length} source${b.sources.length === 1 ? '' : 's'}` : 'Cloud · estimate, no sources'} tone="cloud" icon="cloud" />
           </Pressable>
         )}
       </Row>
@@ -119,7 +120,11 @@ function RangeCard({ deal, theirs, unit }: { deal: Deal; theirs?: number; unit: 
           ) : null}
         </View>
       </View>
-      {!above && theirs !== undefined ? (
+      {below && theirs !== undefined ? (
+        <T size={12} w={700} color={t.okText}>
+          Theirs, {pct(theirs, unit === 'APR')}, is below the range. Check the fees and points.
+        </T>
+      ) : !above && theirs !== undefined ? (
         <T size={12} w={700} color={t.okText}>
           Theirs, {pct(theirs, unit === 'APR')}, is inside the range.
         </T>

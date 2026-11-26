@@ -26,13 +26,16 @@ export function cloudSawLine(q: CloudQuery): string {
 export function benchmarkPrompt(q: CloudQuery): string {
   return [
     '[task:benchmark]',
-    'Use Google Search to find what lenders in the United States are charging today.',
+    // A bare "use Google Search" plus "reply with only JSON" let Gemini 3 answer from memory
+    // without searching. Asking it to search first, and saying why, makes it search.
+    `Search Google now for this week's ${q.product} rates in the United States${q.state ? ` and in ${q.state}` : ''}.`,
+    'Do not answer from memory: rates change every week and your training data is out of date.',
     `Product: ${q.product}.`,
     `Loan size: ${q.amountBand}.`,
     `Borrower: ${q.credit}.`,
     q.state ? `State: ${q.state}.` : '',
-    'Give the typical range of interest rates (APR for car loans) a borrower like this is being offered this week.',
-    'Reply with only this JSON and nothing else: {"low": number, "high": number}',
+    'From the search results, give the typical range of interest rates (APR for car loans) a borrower like this is being offered this week.',
+    'End your answer with one line of JSON: {"low": number, "high": number}',
     'Both numbers are percentages, for example {"low": 6.05, "high": 6.30}.',
   ]
     .filter(Boolean)
@@ -40,7 +43,17 @@ export function benchmarkPrompt(q: CloudQuery): string {
 }
 
 export function parseBenchmark(text: string): { low: number; high: number } | null {
-  const j = extractJson(text) as { low?: unknown; high?: unknown } | null;
+  // The answer ends with the JSON line, after the model's notes from the search.
+  const objs = (text || '').replace(/```(?:json)?/gi, '').match(/\{[^{}]*"low"[^{}]*\}/g);
+  let j: { low?: unknown; high?: unknown } | null = null;
+  if (objs) {
+    try {
+      j = JSON.parse(objs[objs.length - 1]);
+    } catch {
+      j = null;
+    }
+  }
+  if (!j) j = extractJson(text) as { low?: unknown; high?: unknown } | null;
   let low = j && typeof j.low === 'number' ? j.low : NaN;
   let high = j && typeof j.high === 'number' ? j.high : NaN;
   if (!isFinite(low) || !isFinite(high)) {
