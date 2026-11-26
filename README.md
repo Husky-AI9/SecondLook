@@ -146,6 +146,10 @@ time from a GitHub secret.
 |:-:|:-:|:-:|:-:|
 | Check: over your limit | Counter: three replies | Leak guard + safer version | Explain, Cloud · redacted |
 
+**Today's range, live** (the hosted app, Nov 26, 2026: Firebase AI Logic in the cloud with Grounding with Google Search):
+
+<img src="docs/screenshots/web-live-range.jpg" width="300" alt="Verdict for a 6.40% quote: today's range 6.88–7.38% from a live Google Search, Cloud · 6 sources, with Google's search suggestions and the source links listed">
+
 **SecondLook for Chrome** (from the [extension test](#tests), Chromium):
 
 | ![Verdict in the side panel](docs/screenshots/chrome-panel-verdict.jpg) | ![Three replies](docs/screenshots/chrome-panel-replies.jpg) | ![Reply typed into the page](docs/screenshots/chrome-reply-typed.jpg) | ![Leak guard](docs/screenshots/chrome-panel-leak-guard.jpg) |
@@ -267,9 +271,9 @@ The animated diagram at the top shows one message end to end:
 |---|---|
 | Web app and Chrome's Gemini Nano | Live; on-device message check confirmed in desktop Chrome. |
 | Android app and keyboard | Passes 21/21 emulator steps. Emulators have no Gemini Nano, so on-device on Android still needs a supported phone. |
-| Chrome extension | Passes 8/8 checks in Chromium against a local build. |
+| Chrome extension | Passes 10/10 checks in Chromium against a local build, including a quote that arrives by email. |
 | iPhone app and keyboard | Compile in CI. The on-phone keyboard tests ([T1–T4](docs/T1-T4.md)) are pending. |
-| Today's market range | On the Gemini free tier, Grounding with Google Search is not available for Gemini 3 and newer models, so this step needs a paid (Blaze) project. Without it the app says it could not reach the cloud, and the verdict still uses your limits. |
+| Today's market range | Live on the hosted app (Blaze plan): Grounding with Google Search returns the range with its sources and Google's search suggestions, for example 6.88–7.38% from 6 sources for a 30-yr refinance on Nov 26, 2026. Gemini 3 and newer need a paid (Blaze) project for grounding. If an answer arrives without sources, the app retries once and otherwise labels it "estimate, no sources". |
 | Hybrid APIs | Marked Experimental by Firebase. |
 
 ## Run it locally

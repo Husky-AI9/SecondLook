@@ -91,7 +91,13 @@ export function createRouter(provider: AiProvider, opts: RouterOptions): AiRoute
       const s = await status();
       if (!s.configured) throw new Error('not-configured');
       const q = cloudQuery(deal);
-      const r = await tryGenerate({ prompt: benchmarkPrompt(q), mode: 'only-cloud', grounded: true, cloudModel: opts.benchmarkModel() });
+      const ask = () => tryGenerate({ prompt: benchmarkPrompt(q), mode: 'only-cloud', grounded: true, cloudModel: opts.benchmarkModel() });
+      let r = await ask();
+      if (r && !(r.sources && r.sources.length) && parseBenchmark(r.text)) {
+        // The model may still skip the search. Ask once more; keep the answer that has sources.
+        const again = await ask();
+        if (again && again.sources && again.sources.length && parseBenchmark(again.text)) r = again;
+      }
       if (!r) throw new Error('no-answer');
       const range = parseBenchmark(r.text);
       if (!range) throw new Error('unreadable');
