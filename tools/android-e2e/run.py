@@ -10,6 +10,7 @@ import json
 import os
 import re
 import subprocess
+import threading
 import sys
 import time
 import xml.etree.ElementTree as ET
@@ -27,6 +28,7 @@ PIN = "2580"  # made-up PIN for this throwaway emulator
 
 results = []
 shots = [0]
+shot_times = {}
 
 
 class Fail(Exception):
@@ -47,7 +49,53 @@ def shot(name):
     data = subprocess.run(['adb', 'exec-out', 'screencap', '-p'], capture_output=True, timeout=60).stdout
     with open(path, 'wb') as f:
         f.write(data)
+    shot_times[os.path.basename(path)] = time.time()
     return os.path.basename(path)
+
+
+# ---- optional screen recording (SL_RECORD=1), for the demo video
+REC = os.environ.get('SL_RECORD') == '1'
+rec_log = []
+rec_stop = threading.Event()
+rec_thread = [None]
+
+
+def _recorder():
+    i = 0
+    while not rec_stop.is_set():
+        i += 1
+        name = f'/sdcard/sl-rec-{i:02d}.mp4'
+        entry = {'file': os.path.basename(name), 'start': time.time()}
+        rec_log.append(entry)
+        try:
+            subprocess.run(['adb', 'shell', 'screenrecord', '--bit-rate', '8000000', '--time-limit', '170', name],
+                           capture_output=True, timeout=200)
+        except Exception as ex:  # noqa: BLE001
+            entry['error'] = str(ex)[:200]
+        entry['end'] = time.time()
+
+
+def rec_start():
+    if REC and rec_thread[0] is None:
+        rec_thread[0] = threading.Thread(target=_recorder, daemon=True)
+        rec_thread[0].start()
+        time.sleep(1.5)
+
+
+def rec_finish():
+    if not REC or rec_thread[0] is None:
+        return
+    rec_stop.set()
+    shell('pkill -INT screenrecord')
+    rec_thread[0].join(timeout=30)
+    time.sleep(2)
+    for r in rec_log:
+        try:
+            adb('pull', '/sdcard/' + r['file'], f"{OUT}/{r['file']}", timeout=180)
+        except Exception as ex:  # noqa: BLE001
+            r['pull_error'] = str(ex)[:200]
+    with open(f'{OUT}/rec-times.json', 'w') as f:
+        json.dump(rec_log, f, indent=2)
 
 
 def _raw_dump():
@@ -258,6 +306,7 @@ def step(name):
                 except Exception:  # noqa: BLE001
                     pass
             entry['seconds'] = round(time.time() - t0, 1)
+            entry['t0'], entry['t1'] = t0, time.time()
             if name != 'Install the APK' and not alive():
                 entry['detail'] += ' [app process is NOT running after this step]'
                 if entry['status'] == 'PASS':
@@ -795,9 +844,15 @@ for fn in (s_install, s_launch, s_settings, s_registered, s_process_lender, s_pr
            s_samples, s_lock, s_kb_check, s_kb_counter, s_kb_explain, s_kb_leak, s_kb_scam,
            s_selection_menu, s_ime_on, s_ime_check, s_ime_counter, s_ime_leak, s_ime_explain, s_ime_scam,
            s_ime_globe):
+    if fn is s_samples:
+        rec_start()
     fn()
     if results[-1]['step'] == 'Install the APK' and results[-1]['status'] == 'FAIL':
         break
+
+rec_finish()
+with open(f'{OUT}/shot-times.json', 'w') as f:
+    json.dump(shot_times, f, indent=2)
 
 # Logs: app and Firebase lines only, with tokens, keys and ids removed.
 raw = adb('logcat', '-d', '-v', 'time', timeout=120).stdout
