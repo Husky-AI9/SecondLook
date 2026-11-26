@@ -40,6 +40,22 @@ def shot(pg, name):
     pg.screenshot(path=str(OUT / f'{n[0]:02d}-{name}.png'))
 
 
+def wait_text(loc, needle, timeout=60):
+    """Waits until a locator's text contains `needle`; returns the text."""
+    import time
+    end = time.time() + timeout
+    txt = ''
+    while time.time() < end:
+        try:
+            txt = loc.inner_text(timeout=2000)
+            if needle in txt:
+                return txt
+        except Exception:  # noqa: BLE001
+            pass
+        time.sleep(0.5)
+    return txt
+
+
 SEND = """async ([kind, text]) => {
   const [tab] = await chrome.tabs.query({ url: 'http://localhost:8081/__e2e/*' });
   await self.secondlookHandle({ menuItemId: kind, selectionText: text, frameId: 0 }, tab);
@@ -110,6 +126,26 @@ with sync_playwright() as p:
             safer = page.input_value('#reply')
             shot(page, 'safer-version-typed')
             check('safer version replaces it in the page, without 6.25%', '6.25' not in safer and len(safer) > 10, safer)
+
+        # A quote that arrives by email: a webmail-style page with a rich reply box that already
+        # holds a signature and the quoted thread. Chrome's selection text loses line breaks.
+        page.goto(BASE + '/__e2e/email.html')
+        email = ' '.join(page.inner_text('#mail').split())
+        page.click('#reply-btn')
+        sw.evaluate(SEND, ['theirs', email])
+        verdict = wait_text(tid('kb-verdict'), '6.375')
+        shot(panel, 'email-checked')
+        check('email quote → the offered 6.375%, not the 7.125% current rate', '6.375' in verdict and '7.125' not in verdict, verdict.replace('\n', ' '))
+        tid('kb-counter').click()
+        tid('kb-draft-0').wait_for(timeout=60000)
+        first = tid('kb-draft-0').inner_text()
+        tid('kb-draft-0').click()
+        page.wait_for_function("!document.querySelector('#compose').innerText.trim().startsWith('--')", timeout=15000)
+        body = page.inner_text('#compose')
+        shot(page, 'email-reply-typed')
+        check('email reply typed above the signature; signature and quoted email kept',
+              'Alex' in body and 'wrote:' in body and body.index('wrote:') > 20 and not body.strip().startswith('--'),
+              body.replace('\n', ' | '))
     except Exception as e:  # noqa: BLE001
         shot(panel, 'failure')
         check('no errors', False, f'{type(e).__name__}: {e}')

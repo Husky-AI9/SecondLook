@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8" /><title>Inbox (test page)</title>
+    <style>
+      body{font-family:sans-serif;max-width:640px;margin:30px auto;color:#222}
+      .from{color:#555;font-size:14px;margin-bottom:12px}
+      #mail{white-space:pre-wrap;line-height:1.45;border-bottom:1px solid #ddd;padding-bottom:16px}
+      #compose{border:1px solid #bbb;border-radius:8px;min-height:120px;padding:10px;margin-top:12px;white-space:pre-wrap}
+      .quote{color:#777;border-left:3px solid #ccc;padding-left:8px}
+    </style>
+  </head>
+  <body>
+    <h3>Your refinance quote</h3>
+    <div class="from">Dana Ruiz &lt;dana@summithomeloans.example&gt; · to me</div>
+    <div id="mail"></div>
+    <button id="reply-btn" type="button">Reply</button>
+    <!-- Like webmail: a rich reply box with the signature and the quoted email under the caret. -->
+    <div id="compose" contenteditable="true" role="textbox" aria-label="Message body" hidden><div><br></div><div id="sig">-- <br>Alex</div><div class="quote" id="quoted">On Tue, Dana Ruiz wrote: Your current rate is 7.125%...</div></div>
+    <script>
+      // The same text as SAMPLE_MESSAGES.lenderEmail in src/engine/sample.ts.
+      document.getElementById('mail').textContent = [
+        'Hi Alex,', '',
+        'Thanks for taking the time to chat yesterday. As promised, here is your refinance quote.', '',
+        'Your current rate is 7.125%. Based on your credit and 75% LTV, I can offer:', '',
+        'Loan amount: $360,000', 'Rate: 6.375% / APR 6.512%', 'Term: 30-year fixed', 'Points: 0.5',
+        'Lender fees: $1,295', 'Estimated monthly payment (P&I): $2,246/mo', '',
+        "This pricing is good through Friday. Let me know if you'd like to lock.", '',
+        'Best,', 'Dana Ruiz', 'Senior Loan Officer, Summit Home Loans', 'NMLS #000000', 'summithomeloans.example',
+      ].join('\n');
+      document.getElementById('reply-btn').onclick = () => {
+        const c = document.getElementById('compose');
+        c.hidden = false;
+        c.focus();
+        // Webmail opens a reply with the caret on the first line, above the signature.
+        const r = document.createRange();
+        r.setStart(c.firstChild, 0);
+        r.collapse(true);
+        const s = window.getSelection();
+        s.removeAllRanges();
+        s.addRange(r);
+      };
+    </script>
+  </body>
+</html>

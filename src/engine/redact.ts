@@ -56,6 +56,12 @@ export function redact(text: string, ctx: RedactContext = {}): Redacted {
   // Greetings and sign-offs usually carry a first name even when we were not told it.
   sub(/\b([Hh]i|[Hh]ello|[Hh]ey|[Dd]ear|[Tt]hanks|[Tt]hank you)[ ,]+(?!\[)([A-Z][a-z]{1,15})(?=[\s,.!])/g, '$1 [name]', 'names');
   sub(/(^|\n)\s*[-–—]\s*[A-Z][a-z]+(?:\s[A-Z][a-z]+)?\s*$/g, '$1- [name]', 'names');
+  // Email signatures: the name on the line after "Best," / "Thanks," / "Regards," and so on.
+  sub(
+    /((?:^|\n)[ \t]*(?:[Bb]est(?: [Rr]egards| [Ww]ishes)?|[Kk]ind [Rr]egards|[Ww]arm [Rr]egards|[Rr]egards|[Tt]hanks|[Tt]hank [Yy]ou|[Ss]incerely|[Cc]heers|[Ww]armly|[Tt]alk [Ss]oon)[ \t]*[,.!]?[ \t]*\n[ \t]*)[A-Z][a-z'-]+(?:[ \t]+[A-Z][a-z'-]+){0,2}(?=[ \t]*(?:\n|$))/g,
+    '$1[name]',
+    'names',
+  );
   sub(/\b([Tt]his is|[Ii]t's|[Ii]ts|[Ii] am|[Ii]'m)\s+(?!\[)([A-Z][a-z]{1,15})(\s+(?:from|at|with)\b)/g, '$1 [name]$3', 'names');
   sub(/\b(from|at|with)\s+(?!\[)((?:[A-Z][A-Za-z&]+\s){1,3}(?:Bank|Loans|Lending|Mortgage|Auto|Motors|Credit Union|Financial|Finance|Capital|Home Loans))\b/g, '$1 [name]', 'names');
 

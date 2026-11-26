@@ -44,7 +44,8 @@ async function handle(info, tab) {
 self.secondlookHandle = handle;
 
 // Runs in the page. Types the reply into the focused reply box, or the most likely one.
-function typeInto(text) {
+// `replace` is the user's own reply that was checked, when this is its safer version.
+function typeInto(text, replace) {
   const usable = (el) => {
     if (!el || el === document.body || el.disabled || el.readOnly) return false;
     const r = el.getBoundingClientRect();
@@ -69,11 +70,39 @@ function typeInto(text) {
     el.dispatchEvent(new Event('change', { bubbles: true }));
     return true;
   }
-  const range = document.createRange();
-  range.selectNodeContents(el);
+  // Rich editors (webmail, chat apps).
   const sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(range);
+  const selectAll = () => {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  };
+  if (replace) {
+    // A safer version replaces the reply that was checked. Find it; if it is split across
+    // formatting, replace the whole box so the leaky wording cannot survive.
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let node;
+    let found = false;
+    while ((node = walker.nextNode())) {
+      const i = node.nodeValue.indexOf(replace);
+      if (i >= 0) {
+        const range = document.createRange();
+        range.setStart(node, i);
+        range.setEnd(node, i + replace.length);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        found = true;
+        break;
+      }
+    }
+    if (!found) selectAll();
+  } else {
+    // A new reply: if the caret is already in the box (an email reply opens with it above the
+    // signature and the quoted thread), type there and keep the rest; otherwise fill the box.
+    const caretInside = sel.rangeCount > 0 && el.contains(sel.getRangeAt(0).startContainer);
+    if (!caretInside || el.innerText.trim() === '') selectAll();
+  }
   return document.execCommand('insertText', false, text);
 }
 
@@ -86,9 +115,10 @@ async function insert(text) {
   }
   if (tabId === undefined) return { ok: false, why: 'no tab' };
   const frames = [...new Set([(pending && pending.frameId) || 0, 0])];
+  const replace = pending && pending.kind === 'own' ? pending.text : null;
   for (const frameId of frames) {
     try {
-      const [r] = await chrome.scripting.executeScript({ target: { tabId, frameIds: [frameId] }, func: typeInto, args: [text] });
+      const [r] = await chrome.scripting.executeScript({ target: { tabId, frameIds: [frameId] }, func: typeInto, args: [text, replace] });
       if (r && r.result) return { ok: true };
     } catch (e) {
       /* try the next frame */

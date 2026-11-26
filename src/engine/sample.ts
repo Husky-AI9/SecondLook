@@ -9,6 +9,29 @@ export const SAMPLE_MESSAGES = {
   dealer: 'We can do $489/mo for 72 months at 8.9% APR. That includes the protection package.',
   scam: "CONGRATS! You're pre-approved for a $50,000 loan at 2.9% APR. Pay the $250 processing fee today to release your funds: fastfunds.example/claim",
   leak: 'Honestly, the highest I can go is 6.25%.',
+  // The same lender, by email: longer, itemised, with a signature. Every name and number is made up.
+  lenderEmail: [
+    'Hi Alex,',
+    '',
+    'Thanks for taking the time to chat yesterday. As promised, here is your refinance quote.',
+    '',
+    'Your current rate is 7.125%. Based on your credit and 75% LTV, I can offer:',
+    '',
+    'Loan amount: $360,000',
+    'Rate: 6.375% / APR 6.512%',
+    'Term: 30-year fixed',
+    'Points: 0.5',
+    'Lender fees: $1,295',
+    'Estimated monthly payment (P&I): $2,246/mo',
+    '',
+    "This pricing is good through Friday. Let me know if you'd like to lock.",
+    '',
+    'Best,',
+    'Dana Ruiz',
+    'Senior Loan Officer, Summit Home Loans',
+    'NMLS #000000',
+    'summithomeloans.example',
+  ].join('\n'),
 };
 
 export function sampleDeals(now = new Date()): Deal[] {

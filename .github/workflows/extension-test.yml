@@ -20,7 +20,7 @@ jobs:
       - name: "Build the web app (no Firebase keys, offline rules)"
         run: |
           npx expo export -p web
-          mkdir -p dist/__e2e && cp tools/extension-e2e/page.html dist/__e2e/
+          mkdir -p dist/__e2e && cp tools/extension-e2e/page.html tools/extension-e2e/email.html dist/__e2e/
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'

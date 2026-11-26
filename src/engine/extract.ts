@@ -28,13 +28,20 @@ export function extractOffer(text: string): Offer {
   const offer: Offer = { addOns: [] };
   const t = text.replace(/ /g, ' ');
 
-  // Percentages: "8.9% APR" is an APR, anything else is the note rate.
+  // Percentages: "8.9% APR" is an APR, anything else is the note rate. Emails often mention
+  // other percentages first ("your current rate is 7.125%", "20% down", "75% LTV"): those
+  // are not the offer, so they are skipped.
   const pctRe = /(\d{1,2}(?:\.\d{1,3})?)\s?(?:%|percent)(\s*(?:apr|a\.p\.r\.))?/gi;
   let m: RegExpExecArray | null;
   while ((m = pctRe.exec(t))) {
     const v = parseFloat(m[1]);
     if (!(v > 0 && v < 40)) continue;
     const before = t.slice(Math.max(0, m.index - 12), m.index).toLowerCase();
+    const line = t.slice(Math.max(0, m.index - 40), m.index).split('\n').pop()!.toLowerCase();
+    const after = t.slice(m.index + m[0].length, m.index + m[0].length + 24).toLowerCase();
+    if (/\b(current(ly)?|existing|old|previous|prior|average|paying( about)?)( (interest )?rate| loan| mortgage| apr)?( is| was| of| at| sits at|:)?( (about|around|roughly))?\s*$/.test(line)) continue;
+    if (/^\s*(down|ltv|loan[- ]to[- ]value|of (the )?(home|purchase|price|value)|equity|cash back|off)\b/.test(after)) continue;
+    if (/(down payment|ltv|loan[- ]to[- ]value)( of| is| at|:)?\s*$/.test(line)) continue;
     const isApr = !!m[2] || /apr( of| is| at)?\s*$/.test(before);
     if (isApr) {
       if (offer.apr === undefined) offer.apr = v;
@@ -71,7 +78,7 @@ export function extractOffer(text: string): Offer {
     }
   }
 
-  const pts = /(\d(?:\.\d{1,3})?)\s?(?:discount )?points?\b/i.exec(t);
+  const pts = /(\d(?:\.\d{1,3})?)\s?(?:discount )?points?\b/i.exec(t) || /\b(?:discount )?points?\s*[:=]\s*(\d(?:\.\d{1,3})?)\b/i.exec(t);
   if (pts) offer.points = parseFloat(pts[1]);
   else if (/\bno points\b|\bzero points\b/i.test(t)) offer.points = 0;
 
