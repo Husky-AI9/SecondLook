@@ -29,6 +29,7 @@ PIN = "2580"  # made-up PIN for this throwaway emulator
 results = []
 shots = [0]
 shot_times = {}
+ime_range = []  # today's range as the keyboard shows it, from the Check step
 
 
 class Fail(Exception):
@@ -73,6 +74,12 @@ def _recorder():
         except Exception as ex:  # noqa: BLE001
             entry['error'] = str(ex)[:200]
         entry['end'] = time.time()
+
+
+def hold(seconds=2.5):
+    """While recording, keep a result on screen long enough to read in the demo video."""
+    if REC:
+        time.sleep(seconds)
 
 
 def rec_start():
@@ -745,6 +752,7 @@ def s_ime_on(e):
     open_box()
     w, t = ime_wait(['Copy their message, then pick one', 'Set your limits in the SecondLook app', 'Copy their message first'], 25)
     e['shots'].append(shot('ime-ready'))
+    hold(2)
     if not w:
         raise Fail('SecondLook keyboard did not appear: ' + t[:300])
     if 'Set your limits' in w:
@@ -757,8 +765,12 @@ def s_ime_check(e):
     ime_tap('Check')
     w, t = ime_wait(['overpriced', 'Competitive offer', 'not compared yet', 'Likely a scam'], 20)
     e['shots'].append(shot('ime-check'))
+    hold(3.5)
     if w != 'overpriced':
         raise Fail(f'expected "Real offer, but overpriced", got: {t[:300]}')
+    m = re.search(r"today's (\d+\.\d+)%[–-](\d+\.\d+)%", t)
+    if m:
+        ime_range[:] = [float(m.group(1)), float(m.group(2))]
     return t[:300]
 
 
@@ -767,6 +779,7 @@ def s_ime_counter(e):
     ime_tap('Counter')
     w, t = ime_wait(['FRIENDLY'], 20)
     e['shots'].append(shot('ime-counter'))
+    hold(3.5)
     if not w:
         raise Fail('no replies: ' + t[:300])
     if '6.25' in t:
@@ -775,6 +788,7 @@ def s_ime_counter(e):
     time.sleep(1)
     typed = field_text()
     e['shots'].append(shot('ime-reply-typed'))
+    hold(3)
     if not typed or 'Thanks' not in typed and 'Could you' not in typed:
         raise Fail(f'reply was not typed into the box (box has: {typed!r})')
     return f'box now has: {typed}'
@@ -784,15 +798,18 @@ def s_ime_counter(e):
 def s_ime_leak(e):
     clear_field()
     type_text(LEAK)
+    hold(2.5)
     ime_tap('Check')
     w, t = ime_wait(['Hold on before you send'], 15)
     e['shots'].append(shot('ime-leak'))
+    hold(3.5)
     if not w:
         raise Fail('no leak warning: ' + t[:300])
     ime_tap('SAFER VERSION')
     time.sleep(1)
     typed = field_text()
     e['shots'].append(shot('ime-safer-typed'))
+    hold(3)
     if '6.25' in typed or not typed:
         raise Fail(f'safer version not typed or still leaks: {typed!r}')
     return f'warning shown; box now has: {typed}'
@@ -805,22 +822,48 @@ def s_ime_explain(e):
     w, t = ime_wait(['Cloud · redacted', 'On-device', 'Offline rules'], 45)
     time.sleep(1)
     e['shots'].append(shot('ime-explain'))
+    hold(3.5)
     if not w:
         raise Fail('no answer: ' + t[:300])
     return f'source: {w}; {t[:400]}'
 
 
-@step('Android keyboard: scam message')
-def s_ime_scam(e):
+@step('Android keyboard: a rate below today\'s range says "Below", not "Inside"')
+def s_ime_below(e):
+    if not ime_range:
+        raise Fail('the Check step showed no market range to compare with')
+    low = ime_range[0]
+    rate = round((low - 0.5) * 8) / 8  # mortgage rates come in eighths
+    msg = f'Okay Alex, I can do {rate:g}% with $1,200 in fees.'
     clear_field()
-    type_text(SCAM)
+    type_text(msg)
     shell('input keycombination 113 29')  # select all
     shell('input keycombination 113 31')  # copy
     shell('input keyevent 67')
     time.sleep(1)
     ime_tap('Check')
+    w, t = ime_wait(["Below today's", "Inside today's", "Above today's", 'Likely a scam'], 15)
+    e['shots'].append(shot('ime-below'))
+    hold(3)
+    if w != "Below today's":
+        raise Fail(f'{rate:g}% vs a range starting at {low}%: expected "Below today\'s", got: {t[:300]}')
+    return f'{rate:g}%: {t[:300]}'
+
+
+@step('Android keyboard: scam message')
+def s_ime_scam(e):
+    # Copy the practice scam message from the app instead of typing it: long typed text is slow
+    # and flaky while the screen is being recorded.
+    go_tab('keyboard')
+    tap('kb-sample-scam', exact_only=True)
+    tap('kb-bubble', exact_only=True)
+    go_tab('home')
+    clear_field()
+    time.sleep(1)
+    ime_tap('Check')
     w, t = ime_wait(['Likely a scam'], 15)
     e['shots'].append(shot('ime-scam'))
+    hold(4)
     if not w:
         raise Fail('scam not caught: ' + t[:300])
     return t[:300]
@@ -842,7 +885,7 @@ def s_ime_globe(e):
 
 for fn in (s_install, s_launch, s_settings, s_registered, s_process_lender, s_process_scam,
            s_samples, s_lock, s_kb_check, s_kb_counter, s_kb_explain, s_kb_leak, s_kb_scam,
-           s_selection_menu, s_ime_on, s_ime_check, s_ime_counter, s_ime_leak, s_ime_explain, s_ime_scam,
+           s_selection_menu, s_ime_on, s_ime_check, s_ime_counter, s_ime_leak, s_ime_explain, s_ime_below, s_ime_scam,
            s_ime_globe):
     if fn is s_samples:
         rec_start()
