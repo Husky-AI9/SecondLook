@@ -11,11 +11,13 @@ export function money(n: number, opts: { cents?: boolean } = {}): string {
 
 /** 6.4 -> "6.40%", 8.9 -> "8.9%" when short is true. */
 export function pct(n: number, short = false): string {
+  // Mortgage rates come in eighths: 6.375% stays 6.375%, not 6.38%.
+  const places = Math.round(n * 1000) % 10 !== 0 ? 3 : 2;
   if (short) {
-    const s = n.toFixed(2).replace(/0$/, '');
+    const s = n.toFixed(places).replace(/0$/, '');
     return s.replace(/\.0$/, '') + '%';
   }
-  return n.toFixed(2) + '%';
+  return n.toFixed(places) + '%';
 }
 
 /** Rounds to a friendly "about" figure: 16426.8 -> 16400. */

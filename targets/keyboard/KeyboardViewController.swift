@@ -64,8 +64,42 @@ enum Rules {
           let r = Range(m.range(at: 1), in: text) else { return nil }
     return Double(text[r].replacingOccurrences(of: ",", with: ""))
   }
-  static func rate(_ text: String) -> Double? { firstMatch(#"(\d{1,2}(?:\.\d{1,3})?)\s?%"#, in: text) }
-  static func fees(_ text: String) -> Double? { firstMatch(#"\$\s?(\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?\s?(?:in )?(?:total )?(?:lender |closing )?(?:fees?|closing costs?)"#, in: text) }
+  static func has(_ pattern: String, _ s: String) -> Bool {
+    guard let re = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) else { return false }
+    return re.firstMatch(in: s, range: NSRange(s.startIndex..., in: s)) != nil
+  }
+  // Emails mention other percentages before the offer ("your current rate is 7.125%",
+  // "20% down", "75% LTV"). Same skips as src/engine/extract.ts.
+  static let rateSkipBefore = #"\b(current(ly)?|existing|old|previous|prior|average|paying( about)?)( (interest )?rate| loan| mortgage| apr)?( is| was| of| at| sits at|:)?( (about|around|roughly))?\s*$|(down payment|ltv|loan[- ]to[- ]value)( of| is| at|:)?\s*$"#
+  static let rateSkipAfter = #"^\s*(down|ltv|loan[- ]to[- ]value|of (the )?(home|purchase|price|value)|equity|cash back|off)\b"#
+  /// The offered note rate; the APR only if no note rate is given.
+  static func rate(_ text: String) -> Double? {
+    guard let re = try? NSRegularExpression(pattern: #"(\d{1,2}(?:\.\d{1,3})?)\s?%"#) else { return nil }
+    let ns = text as NSString
+    var apr: Double? = nil
+    for m in re.matches(in: text, range: NSRange(location: 0, length: ns.length)) {
+      guard let v = Double(ns.substring(with: m.range(at: 1))), v > 0, v < 40 else { continue }
+      let start = m.range.location
+      let end = m.range.location + m.range.length
+      let lineStart = max(0, start - 40)
+      var line = ns.substring(with: NSRange(location: lineStart, length: start - lineStart))
+      if let nl = line.range(of: "\n", options: .backwards) { line = String(line[nl.upperBound...]) }
+      let after = ns.substring(with: NSRange(location: end, length: min(24, ns.length - end)))
+      if has(rateSkipBefore, line) || has(rateSkipAfter, after) { continue }
+      let b0 = max(0, start - 12)
+      let before = ns.substring(with: NSRange(location: b0, length: start - b0))
+      if has(#"^\s*(apr|a\.p\.r\.)"#, after) || has(#"apr( of| is| at)?\s*$"#, before) {
+        if apr == nil { apr = v }
+        continue
+      }
+      return v
+    }
+    return apr
+  }
+  static func fees(_ text: String) -> Double? {
+    firstMatch(#"\$\s?(\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?\s?(?:in )?(?:total )?(?:lender |closing )?(?:fees?|closing costs?)"#, in: text)
+      ?? firstMatch(#"(?:lender |closing |origination )?(?:fees?|closing costs?)\s*(?:of|are|is|total|:)?\s*\$\s?(\d{1,3}(?:,\d{3})+|\d+)"#, in: text)
+  }
   static func percents(_ text: String) -> [Double] {
     guard let re = try? NSRegularExpression(pattern: #"(\d{1,2}(?:\.\d{1,3})?)\s?%"#) else { return [] }
     return re.matches(in: text, range: NSRange(text.startIndex..., in: text)).compactMap { m in
@@ -88,7 +122,8 @@ enum Rules {
     return score >= 5 ? reasons : []
   }
 
-  static func pct(_ v: Double) -> String { String(format: "%.2f%%", v) }
+  // Mortgage rates come in eighths: 6.375% stays 6.375%.
+  static func pct(_ v: Double) -> String { String(format: Int((v * 1000).rounded()) % 10 != 0 ? "%.3f%%" : "%.2f%%", v) }
   static func money(_ v: Double) -> String {
     let f = NumberFormatter(); f.numberStyle = .decimal; f.maximumFractionDigits = 0
     return "$" + (f.string(from: NSNumber(value: v)) ?? String(Int(v)))

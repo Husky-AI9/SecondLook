@@ -114,8 +114,42 @@ internal object KRules {
     RegexOption.IGNORE_CASE,
   )
 
-  fun rate(text: String): Double? = RATE.find(text)?.groupValues?.get(1)?.toDoubleOrNull()
-  fun fees(text: String): Double? = FEES.find(text)?.groupValues?.get(1)?.replace(",", "")?.toDoubleOrNull()
+  private val FEES_AFTER = Regex(
+    """(?:lender |closing |origination )?(?:fees?|closing costs?)\s*(?:of|are|is|total|:)?\s*\$\s?(\d{1,3}(?:,\d{3})+|\d+)""",
+    RegexOption.IGNORE_CASE,
+  )
+  // Emails mention other percentages before the offer ("your current rate is 7.125%",
+  // "20% down", "75% LTV"). Same skips as src/engine/extract.ts.
+  private val SKIP_BEFORE = Regex(
+    """\b(current(ly)?|existing|old|previous|prior|average|paying( about)?)( (interest )?rate| loan| mortgage| apr)?( is| was| of| at| sits at|:)?( (about|around|roughly))?\s*$|(down payment|ltv|loan[- ]to[- ]value)( of| is| at|:)?\s*$""",
+    RegexOption.IGNORE_CASE,
+  )
+  private val SKIP_AFTER = Regex("""^\s*(down|ltv|loan[- ]to[- ]value|of (the )?(home|purchase|price|value)|equity|cash back|off)\b""", RegexOption.IGNORE_CASE)
+  private val APR_AFTER = Regex("""^\s*(apr|a\.p\.r\.)""", RegexOption.IGNORE_CASE)
+  private val APR_BEFORE = Regex("""apr( of| is| at)?\s*$""", RegexOption.IGNORE_CASE)
+
+  /** The offered note rate; the APR only if no note rate is given. */
+  fun rate(text: String): Double? {
+    var apr: Double? = null
+    for (m in RATE.findAll(text)) {
+      val v = m.groupValues[1].toDoubleOrNull() ?: continue
+      if (v <= 0.0 || v >= 40.0) continue
+      val start = m.range.first
+      val end = m.range.last + 1
+      val line = text.substring(maxOf(0, start - 40), start).substringAfterLast('\n')
+      val after = text.substring(end, minOf(text.length, end + 24))
+      if (SKIP_BEFORE.containsMatchIn(line) || SKIP_AFTER.containsMatchIn(after)) continue
+      val before = text.substring(maxOf(0, start - 12), start)
+      if (APR_AFTER.containsMatchIn(after) || APR_BEFORE.containsMatchIn(before)) {
+        if (apr == null) apr = v
+        continue
+      }
+      return v
+    }
+    return apr
+  }
+  fun fees(text: String): Double? =
+    (FEES.find(text) ?: FEES_AFTER.find(text))?.groupValues?.get(1)?.replace(",", "")?.toDoubleOrNull()
   fun percents(text: String): List<Double> = RATE.findAll(text).mapNotNull { it.groupValues[1].toDoubleOrNull() }.toList()
 
   private val SCAM_SIGNS = listOf(
@@ -138,7 +172,9 @@ internal object KRules {
     return if (score >= 5) reasons else emptyList()
   }
 
-  fun pct(v: Double): String = String.format(Locale.US, "%.2f%%", v)
+  // Mortgage rates come in eighths: 6.375% stays 6.375%.
+  fun pct(v: Double): String =
+    String.format(Locale.US, if (Math.round(v * 1000) % 10 != 0L) "%.3f%%" else "%.2f%%", v)
   fun money(v: Double): String = "$" + NumberFormat.getIntegerInstance(Locale.US).format(v.toLong())
 
   /** Midpoint of target and walk-away, rounded down to 0.05, always below the walk-away. */
@@ -209,6 +245,8 @@ internal object KRedact {
       if (w.length < 3 || w.lowercase() in NAME_STOP) continue
       sub(Regex("""\b${Regex.escape(w)}\b""", RegexOption.IGNORE_CASE), "[name]")
     }
+    // Email signatures: the name on the line after "Best," / "Thanks," / "Regards," and so on.
+    sub(Regex("""((?:^|\n)[ \t]*(?:[Bb]est(?: [Rr]egards| [Ww]ishes)?|[Kk]ind [Rr]egards|[Ww]arm [Rr]egards|[Rr]egards|[Tt]hanks|[Tt]hank [Yy]ou|[Ss]incerely|[Cc]heers|[Ww]armly|[Tt]alk [Ss]oon)[ \t]*[,.!]?[ \t]*\n[ \t]*)[A-Z][a-z'-]+(?:[ \t]+[A-Z][a-z'-]+){0,2}(?=[ \t]*(?:\n|$))"""), "\$1[name]")
     sub(Regex("""\b([Hh]i|[Hh]ello|[Hh]ey|[Dd]ear|[Tt]hanks|[Tt]hank you)[ ,]+(?!\[)([A-Z][a-z]{1,15})(?=[\s,.!])"""), "\$1 [name]")
     sub(Regex("""\b([Tt]his is|[Ii]t's|[Ii]ts|[Ii] am|[Ii]'m)\s+(?!\[)([A-Z][a-z]{1,15})(\s+(?:from|at|with)\b)"""), "\$1 [name]\$3")
     sub(Regex("""\b(from|at|with)\s+(?!\[)((?:[A-Z][A-Za-z&]+\s){1,3}(?:Bank|Loans|Lending|Mortgage|Auto|Motors|Credit Union|Financial|Finance|Capital|Home Loans))\b"""), "\$1 [name]")

@@ -57,6 +57,8 @@ test('formatting', () => {
   assert.equal(pct(6.4), '6.40%');
   assert.equal(pct(8.9, true), '8.9%');
   assert.equal(pct(6.15, true), '6.15%');
+  assert.equal(pct(6.375), '6.375%');
+  assert.equal(pct(6.375, true), '6.375%');
   assert.equal(amountBand(350000), '$300–400k');
   assert.equal(amountBand(27200), '$20–30k');
   assert.equal(shortDealLabel(refi), 'Refi · Summit');
@@ -110,6 +112,29 @@ test('reads other common phrasings', () => {
   const c = extractOffer('Call me back when you get a chance.');
   assert.equal(c.rate, undefined);
   assert.deepEqual(c.addOns, []);
+});
+test('reads a quote that arrives as an email', () => {
+  const o = extractOffer(SAMPLE_MESSAGES.lenderEmail);
+  assert.equal(o.rate, 6.375); // not the 7.125% current rate mentioned first
+  assert.equal(o.apr, 6.512);
+  assert.equal(o.termMonths, 360);
+  assert.equal(o.rateType, 'fixed');
+  assert.equal(o.amount, 360000);
+  assert.equal(o.points, 0.5);
+  assert.equal(o.fees, 1295);
+  assert.equal(o.monthlyPayment, 2246);
+  assert.equal(o.expires, 'Friday');
+  assert.equal(checkScam(SAMPLE_MESSAGES.lenderEmail).isScam, false); // a signature link is not a scam
+  // Redacted for the cloud with no Deal File to go on: the signature name and licence go too.
+  const red = redact(SAMPLE_MESSAGES.lenderEmail).text;
+  assert.ok(!/Dana|Ruiz|Alex|Summit|NMLS|summithomeloans/.test(red), red);
+  assert.ok(red.includes('6.375%') && red.includes('$1,295'), red);
+});
+test('skips percentages that are not the offer', () => {
+  assert.equal(extractOffer('With 20% down, I can do 6.25% on a 30-year fixed.').rate, 6.25);
+  assert.equal(extractOffer("You're currently paying 7.1%. I can get you 6.3%.").rate, 6.3);
+  assert.equal(extractOffer('At 35% LTV the rate is 6.05%.').rate, 6.05);
+  assert.equal(extractOffer('Rates were up this week, but I can get you 6.40%.').rate, 6.4);
 });
 test('a number the model invented is dropped; a real one it found is kept', () => {
   const text = 'I can do 6.40% and the origination comes to 1850 dollars';
