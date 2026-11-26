@@ -160,7 +160,8 @@ internal object KRules {
     Triple("""guaranteed approval|no credit check|100% approv""", "Promises approval with no credit check", 3),
   ).map { (p, label, w) -> Triple(Regex(p, RegexOption.IGNORE_CASE), label, w) }
 
-  fun scamReasons(text: String): List<String> {
+  /** Same scoring as src/engine/scamRules.ts, including "too good": a rate far below the market. */
+  fun scamReasons(text: String, marketLow: Double? = null): List<String> {
     var score = 0
     val reasons = mutableListOf<String>()
     for ((re, label, weight) in SCAM_SIGNS) {
@@ -169,7 +170,21 @@ internal object KRules {
         reasons.add(label)
       }
     }
+    val r = rate(text)
+    val floor = if (marketLow != null) minOf(TOO_GOOD_APR, marketLow - 2) else TOO_GOOD_APR
+    if (r != null && r <= floor) {
+      score += 2
+      reasons.add("Rate is far below anything on the market")
+    }
     return if (score >= 5) reasons else emptyList()
+  }
+  private const val TOO_GOOD_APR = 3.5
+
+  /** One sentence comparing their rate with today's range, as the web verdict says it. */
+  fun rangeLine(rate: Double, low: Double, high: Double): String = when {
+    rate > high + 0.0005 -> "Above today's ${pct(low)}–${pct(high)}."
+    rate < low - 0.0005 -> "Below today's ${pct(low)}–${pct(high)}. Check the fees and points."
+    else -> "Inside today's ${pct(low)}–${pct(high)}."
   }
 
   // Mortgage rates come in eighths: 6.375% stays 6.375%.
@@ -503,7 +518,7 @@ class SecondLookKeyboardService : InputMethodService() {
       return show("Your reply doesn't give away your walk-away rate. Read it, then press send.", "Offline rules", Tone.OK)
     }
     val text = copied() ?: return
-    val scam = KRules.scamReasons(text)
+    val scam = KRules.scamReasons(text, deal?.rangeLow)
     if (scam.isNotEmpty()) {
       return show("Likely a scam. Don't reply.\n• " + scam.joinToString("\n• "), "Offline rules", Tone.SCAM)
     }
@@ -512,10 +527,7 @@ class SecondLookKeyboardService : InputMethodService() {
     val parts = mutableListOf<String>()
     val d = deal
     if (d?.rangeLow != null && d.rangeHigh != null) {
-      parts.add(
-        if (rate > d.rangeHigh + 0.0005) "Above today's ${KRules.pct(d.rangeLow)}–${KRules.pct(d.rangeHigh)}."
-        else "Inside today's ${KRules.pct(d.rangeLow)}–${KRules.pct(d.rangeHigh)}.",
-      )
+      parts.add(KRules.rangeLine(rate, d.rangeLow, d.rangeHigh))
     }
     d?.limits?.let { l ->
       if (rate > l.maxRate + 0.0005) parts.add("The rate is over your limit.")
@@ -529,7 +541,7 @@ class SecondLookKeyboardService : InputMethodService() {
   private fun tapCounter() {
     if (busy) return
     val text = copied() ?: return
-    if (KRules.scamReasons(text).isNotEmpty()) {
+    if (KRules.scamReasons(text, deal?.rangeLow).isNotEmpty()) {
       return show("Likely a scam. Don't reply.\nNo reply is offered for scam messages. Don't tap the link.", "Offline rules", Tone.SCAM)
     }
     val d = deal

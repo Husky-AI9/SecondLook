@@ -114,12 +114,22 @@ enum Rules {
     (#"gift ?cards?|bitcoin|crypto|western union|moneygram|zelle|cash ?app|wire transfer"#, "Wants payment by gift card, crypto or wire", 4),
     (#"guaranteed approval|no credit check|100% approv"#, "Promises approval with no credit check", 3),
   ]
-  static func scamReasons(_ text: String) -> [String] {
+  /// Same scoring as src/engine/scamRules.ts, including "too good": a rate far below the market.
+  static let tooGoodApr = 3.5
+  static func scamReasons(_ text: String, marketLow: Double? = nil) -> [String] {
     var score = 0; var reasons: [String] = []
     for (pattern, label, weight) in scamSigns where text.range(of: pattern, options: [.regularExpression, .caseInsensitive]) != nil {
       score += weight; reasons.append(label)
     }
+    let floor = marketLow.map { min(tooGoodApr, $0 - 2) } ?? tooGoodApr
+    if let r = rate(text), r <= floor { score += 2; reasons.append("Rate is far below anything on the market") }
     return score >= 5 ? reasons : []
+  }
+  /// One sentence comparing their rate with today's range, as the web verdict says it.
+  static func rangeLine(_ rate: Double, low: Double, high: Double) -> String {
+    if rate > high + 0.0005 { return "Above today's \(pct(low))–\(pct(high))." }
+    if rate < low - 0.0005 { return "Below today's \(pct(low))–\(pct(high)). Check the fees and points." }
+    return "Inside today's \(pct(low))–\(pct(high))."
   }
 
   // Mortgage rates come in eighths: 6.375% stays 6.375%.
@@ -290,11 +300,11 @@ final class KeyboardViewController: UIInputViewController {
       return show("Hold on before you send. This gives away your walk-away rate. Once a lender knows the highest number you'll accept, that is usually the number you get.", source: "Offline rules")
     }
     guard let text = copied() else { return }
-    let scam = Rules.scamReasons(text)
+    let scam = Rules.scamReasons(text, marketLow: deal?.range?.low)
     if !scam.isEmpty { return show("Likely a scam. Don't reply.\n• " + scam.joined(separator: "\n• "), source: "Offline rules") }
     guard let rate = Rules.rate(text) else { return show("No rate in this message. Ask for the rate, APR, fees and term in writing.", source: "Offline rules") }
     var parts: [String] = []
-    if let r = deal?.range { parts.append(rate > r.high ? "Above today's \(Rules.pct(r.low))–\(Rules.pct(r.high))." : "Inside today's \(Rules.pct(r.low))–\(Rules.pct(r.high)).") }
+    if let r = deal?.range { parts.append(Rules.rangeLine(rate, low: r.low, high: r.high)) }
     if let l = deal?.limits {
       if rate > l.maxRate { parts.append("The rate is over your limit.") }
       if let f = Rules.fees(text), f > l.maxFees { parts.append("Fees are \(Rules.money(f - l.maxFees)) over your limit.") }
@@ -305,7 +315,7 @@ final class KeyboardViewController: UIInputViewController {
 
   @objc func tapCounter() {
     guard let text = copied() else { return }
-    if !Rules.scamReasons(text).isEmpty { return show("Likely a scam. No reply is offered for scam messages. Don't tap the link.", source: "Offline rules") }
+    if !Rules.scamReasons(text, marketLow: deal?.range?.low).isEmpty { return show("Likely a scam. No reply is offered for scam messages. Don't tap the link.", source: "Offline rules") }
     guard let d = deal, d.limits != nil else { return show("Set your limits in the SecondLook app first.", source: "") }
     let replies = Rules.replies(deal: d, theirFees: Rules.fees(text))
     show("Tap a reply to put it in the message box. You press send.", source: "Offline rules")
