@@ -161,6 +161,7 @@ export function Home() {
   const t = useTheme();
   const name = useStore((s) => s.profile.name);
   const deals = useStore((s) => s.deals);
+  const judgePin = useStore((s) => s.judgePin);
   const active = useStore(activeDeal);
   const heroDeal = active && wonSoFar(active) ? active : deals.find((d) => wonSoFar(d));
 
@@ -168,7 +169,7 @@ export function Home() {
     <Screen gap={18} navSpace testID="screen-home">
       <Row between gap={12}>
         <Row gap={12} style={{ flex: 1 }}>
-          <Avatar letter={name ? initial(name) : 'S'} />
+          <Avatar letter={name ? initial(name) : 'Q'} />
           <View style={{ gap: 1, flex: 1 }}>
             <T size={13} color={t.muted}>
               {name ? 'Welcome back' : 'Welcome to'}
@@ -180,6 +181,17 @@ export function Home() {
         </Row>
         <RoundBtn testID="open-settings" icon="settings" label="Settings" onPress={() => actions.go({ name: 'settings' })} />
       </Row>
+
+      {judgePin ? (
+        <Card pad={16} testID="judge-banner" style={{ gap: 6 }}>
+          <T size={15} w={700}>
+            Judge mode
+          </T>
+          <T size={14} color={t.muted} lh={1.45}>
+            Two made-up deals are loaded and their limits are locked with PIN {judgePin}. Try the Keyboard tab: tap the lender's message, then Check, Counter and Explain. Type "the highest I can go is six and a quarter" to see the leak guard.
+          </T>
+        </Card>
+      ) : null}
 
       {heroDeal ? <Hero deal={heroDeal} /> : <Welcome />}
 
