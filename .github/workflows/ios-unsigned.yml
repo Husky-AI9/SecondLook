@@ -37,14 +37,14 @@ jobs:
       - name: Build without signing
         run: |
           set -o pipefail
-          xcodebuild -workspace ios/SecondLook.xcworkspace -scheme SecondLook \
+          xcodebuild -workspace ios/Quotekey.xcworkspace -scheme Quotekey \
             -configuration Release -sdk iphoneos -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
             > xcodebuild.log 2>&1 || { grep -E "error:|error :|fatal error|\*\* BUILD FAILED|ld: |Undefined symbol" xcodebuild.log | sort -u | head -80; tail -n 60 xcodebuild.log; exit 1; }
           tail -n 5 xcodebuild.log
       - name: Check the build (T1, build half)
         run: |
-          APP=build/Build/Products/Release-iphoneos/SecondLook.app
+          APP=build/Build/Products/Release-iphoneos/Quotekey.app
           echo "App bundle id: $(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Info.plist")"
           ls "$APP/PlugIns" 2>/dev/null || echo "no extensions in this build"
           for X in "$APP"/PlugIns/*.appex; do
@@ -56,13 +56,13 @@ jobs:
       - name: Package .ipa
         run: |
           mkdir Payload
-          cp -R build/Build/Products/Release-iphoneos/SecondLook.app Payload/
-          zip -qry SecondLook-unsigned.ipa Payload
-          ls -lh SecondLook-unsigned.ipa
+          cp -R build/Build/Products/Release-iphoneos/Quotekey.app Payload/
+          zip -qry Quotekey-unsigned.ipa Payload
+          ls -lh Quotekey-unsigned.ipa
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: secondlook-ios-unsigned
           path: |
-            SecondLook-unsigned.ipa
+            Quotekey-unsigned.ipa
             xcodebuild.log

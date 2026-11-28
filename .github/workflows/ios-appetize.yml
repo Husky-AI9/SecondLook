@@ -40,7 +40,7 @@ jobs:
       - name: Build for the iOS Simulator (Release, so the JavaScript is embedded)
         run: |
           set -o pipefail
-          xcodebuild -workspace ios/SecondLook.xcworkspace -scheme SecondLook \
+          xcodebuild -workspace ios/Quotekey.xcworkspace -scheme Quotekey \
             -configuration Release -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' ARCHS=arm64 \
             -derivedDataPath build CODE_SIGNING_ALLOWED=NO \
@@ -49,9 +49,9 @@ jobs:
       - name: Zip the .app
         run: |
           cd build/Build/Products/Release-iphonesimulator
-          test -f SecondLook.app/main.jsbundle && echo "JavaScript bundle is embedded"
-          zip -qry "$GITHUB_WORKSPACE/SecondLook-simulator.zip" SecondLook.app
-          ls -lh "$GITHUB_WORKSPACE/SecondLook-simulator.zip"
+          test -f Quotekey.app/main.jsbundle && echo "JavaScript bundle is embedded"
+          zip -qry "$GITHUB_WORKSPACE/Quotekey-simulator.zip" Quotekey.app
+          ls -lh "$GITHUB_WORKSPACE/Quotekey-simulator.zip"
       - name: Upload to Appetize
         if: env.HAS_APPETIZE == 'true'
         env:
@@ -62,7 +62,7 @@ jobs:
           URL="https://api.appetize.io/v1/apps${APPETIZE_PUBLIC_KEY:+/$APPETIZE_PUBLIC_KEY}"
           curl -sS --fail-with-body -X POST "$URL" \
             -H "X-API-KEY: $APPETIZE_API_TOKEN" \
-            -F "file=@SecondLook-simulator.zip" \
+            -F "file=@Quotekey-simulator.zip" \
             -F "platform=ios" \
             -F "appPermissions.run=public" > appetize.json
           KEY=$(jq -r '.publicKey' appetize.json)
@@ -74,5 +74,5 @@ jobs:
         with:
           name: secondlook-ios-simulator
           path: |
-            SecondLook-simulator.zip
+            Quotekey-simulator.zip
             xcodebuild.log
