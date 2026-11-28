@@ -5,6 +5,7 @@ export * from './pin';
 export * from './extract';
 export * from './scamRules';
 export * from './redact';
+export * from './rates';
 export * from './leakGuard';
 export * from './drafts';
 export * from './verdict';

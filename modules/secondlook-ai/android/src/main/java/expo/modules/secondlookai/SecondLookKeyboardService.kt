@@ -152,33 +152,111 @@ internal object KRules {
     (FEES.find(text) ?: FEES_AFTER.find(text))?.groupValues?.get(1)?.replace(",", "")?.toDoubleOrNull()
   fun percents(text: String): List<Double> = RATE.findAll(text).mapNotNull { it.groupValues[1].toDoubleOrNull() }.toList()
 
+  // ---- scam rules: the same rules and weights as src/engine/scamRules.ts
+  private val SCAM_OPTS = setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL)
   private val SCAM_SIGNS = listOf(
-    Triple("""(pay|send|wire|deposit)\b.{0,50}\b(fee|deposit|insurance|tax)s?\b.{0,70}\b(release|unlock|receive|claim|before|first)|(processing|advance|release|activation) fee""", "Asks for a fee before any money is paid out", 3),
-    Triple("""\b(pay|send|act|respond|claim|click)\b.{0,40}\b(today|now|immediately)|last chance|final notice|urgent""", "Pressure to pay today", 2),
-    Triple("""https?://|www\.|\b[a-z0-9-]+\.(com|net|org|info|biz|xyz|top|site|online|click|example)\b""", "Link goes to a site that isn't a known lender", 2),
-    Triple("""gift ?cards?|bitcoin|crypto|western union|moneygram|zelle|cash ?app|wire transfer""", "Wants payment by gift card, crypto or wire", 4),
-    Triple("""guaranteed approval|no credit check|100% approv""", "Promises approval with no credit check", 3),
-  ).map { (p, label, w) -> Triple(Regex(p, RegexOption.IGNORE_CASE), label, w) }
+    Triple(
+      """(pay|send|wire|deposit|remit|purchase|buy|need|requires?|required)\b.{0,50}\b(?<!appraisal |credit report )(fee|deposit|insurance|bond|tax|charge)s?\b.{0,70}\b(release|unlock|receive|claim|activate|proceed|process|fund|funding|hold|before|to get|first)""" +
+        """|\b(processing|advance|insurance|release|activation|verification|transfer|reservation|enrollment)\s+fee\b.{0,50}\b(today|now|first|before|release|upfront|up front)""" +
+        """|\b(fee|deposit)s?\b.{0,20}\b(is |are )?(due|required|needed)\b.{0,30}\b(before|to (release|unlock|fund|lock|receive))""" +
+        """|\b(pay|send|wire|deposit)\s+(a |the |an )?\$\s?\d[\d,]*.{0,40}\bto (activate|release|unlock|receive|get|claim)\b""" +
+        """|upfront (fee|payment)|up-front (fee|payment)|payments? in advance""",
+      "Asks for a fee before any money is paid out", 4,
+    ),
+    Triple(
+      """\b(pay|send|act|respond|claim|confirm|click)\b.{0,40}\b(today|now|immediately|right away|within \d+ ?(hours?|hrs?|minutes?|mins?))|expires in \d+ ?(min|hour)|before it expires|expires (soon|today|tonight)|(today|tonight|this week) only|limited (time|spots)|last chance|final notice|act fast|urgent""",
+      "Pressure to pay today", 2,
+    ),
+    Triple("""https?://|www\.|\b[a-z0-9-]+\.(com|net|org|io|co|info|biz|us|loans?|finance|xyz|top|site|online|click|link|example|app)\b""", "Link goes to a site that isn't a known lender", 2),
+    Triple("""guaranteed approval|no credit check|100% approv|approval guaranteed|bad credit ok|everyone (is )?approved""", "Promises approval with no credit check", 3),
+    Triple("""gift ?cards?|bitcoin|\bcrypto|\busdt\b|western union|moneygram|\bzelle\b|cash ?app|wire transfer|\b(by|via) wire\b|prepaid (debit )?card""", "Wants payment by gift card, crypto or wire", 4),
+    Triple(
+      """(send|reply with|text|confirm|verify|provide|share|enter|need|give us|what is|what's|photo of)\b.{0,40}\b(ssn|social security|bank (login|password|username)|(username|login) and password|online banking|routing number|account number|debit card|\bpin\b|one[- ]time (code|passcode)|verification code|\botp\b)""",
+      "Asks for your SSN, PIN or bank login by text", 4,
+    ),
+    Triple(
+      """(stop|save|prevent) (your )?foreclosure|payments? to us instead|instead of (paying )?your (lender|bank|servicer)|stop (making |paying )?your (mortgage |bank )?payments|stop paying your (bank|lender|mortgage)""",
+      "Offers to stop a foreclosure if you pay them instead", 4,
+    ),
+    Triple("""\bCONGRAT|\bWINNER\b|YOU('| HA)VE WON|you(’|'| ha)ve been selected|you (were|are) selected|pre-?approved.{0,40}(claim|click|release)""", "Prize-style language", 1),
+  ).map { (p, label, w) -> Triple(Regex(p, SCAM_OPTS), label, w) }
+  private val LICENCE = Regex("""\bnmls\b|licen[cs]e\s*(no\.?|number|#)?\s*:?\s*\d{3,}""", RegexOption.IGNORE_CASE)
+  private val ZERO_APR = Regex("""\b0(?:\.0+)?\s?%\s*(apr|interest|financing)\b""", RegexOption.IGNORE_CASE)
+  private val NEGATION = Regex("""\b(never|not|no one|nobody|won'?t|don'?t|doesn'?t)\b""", RegexOption.IGNORE_CASE)
+
+  /** "We will never ask for a gift card" is a warning, not a request. */
+  private fun matchesNotNegated(re: Regex, text: String): Boolean = re.findAll(text).any { m ->
+    val before = text.substring(maxOf(0, m.range.first - 40), m.range.first).split(Regex("[.!?\n]")).last()
+    !NEGATION.containsMatchIn(before)
+  }
 
   /** Same scoring as src/engine/scamRules.ts, including "too good": a rate far below the market. */
-  fun scamReasons(text: String, marketLow: Double? = null): List<String> {
-    var score = 0
-    val reasons = mutableListOf<String>()
-    for ((re, label, weight) in SCAM_SIGNS) {
-      if (re.containsMatchIn(text)) {
-        score += weight
-        reasons.add(label)
-      }
-    }
+  fun scamReasons(text: String, marketLow: Double? = null, knownNames: List<String> = emptyList()): List<String> {
+    val strong = mutableListOf<Pair<String, Int>>()
+    for ((re, label, weight) in SCAM_SIGNS) if (matchesNotNegated(re, text)) strong.add(label to weight)
     val r = rate(text)
     val floor = if (marketLow != null) minOf(TOO_GOOD_APR, marketLow - 2) else TOO_GOOD_APR
-    if (r != null && r <= floor) {
-      score += 2
-      reasons.add("Rate is far below anything on the market")
-    }
-    return if (score >= 5) reasons else emptyList()
+    if ((r != null && r <= floor) || ZERO_APR.containsMatchIn(text)) strong.add("Rate is far below anything on the market" to 2)
+    if (strong.isEmpty()) return emptyList()
+    // "No licence number" alone is normal for a text from a loan officer: it only counts with another sign.
+    val lower = text.lowercase()
+    val fromKnown = knownNames.any { it.length >= 3 && lower.contains(it.lowercase()) }
+    val all = if (!LICENCE.containsMatchIn(text) && !fromKnown) strong + ("No lender name or licence number" to 1) else strong
+    return if (all.sumOf { it.second } >= 5) all.map { it.first } else emptyList()
   }
   private const val TOO_GOOD_APR = 3.5
+
+  // ---- rate mentions (port of src/engine/rates.ts): the walk-away rate however it is typed:
+  // "6.25%", "6.25", "six and a quarter", "six point two five", "6¼%", "6 1/4%", "625 bps".
+  private val ONES = mapOf(
+    "one" to 1, "two" to 2, "three" to 3, "four" to 4, "five" to 5, "six" to 6, "seven" to 7, "eight" to 8, "nine" to 9, "ten" to 10,
+    "eleven" to 11, "twelve" to 12, "thirteen" to 13, "fourteen" to 14, "fifteen" to 15, "sixteen" to 16, "seventeen" to 17,
+    "eighteen" to 18, "nineteen" to 19, "twenty" to 20,
+  )
+  private val DIGIT_WORDS = mapOf("zero" to 0, "oh" to 0, "one" to 1, "two" to 2, "three" to 3, "four" to 4, "five" to 5, "six" to 6, "seven" to 7, "eight" to 8, "nine" to 9)
+  private val FRACTION_WORDS = mapOf(
+    "a quarter" to 0.25, "one quarter" to 0.25, "a half" to 0.5, "one half" to 0.5, "three quarters" to 0.75,
+    "an eighth" to 0.125, "one eighth" to 0.125, "three eighths" to 0.375, "five eighths" to 0.625, "seven eighths" to 0.875,
+  )
+  private val FRACTION_CHARS = mapOf('¼' to 0.25, '½' to 0.5, '¾' to 0.75, '⅛' to 0.125, '⅜' to 0.375, '⅝' to 0.625, '⅞' to 0.875)
+  private const val FRACTION_RE = "a quarter|one quarter|a half|one half|three[- ]quarters|an eighth|one[- ]eighth|three[- ]eighths|five[- ]eighths|seven[- ]eighths"
+  private const val PERCENT = """\s?(?:%|percent\b|per cent\b)"""
+  private val NOT_RATE_AFTER = Regex("""^\s?(?:k\b|dollars?|bucks|a month|per month|/\s?mo|months?|mos?\b|years?|yrs?|points?|pts?\b|square|sq\b|miles?|hours?|hrs?|days?|weeks?|minutes?|mins?|am\b|pm\b|o'?clock)""", RegexOption.IGNORE_CASE)
+  private val FRAC_CHAR_RE = Regex("""(\d{1,2})\s?([¼½¾⅛⅜⅝⅞])""")
+  private val TYPED_FRAC_RE = Regex("""(?<![\d/])(\d{1,2})\s+(?:and\s+)?([1357])/([248])(?![\d/])""")
+  private val BPS_RE = Regex("""(?<![\d.,$])(\d{3,4})\s?(?:basis points?|bps|bp)\b""", RegexOption.IGNORE_CASE)
+  private val WORDS_RE = Regex(
+    "\\b(" + ONES.keys.joinToString("|") + ")(?:\\s+and\\s+(" + FRACTION_RE + ")|\\s+point\\s+((?:" + DIGIT_WORDS.keys.joinToString("|") +
+      ")(?:[\\s-]+(?:" + DIGIT_WORDS.keys.joinToString("|") + ")){0,2}))?(" + PERCENT + ")?",
+    RegexOption.IGNORE_CASE,
+  )
+  private val DIGITS_RE = Regex("""(?<![\d.,$/])(\d{1,2}(?:\.\d{1,3})?)(?![\d¼½¾⅛⅜⅝⅞]|\s?/)(""" + PERCENT + """)?""", RegexOption.IGNORE_CASE)
+
+  fun rateMentions(text: String): List<Double> {
+    val t = text.replace(Regex("[‐-―]"), "-")
+    val out = mutableListOf<Double>()
+    fun add(n: Double) { if (n > 0 && n < 30) out.add(Math.round(n * 1000) / 1000.0) }
+    FRAC_CHAR_RE.findAll(t).forEach { add(it.groupValues[1].toInt() + (FRACTION_CHARS[it.groupValues[2][0]] ?: 0.0)) }
+    TYPED_FRAC_RE.findAll(t).forEach { add(it.groupValues[1].toInt() + it.groupValues[2].toDouble() / it.groupValues[3].toDouble()) }
+    BPS_RE.findAll(t).forEach { add(it.groupValues[1].toInt() / 100.0) }
+    WORDS_RE.findAll(t).forEach { m ->
+      val whole = ONES[m.groupValues[1].lowercase()] ?: return@forEach
+      val frac = m.groupValues[2]
+      val point = m.groupValues[3]
+      when {
+        frac.isNotEmpty() -> add(whole + (FRACTION_WORDS[frac.lowercase().replace('-', ' ')] ?: 0.0))
+        point.isNotEmpty() -> add(whole + ("0." + point.lowercase().split(Regex("[\\s-]+")).joinToString("") { (DIGIT_WORDS[it] ?: 0).toString() }).toDouble())
+        m.groupValues[4].isNotEmpty() -> add(whole.toDouble())
+      }
+    }
+    DIGITS_RE.findAll(t).forEach { m ->
+      val hasPct = m.groupValues[2].isNotEmpty()
+      if (!hasPct && !m.groupValues[1].contains('.')) return@forEach
+      if (!hasPct && NOT_RATE_AFTER.containsMatchIn(t.substring(m.range.last + 1))) return@forEach
+      m.groupValues[1].toDoubleOrNull()?.let { add(it) }
+    }
+    return out
+  }
 
   /** One sentence comparing their rate with today's range, as the web verdict says it. */
   fun rangeLine(rate: Double, low: Double, high: Double): String = when {
@@ -227,7 +305,7 @@ internal object KRules {
   /** The number check from the leak guard: does this text name the walk-away rate? */
   fun leaksWalkAway(text: String, l: KLimits): Boolean {
     if (abs(l.maxRate - l.targetRate) <= 0.0005) return false
-    return percents(text).any { abs(it - l.maxRate) < 0.0005 }
+    return rateMentions(text).any { abs(it - l.maxRate) < 0.0005 }
   }
 
   /** What to say instead of the walk-away rate: the target, which reveals nothing. */
@@ -518,7 +596,7 @@ class SecondLookKeyboardService : InputMethodService() {
       return show("Your reply doesn't give away your walk-away rate. Read it, then press send.", "Offline rules", Tone.OK)
     }
     val text = copied() ?: return
-    val scam = KRules.scamReasons(text, deal?.rangeLow)
+    val scam = KRules.scamReasons(text, deal?.rangeLow, listOfNotNull(deal?.lender, deal?.contact))
     if (scam.isNotEmpty()) {
       return show("Likely a scam. Don't reply.\n• " + scam.joinToString("\n• "), "Offline rules", Tone.SCAM)
     }
@@ -541,7 +619,7 @@ class SecondLookKeyboardService : InputMethodService() {
   private fun tapCounter() {
     if (busy) return
     val text = copied() ?: return
-    if (KRules.scamReasons(text, deal?.rangeLow).isNotEmpty()) {
+    if (KRules.scamReasons(text, deal?.rangeLow, listOfNotNull(deal?.lender, deal?.contact)).isNotEmpty()) {
       return show("Likely a scam. Don't reply.\nNo reply is offered for scam messages. Don't tap the link.", "Offline rules", Tone.SCAM)
     }
     val d = deal

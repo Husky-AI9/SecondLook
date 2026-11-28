@@ -753,6 +753,18 @@ def s_ime_leak(e):
     return f'warning shown; box now has: {typed}'
 
 
+@step('Android keyboard: leak guard on the walk-away rate in words ("six and a quarter", no %)')
+def s_ime_leak_words(e):
+    clear_field()
+    type_text('The highest I can go is six and a quarter.')
+    ime_tap('Check')
+    w, t = ime_wait(['Hold on before you send', 'Copy their message', "Real offer", 'Competitive offer', 'Likely a scam'], 15)
+    e['shots'].append(shot('ime-leak-words'))
+    if w != 'Hold on before you send':
+        raise Fail('no leak warning for the rate in words: ' + t[:300])
+    return 'warning shown for "six and a quarter"'
+
+
 @step('Android keyboard: Explain (Firebase AI Logic)')
 def s_ime_explain(e):
     clear_field()
@@ -820,7 +832,7 @@ def s_ime_globe(e):
 
 for fn in (s_install, s_launch, s_settings, s_registered, s_process_lender, s_process_scam,
            s_samples, s_lock, s_kb_check, s_kb_counter, s_kb_explain, s_kb_leak, s_kb_scam,
-           s_selection_menu, s_ime_on, s_ime_check, s_ime_counter, s_ime_leak, s_ime_explain, s_ime_below, s_ime_scam,
+           s_selection_menu, s_ime_on, s_ime_check, s_ime_counter, s_ime_leak, s_ime_leak_words, s_ime_explain, s_ime_below, s_ime_scam,
            s_ime_globe):
     fn()
     if results[-1]['step'] == 'Install the APK' and results[-1]['status'] == 'FAIL':

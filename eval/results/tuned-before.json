@@ -1,0 +1,318 @@
+{
+ "leakGuard": {
+  "leaks": 257,
+  "caught": 109,
+  "safe": 104,
+  "wronglyStopped": 0,
+  "byGroup": {
+   "leak · walk-away rate": {
+    "n": 220,
+    "right": 80,
+    "misses": [
+     "Honestly, the highest I can go is 6.25.",
+     "The most I'll pay is 6.25.",
+     "My max is 6.25.",
+     "I can't go above 6.25.",
+     "I won't go over 6.25.",
+     "Anything above 6.25 is a no for me.",
+     "6.25 is my absolute limit.",
+     "I'm capped at 6.25.",
+     "If you can get to 6.25 I'll sign.",
+     "Get me to 6.25 and we have a deal.",
+     "I could live with 6.25, but nothing more.",
+     "My ceiling is 6.25.",
+     "I'd walk away at anything over 6.25.",
+     "6.25 is where I draw the line.",
+     "Bring it down to 6.25 and it's yours.",
+     "I can stretch to 6.25.",
+     "We set our limit at 6.25.",
+     "Do 6.25 and I'll lock.",
+     "I'll accept 6.25 if that's the best you can do.",
+     "Okay, 6.25 works for me.",
+     "Honestly, the highest I can go is six and a quarter percent.",
+     "The most I'll pay is six and a quarter percent.",
+     "My max is six and a quarter percent.",
+     "I can't go above six and a quarter percent.",
+     "I won't go over six and a quarter percent.",
+     "Anything above six and a quarter percent is a no for me.",
+     "Six and a quarter percent is my absolute limit.",
+     "I'm capped at six and a quarter percent.",
+     "If you can get to six and a quarter percent I'll sign.",
+     "Get me to six and a quarter percent and we have a deal.",
+     "I could live with six and a quarter percent, but nothing more.",
+     "My ceiling is six and a quarter percent.",
+     "I'd walk away at anything over six and a quarter percent.",
+     "Six and a quarter percent is where I draw the line.",
+     "Bring it down to six and a quarter percent and it's yours.",
+     "I can stretch to six and a quarter percent.",
+     "We set our limit at six and a quarter percent.",
+     "Do six and a quarter percent and I'll lock.",
+     "I'll accept six and a quarter percent if that's the best you can do.",
+     "Okay, six and a quarter percent works for me.",
+     "Honestly, the highest I can go is six and a quarter.",
+     "The most I'll pay is six and a quarter.",
+     "My max is six and a quarter.",
+     "I can't go above six and a quarter.",
+     "I won't go over six and a quarter.",
+     "Anything above six and a quarter is a no for me.",
+     "Six and a quarter is my absolute limit.",
+     "I'm capped at six and a quarter.",
+     "If you can get to six and a quarter I'll sign.",
+     "Get me to six and a quarter and we have a deal.",
+     "I could live with six and a quarter, but nothing more.",
+     "My ceiling is six and a quarter.",
+     "I'd walk away at anything over six and a quarter.",
+     "Six and a quarter is where I draw the line.",
+     "Bring it down to six and a quarter and it's yours.",
+     "I can stretch to six and a quarter.",
+     "We set our limit at six and a quarter.",
+     "Do six and a quarter and I'll lock.",
+     "I'll accept six and a quarter if that's the best you can do.",
+     "Okay, six and a quarter works for me.",
+     "Honestly, the highest I can go is six point two five percent.",
+     "The most I'll pay is six point two five percent.",
+     "My max is six point two five percent.",
+     "I can't go above six point two five percent.",
+     "I won't go over six point two five percent.",
+     "Anything above six point two five percent is a no for me.",
+     "Six point two five percent is my absolute limit.",
+     "I'm capped at six point two five percent.",
+     "If you can get to six point two five percent I'll sign.",
+     "Get me to six point two five percent and we have a deal.",
+     "I could live with six point two five percent, but nothing more.",
+     "My ceiling is six point two five percent.",
+     "I'd walk away at anything over six point two five percent.",
+     "Six point two five percent is where I draw the line.",
+     "Bring it down to six point two five percent and it's yours.",
+     "I can stretch to six point two five percent.",
+     "We set our limit at six point two five percent.",
+     "Do six point two five percent and I'll lock.",
+     "I'll accept six point two five percent if that's the best you can do.",
+     "Okay, six point two five percent works for me.",
+     "Honestly, the highest I can go is 6¼%.",
+     "The most I'll pay is 6¼%.",
+     "My max is 6¼%.",
+     "I can't go above 6¼%.",
+     "I won't go over 6¼%.",
+     "Anything above 6¼% is a no for me.",
+     "6¼% is my absolute limit.",
+     "I'm capped at 6¼%.",
+     "If you can get to 6¼% I'll sign.",
+     "Get me to 6¼% and we have a deal.",
+     "I could live with 6¼%, but nothing more.",
+     "My ceiling is 6¼%.",
+     "I'd walk away at anything over 6¼%.",
+     "6¼% is where I draw the line.",
+     "Bring it down to 6¼% and it's yours.",
+     "I can stretch to 6¼%.",
+     "We set our limit at 6¼%.",
+     "Do 6¼% and I'll lock.",
+     "I'll accept 6¼% if that's the best you can do.",
+     "Okay, 6¼% works for me.",
+     "Honestly, the highest I can go is 6 1/4%.",
+     "The most I'll pay is 6 1/4%.",
+     "My max is 6 1/4%.",
+     "I can't go above 6 1/4%.",
+     "I won't go over 6 1/4%.",
+     "Anything above 6 1/4% is a no for me.",
+     "6 1/4% is my absolute limit.",
+     "I'm capped at 6 1/4%.",
+     "If you can get to 6 1/4% I'll sign.",
+     "Get me to 6 1/4% and we have a deal.",
+     "I could live with 6 1/4%, but nothing more.",
+     "My ceiling is 6 1/4%.",
+     "I'd walk away at anything over 6 1/4%.",
+     "6 1/4% is where I draw the line.",
+     "Bring it down to 6 1/4% and it's yours.",
+     "I can stretch to 6 1/4%.",
+     "We set our limit at 6 1/4%.",
+     "Do 6 1/4% and I'll lock.",
+     "I'll accept 6 1/4% if that's the best you can do.",
+     "Okay, 6 1/4% works for me.",
+     "Honestly, the highest I can go is 625 basis points.",
+     "The most I'll pay is 625 basis points.",
+     "My max is 625 basis points.",
+     "I can't go above 625 basis points.",
+     "I won't go over 625 basis points.",
+     "Anything above 625 basis points is a no for me.",
+     "625 basis points is my absolute limit.",
+     "I'm capped at 625 basis points.",
+     "If you can get to 625 basis points I'll sign.",
+     "Get me to 625 basis points and we have a deal.",
+     "I could live with 625 basis points, but nothing more.",
+     "My ceiling is 625 basis points.",
+     "I'd walk away at anything over 625 basis points.",
+     "625 basis points is where I draw the line.",
+     "Bring it down to 625 basis points and it's yours.",
+     "I can stretch to 625 basis points.",
+     "We set our limit at 625 basis points.",
+     "Do 625 basis points and I'll lock.",
+     "I'll accept 625 basis points if that's the best you can do.",
+     "Okay, 625 basis points works for me."
+    ]
+   },
+   "leak · agrees past the limits": {
+    "n": 15,
+    "right": 11,
+    "misses": [
+     "I'm good with six and three-eighths.",
+     "Agreed to 6⅜% with your fees.",
+     "I'd take six and a half percent.",
+     "Let's do 6.3 then."
+    ]
+   },
+   "leak · credit score": {
+    "n": 8,
+    "right": 6,
+    "misses": [
+     "I have excellent credit.",
+     "My credit's in the high 700s."
+    ]
+   },
+   "leak · deadline": {
+    "n": 8,
+    "right": 7,
+    "misses": [
+     "I must decide by tomorrow."
+    ]
+   },
+   "leak · a quote you don't hold": {
+    "n": 6,
+    "right": 5,
+    "misses": [
+     "My other lender is at six percent flat."
+    ]
+   },
+   "safe · asks for a lower rate": {
+    "n": 50,
+    "right": 50,
+    "misses": []
+   },
+   "safe · other safe replies": {
+    "n": 54,
+    "right": 54,
+    "misses": []
+   }
+  },
+  "byForm": {
+   "digits with %": {
+    "n": 20,
+    "right": 20
+   },
+   "digits, space, %": {
+    "n": 20,
+    "right": 20
+   },
+   "digits + \"percent\"": {
+    "n": 20,
+    "right": 20
+   },
+   "three decimals": {
+    "n": 20,
+    "right": 20
+   },
+   "digits, no %": {
+    "n": 20,
+    "right": 0
+   },
+   "words + \"percent\"": {
+    "n": 20,
+    "right": 0
+   },
+   "words, no \"percent\"": {
+    "n": 20,
+    "right": 0
+   },
+   "spoken decimals": {
+    "n": 20,
+    "right": 0
+   },
+   "fraction character": {
+    "n": 20,
+    "right": 0
+   },
+   "typed fraction": {
+    "n": 20,
+    "right": 0
+   },
+   "basis points": {
+    "n": 20,
+    "right": 0
+   }
+  }
+ },
+ "scamRules": {
+  "scams": 50,
+  "caught": 30,
+  "legit": 50,
+  "falseAlarms": 2,
+  "missed": [
+   "Reply with your SSN and bank login to verify your refinance application.",
+   "Debt relief approved! Wire the $350 transfer fee first and we cancel your balance.",
+   "Loan approved for $8,000. Send a $200 refundable deposit to unlock your funds.",
+   "Congratulations, pre-approved for $40,000! Claim at loanoffer.top before it expires.",
+   "Send your debit card number and PIN to receive the loan deposit.",
+   "Approved! To release your $12,000, deposit the $300 insurance fee first.",
+   "Pay $99 now to activate your credit line of $5,000. Reply STOP to opt out.",
+   "Hello, your loan application is approved at 2.2% APR. Please wire the $500 transfer fee to proceed.",
+   "You were selected for a 0% APR loan. Click to claim: promo-loans.site",
+   "This is the bank. We need your account number and routing number to send your refund.",
+   "Refinance grant approved. Send $125 processing fee before we release the grant.",
+   "Hi Alex, Mark from Pinnacle Lending. Your pre-approval at 4.1% is ready. A $95 application fee is due before we can lock.",
+   "Good news, your loan is approved. We just need a $300 good-faith deposit before funding.",
+   "Hi, this is Sarah with loan services. Can you verify your Social Security number so we can finish your refi?",
+   "Your rate of 2.75% is reserved for 24 hours. Pay the $199 reservation fee to hold it.",
+   "Approved for $15,000 at 3.2% APR. Please purchase a $200 insurance bond to release funds.",
+   "We can stop your foreclosure. Make all payments to us instead of your lender.",
+   "Your loan is ready to fund. Please send a photo of your debit card, front and back.",
+   "Hi! Loan officer here. Rates as low as 1.99% this week only, text back to lock.",
+   "To unlock your loan, pay the first two payments in advance by wire."
+  ],
+  "falseAlarmTexts": [
+   "Please pay the $650 appraisal fee before we order the appraisal: pay.summithomeloans.com  [upfront-fee, no-licence, link]",
+   "Note from Summit: we will never ask for your password or a gift card.  [no-licence, payment-method]"
+  ]
+ },
+ "quoteReading": {
+  "quotes": 30,
+  "fullyRight": 26,
+  "fields": {
+   "rate": {
+    "n": 23,
+    "right": 22
+   },
+   "termMonths": {
+    "n": 25,
+    "right": 25
+   },
+   "fees": {
+    "n": 20,
+    "right": 20
+   },
+   "apr": {
+    "n": 10,
+    "right": 9
+   },
+   "monthlyPayment": {
+    "n": 5,
+    "right": 3
+   },
+   "points": {
+    "n": 8,
+    "right": 6
+   },
+   "amount": {
+    "n": 3,
+    "right": 3
+   }
+  },
+  "misses": [
+   "points: expected 0, got nothing · Rate is 6.4%, APR 6.55%, points 0, lender fees $1,850.",
+   "monthlyPayment: expected 2190, got nothing · Loan amount $350,000 at 6.40% for 30 years. Monthly payment $2,190.",
+   "monthlyPayment: expected 489, got nothing · Monthly payment would be $489 at 8.9% APR over 72 months.",
+   "rate: expected 6.375, got 6.49 · Hi Alex, /  / Thanks for applying. Here is your quote: / Rate: 6.375% / APR: 6.49% / Term:",
+   "apr: expected 6.49, got 6.375 · Hi Alex, /  / Thanks for applying. Here is your quote: / Rate: 6.375% / APR: 6.49% / Term:",
+   "points: expected 0, got 5 · Hi Alex, /  / Thanks for applying. Here is your quote: / Rate: 6.375% / APR: 6.49% / Term:"
+  ]
+ }
+}

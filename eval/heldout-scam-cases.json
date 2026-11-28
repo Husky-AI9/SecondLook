@@ -1,0 +1,162 @@
+[
+ {
+  "text": "Your $9,500 loan is approved. Pay a $150 fee with an Amazon gift card to receive it.",
+  "expect": "scam"
+ },
+ {
+  "text": "IRS notice: you owe back taxes. Pay now with Bitcoin to avoid arrest.",
+  "expect": "scam"
+ },
+ {
+  "text": "Mortgage payoff program! We pay off your house. Pay our $400 enrollment fee today: payoffnow.site",
+  "expect": "scam"
+ },
+ {
+  "text": "Hi, your account has been flagged. Reply with the verification code we sent to keep your loan.",
+  "expect": "scam"
+ },
+ {
+  "text": "Get 0.5% APR financing on any car! Limited time, click autolux.click",
+  "expect": "scam"
+ },
+ {
+  "text": "Your loan is approved but on hold. Send a $250 insurance payment by wire to release it.",
+  "expect": "scam"
+ },
+ {
+  "text": "Congratulations, you won a free refinance! Claim at freerefi.online",
+  "expect": "scam"
+ },
+ {
+  "text": "Loan servicing update: make your next payment to our new Zelle account.",
+  "expect": "scam"
+ },
+ {
+  "text": "We can lower your rate to 2%! Pay the $300 processing fee first.",
+  "expect": "scam"
+ },
+ {
+  "text": "Guaranteed approval regardless of credit. Funds today. lendfast.xyz",
+  "expect": "scam"
+ },
+ {
+  "text": "Your student loan qualifies for forgiveness. Pay $49 today to enroll: edrelief.info",
+  "expect": "scam"
+ },
+ {
+  "text": "Approved! Just text us your bank username and password so we can deposit the funds.",
+  "expect": "scam"
+ },
+ {
+  "text": "We are holding $20,000 for you. Pay the $199 release fee now.",
+  "expect": "scam"
+ },
+ {
+  "text": "Act now: 1.25% mortgage rates, today only. Text YES to lock.",
+  "expect": "scam"
+ },
+ {
+  "text": "Hi from loan support, please confirm your SSN and date of birth to finish your file.",
+  "expect": "scam"
+ },
+ {
+  "text": "Your car loan was approved at 1.9%. Pay the first payment by Cash App to activate.",
+  "expect": "scam"
+ },
+ {
+  "text": "Stop paying your bank! Our program makes your payments for you. Call now.",
+  "expect": "scam"
+ },
+ {
+  "text": "To receive your loan, buy a $500 prepaid card and send us the numbers.",
+  "expect": "scam"
+ },
+ {
+  "text": "You have been selected for a 1% loan. Respond within 2 hours to claim.",
+  "expect": "scam"
+ },
+ {
+  "text": "Final notice: your loan offer expires tonight. Pay the $75 fee at offerpay.top",
+  "expect": "scam"
+ },
+ {
+  "text": "Hi Alex, this is Dana from Summit. 6.35% fixed for 30 years with $1,600 in fees.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your appraisal came in at value. We're on track for Friday.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, the lender credit would bring your fees down to $1,050.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Quick question: is the property your primary residence?",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your Closing Disclosure is ready to review in the portal.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "We can do 6.25% with 0.5 points or 6.5% with none. NMLS 401822.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Please sign the intent to proceed by Wednesday so we can order the appraisal.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Rates improved today: 30-yr fixed at 6.3%. Want me to re-price your quote?",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, I'm out tomorrow; my colleague Sam can help with any questions.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your loan is clear to close. Title will reach out about scheduling.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Ridgeline Auto: we can do 7.9% APR for 60 months, $455/mo.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi, it's Jordan from Ridgeline. The extended warranty is optional; we can remove it.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Summit Home Loans: your rate is locked at 6.2% until Dec 22.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "The $500 application fee is refundable if we can't approve your loan.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "We received the pay stubs, thank you!",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Can you send a copy of your homeowner's insurance declarations page?",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, I can match the other quote if it's in writing. Please send it over.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your credit union auto loan: 6.74% APR, 60 months, no fees.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your rate lock will expire Monday. Do you want me to extend it?",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Please review and e-sign at portal.summithomeloans.com/sign",
+  "expect": "not-scam"
+ }
+]
