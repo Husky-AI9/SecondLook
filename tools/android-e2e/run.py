@@ -822,6 +822,7 @@ def s_ime_leak_words(e):
     ime_tap('Check')
     w, t = ime_wait(['Hold on before you send', 'Copy their message', "Real offer", 'Competitive offer', 'Likely a scam'], 15)
     e['shots'].append(shot('ime-leak-words'))
+    hold(3)
     if w != 'Hold on before you send':
         raise Fail('no leak warning for the rate in words: ' + t[:300])
     return 'warning shown for "six and a quarter"'
