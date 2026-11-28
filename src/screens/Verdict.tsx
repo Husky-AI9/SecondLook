@@ -378,7 +378,7 @@ export function Verdict() {
         </Row>
 
         <T size={11} color={t.muted} lh={1.4}>
-          SecondLook compares numbers and suggests questions. It does not give financial advice.
+          Quotekey compares numbers and suggests questions. It does not give financial advice.
         </T>
       </Screen>
 

@@ -1,4 +1,4 @@
-"""SecondLook for Chrome, end to end, in a real Chromium with the extension loaded.
+"""Quotekey for Chrome, end to end, in a real Chromium with the extension loaded.
 
 The side panel is opened as a tab (same page, same code); the right-click is replaced by a call
 to the extension's own menu handler. A real right-click grants the extension access to the tab
@@ -153,7 +153,7 @@ with sync_playwright() as p:
     ctx.close()
 
 passed = sum(ok for _, ok, _ in results)
-md = [f'# SecondLook for Chrome: {passed}/{len(results)} checks passed', '']
+md = [f'# Quotekey for Chrome: {passed}/{len(results)} checks passed', '']
 md += [f"- {'PASS' if ok else 'FAIL'} · {name}{(' — ' + d) if d else ''}" for name, ok, d in results]
 (OUT / 'results.md').write_text('\n'.join(md) + '\n')
 print('\n'.join(md))

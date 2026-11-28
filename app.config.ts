@@ -19,7 +19,7 @@ const appCheckDebug = process.env.APPCHECK_DEBUG !== '0';
 const withKeyboard = process.env.EXPO_PUBLIC_KEYBOARD === '1';
 
 const config: ExpoConfig = {
-  name: 'SecondLook',
+  name: 'Quotekey',
   slug: 'secondlook',
   version: '1.0.0',
   orientation: 'portrait',
@@ -50,8 +50,8 @@ const config: ExpoConfig = {
     bundler: 'metro',
     output: 'single',
     favicon: './assets/favicon.png',
-    name: 'SecondLook',
-    shortName: 'SecondLook',
+    name: 'Quotekey',
+    shortName: 'Quotekey',
     themeColor: '#3D4A45',
     backgroundColor: '#E9E7E1',
   },

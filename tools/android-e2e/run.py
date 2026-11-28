@@ -1,4 +1,4 @@
-"""Walks through SecondLook on an Android emulator with adb + uiautomator.
+"""Walks through Quotekey on an Android emulator with adb + uiautomator.
 
 Usage: python3 run.py <apk> <out-dir>
 
@@ -79,7 +79,7 @@ def dump():
         if not title:
             return root
         system_dialogs.append(title)
-        pick = 'Close app' if 'SecondLook' not in title else 'Wait'
+        pick = 'Close app' if 'Quotekey' not in title else 'Wait'
         btn = next((n for n in root.iter('node') if (n.get('text') or '') == pick), None)
         if btn is None:
             shell('am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS')
@@ -337,12 +337,12 @@ def s_settings(e):
     return txt
 
 
-@step('Select text → SecondLook is registered in the text-selection menu')
+@step('Select text → Quotekey is registered in the text-selection menu')
 def s_registered(e):
     r = shell('cmd package query-activities --brief -a android.intent.action.PROCESS_TEXT -t text/plain')
     out = r.stdout.strip()
     if PKG not in out:
-        raise Fail('SecondLook is not listed for PROCESS_TEXT: ' + out[-300:])
+        raise Fail('Quotekey is not listed for PROCESS_TEXT: ' + out[-300:])
     return 'listed: ' + ' '.join(l.strip() for l in out.splitlines() if PKG in l)
 
 
@@ -535,7 +535,7 @@ def popup_dump():
         return None
 
 
-@step('Text-selection menu shows "SecondLook" (long-press in a text box)')
+@step('Text-selection menu shows "Quotekey" (long-press in a text box)')
 def s_selection_menu(e):
     tap('kb-globe', exact_only=True)
     tap('kb-sample-lender', exact_only=True)
@@ -554,11 +554,11 @@ def s_selection_menu(e):
     target = None
     root = popup_dump()
     if root is not None:
-        n = find('SecondLook', root, exact_only=True)
+        n = find('Quotekey', root, exact_only=True)
         if n is not None:
             target, how = center(n), 'menu (uiautomator)'
     if target is None:
-        b = ocr_find('SecondLook')
+        b = ocr_find('Quotekey')
         if b:
             target, how = (b[0] + b[2] // 2, b[1] + b[3] // 2), 'menu (OCR)'
     if target is None:
@@ -577,23 +577,23 @@ def s_selection_menu(e):
         time.sleep(1.5)
         e['shots'].append(shot('selection-menu-more'))
         root = popup_dump()
-        n = find('SecondLook', root, exact_only=True) if root is not None else None
+        n = find('Quotekey', root, exact_only=True) if root is not None else None
         if n is not None:
             target, how = center(n), 'overflow menu (uiautomator)'
         else:
-            b = ocr_find('SecondLook')
+            b = ocr_find('Quotekey')
             if b:
                 target, how = (b[0] + b[2] // 2, b[1] + b[3] // 2), 'overflow menu (OCR)'
     if target is None:
         words = ' '.join(w[0] for w in ocr_words())[:300]
-        raise Fail('"SecondLook" not seen in the menu. Screen text: ' + words)
+        raise Fail('"Quotekey" not seen in the menu. Screen text: ' + words)
     shell(f'input tap {target[0]} {target[1]}')
     k, _ = wait_for(['screen-verdict', 'screen-scam', 'Start a deal from this'], 90)
     time.sleep(2)
     e['shots'].append(shot('selection-menu-result'))
     if not k:
-        raise Fail(f'"SecondLook" was in the {how}, but tapping it opened nothing')
-    return f'"SecondLook" found in the {how}; tapping it opened {k}. ' + source_line()
+        raise Fail(f'"Quotekey" was in the {how}, but tapping it opened nothing')
+    return f'"Quotekey" found in the {how}; tapping it opened {k}. ' + source_line()
 
 
 IME = f'{PKG}/expo.modules.secondlookai.SecondLookKeyboardService'
@@ -604,7 +604,7 @@ def inside(b, r):
 
 
 def ime_region(root):
-    """Box of the SecondLook keyboard panel: the outermost view around its globe key."""
+    """Box of the Quotekey keyboard panel: the outermost view around its globe key."""
     parents = {c: p for p in root.iter() for c in p}
     globe = next((n for n in root.iter('node') if (n.get('content-desc') or '') == 'Switch keyboard'), None)
     if globe is None:
@@ -619,7 +619,7 @@ def ime_region(root):
 
 
 def ime_nodes():
-    """Nodes of the SecondLook keyboard only (all windows dumped; app nodes left out)."""
+    """Nodes of the Quotekey keyboard only (all windows dumped; app nodes left out)."""
     root = popup_dump()
     region = ime_region(root) if root is not None else None
     if not region:
@@ -646,7 +646,7 @@ def ime_wait(words, timeout=30):
             if w.lower() in t.lower():
                 return w, t
         time.sleep(1.5)
-    return None, t or '(SecondLook keyboard not on screen)'
+    return None, t or '(Quotekey keyboard not on screen)'
 
 
 def ime_tap(label, timeout=20):
@@ -661,7 +661,7 @@ def ime_tap(label, timeout=20):
             time.sleep(1.5)
             return
         time.sleep(1.5)
-    raise Fail(f'keyboard key "{label}" not found in the SecondLook keyboard')
+    raise Fail(f'keyboard key "{label}" not found in the Quotekey keyboard')
 
 
 def open_box():
@@ -681,7 +681,7 @@ def clear_field():
     clear_focused_field()
 
 
-@step('Android keyboard: turn on, switch to SecondLook, panel appears')
+@step('Android keyboard: turn on, switch to Quotekey, panel appears')
 def s_ime_on(e):
     shell(f'am force-stop {PKG}')
     launch_home()
@@ -695,10 +695,10 @@ def s_ime_on(e):
     if current != IME:
         raise Fail(f'could not select the keyboard: {out}; current = {current}')
     open_box()
-    w, t = ime_wait(['Copy their message, then pick one', 'Set your limits in the SecondLook app', 'Copy their message first'], 25)
+    w, t = ime_wait(['Copy their message, then pick one', 'Set your limits in the Quotekey app', 'Copy their message first'], 25)
     e['shots'].append(shot('ime-ready'))
     if not w:
-        raise Fail('SecondLook keyboard did not appear: ' + t[:300])
+        raise Fail('Quotekey keyboard did not appear: ' + t[:300])
     if 'Set your limits' in w:
         raise Fail('keyboard has no limits pack from the app')
     return f'selected {current}; panel: {t[:200]}'
@@ -812,7 +812,7 @@ def s_ime_globe(e):
     e['shots'].append(shot('ime-globe'))
     shell('ime reset')
     if current == IME:
-        raise Fail('still on the SecondLook keyboard')
+        raise Fail('still on the Quotekey keyboard')
     return f'now using {current}'
 
 
@@ -828,7 +828,7 @@ for fn in (s_install, s_launch, s_settings, s_registered, s_process_lender, s_pr
 
 # Logs: app and Firebase lines only, with tokens, keys and ids removed.
 raw = adb('logcat', '-d', '-v', 'time', timeout=120).stdout
-keep = re.compile(r'ReactNativeJS|SecondLook|secondlook|Firebase|AppCheck|AICore|GenAi|genai|Gemini|AndroidRuntime|FATAL|Expo', re.I)
+keep = re.compile(r'ReactNativeJS|Quotekey|secondlook|Firebase|AppCheck|AICore|GenAi|genai|Gemini|AndroidRuntime|FATAL|Expo', re.I)
 redact = [
     (re.compile(r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}'), '<id>'),
     (re.compile(r'AIza[0-9A-Za-z_\-]{30,}'), '<api-key>'),
@@ -851,7 +851,7 @@ passed = sum(r['status'] == 'PASS' for r in results)
 with open(f'{OUT}/results.json', 'w') as f:
     json.dump(results, f, indent=2)
 with open(f'{OUT}/results.md', 'w') as f:
-    f.write(f'# SecondLook on an Android emulator: {passed}/{len(results)} steps passed\n\n')
+    f.write(f'# Quotekey on an Android emulator: {passed}/{len(results)} steps passed\n\n')
     f.write('Pixel 6 profile, Android 14 (API 34), Google APIs image, x86_64. No Gemini Nano on an emulator.\n\n')
     for r in results:
         f.write(f"## {r['status']} · {r['step']} ({r['seconds']} s)\n\n{r['detail']}\n\n")

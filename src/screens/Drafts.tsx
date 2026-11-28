@@ -89,7 +89,7 @@ export function Drafts({ dealId }: { dealId: string }) {
     res && !res.needsLimits && res.drafts.length > 0 && !ownOpen ? (
       <>
         <T size={13} color={t.muted} center lh={1.4}>
-          You press send. SecondLook never sends for you.
+          You press send. Quotekey never sends for you.
         </T>
         <Button testID="send-draft" label={sendLabel} iconRight="arrowRight" loading={sending} onPress={() => send(res.drafts[pick])} />
       </>
@@ -123,7 +123,7 @@ export function Drafts({ dealId }: { dealId: string }) {
                 Set your limits first
               </T>
               <T size={14} color={t.muted} lh={1.45}>
-                A reply is written to stay inside the most you would accept. Lock that number and SecondLook can draft for you.
+                A reply is written to stay inside the most you would accept. Lock that number and Quotekey can draft for you.
               </T>
             </View>
           </Row>

@@ -48,7 +48,7 @@ function Welcome() {
   return (
     <View testID="welcome" style={{ padding: 22, borderRadius: 30, backgroundColor: t.block, gap: 10 }}>
       <T size={28} w={600} color={t.onBlock} ls={-0.6} lh={1.15}>
-        Get a second look before you reply.
+        Check the quote. Counter it. Keep your number.
       </T>
       <T size={15} color={t.onBlockMuted} lh={1.45}>
         Paste a rate quote a lender or dealer texted you. See if it is real and fairly priced, then send a reply that stays inside limits only you know.
@@ -104,7 +104,7 @@ function CheckCard() {
             {typed ? 'Check this message' : hasCopied ? 'You copied a message' : 'Check a message'}
           </T>
           <T size={14} color={t.muted} lh={1.4}>
-            {hasCopied && !typed ? Platform.OS === 'web' ? 'Tap below and SecondLook reads it in this browser.' : 'Tap below and SecondLook reads it on this phone.' : 'Copy a text from a lender or dealer, or paste it here.'}
+            {hasCopied && !typed ? Platform.OS === 'web' ? 'Tap below and Quotekey reads it in this browser.' : 'Tap below and Quotekey reads it on this phone.' : 'Copy a text from a lender or dealer, or paste it here.'}
           </T>
         </View>
       </Row>
@@ -174,7 +174,7 @@ export function Home() {
               {name ? 'Welcome back' : 'Welcome to'}
             </T>
             <T size={19} w={700} ls={-0.19} lines={1}>
-              {name || 'SecondLook'}
+              {name || 'Quotekey'}
             </T>
           </View>
         </Row>

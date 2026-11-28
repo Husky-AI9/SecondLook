@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { nativeAi } from '../../modules/secondlook-ai';
 
-// Android: highlight text in any app and "SecondLook" appears next to Copy and Share.
+// Android: highlight text in any app and "Quotekey" appears next to Copy and Share.
 // The selected text arrives through the PROCESS_TEXT intent, read by the native module.
 
 export function takeIncomingText(): string | null {
