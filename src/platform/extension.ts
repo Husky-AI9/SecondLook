@@ -1,9 +1,9 @@
 import { Platform } from 'react-native';
 
-// SecondLook for Chrome (extension/): the extension's side panel shows this web app in a frame
+// Quotekey for Chrome (extension/): the extension's side panel shows this web app in a frame
 // with ?ext=1. Text the user selects on a page arrives here by postMessage; a reply the user
 // taps goes back the same way and the extension types it into the page's reply box.
-// Only the SecondLook extension (fixed id from the key in extension/manifest.json) is trusted.
+// Only the Quotekey extension (fixed id from the key in extension/manifest.json) is trusted.
 
 export const EXTENSION_ORIGIN = 'chrome-extension://koogiofpinglcgjiaonpllmbdhcbndcl';
 

@@ -108,7 +108,7 @@ if (fontPath && existsSync(fontPath)) {
 }
 writeFileSync(
   resolve(out, 'index.html'),
-  `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>SecondLook preview</title><style>
+  `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Quotekey preview</title><style>
 ${font}
 html,body,#root{height:100%;margin:0}
 body{background:#E9E7E1;-webkit-font-smoothing:antialiased;font-family:'DM Sans',system-ui,sans-serif}

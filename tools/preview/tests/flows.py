@@ -1,5 +1,5 @@
 """
-Browser tests for the SecondLook screens, state and AI routing.
+Browser tests for the Quotekey screens, state and AI routing.
 
 Runs the real app code in headless Chrome through the preview build (see ../build.mjs).
 Firebase is replaced by a fake that records every call, so these tests can assert what
@@ -503,7 +503,7 @@ def ios_keyboard_test_bench(browser):
 @scenario
 def android_select_text_and_cloud_fallback(browser):
     a = App(browser, dist='dist-preview-android', extra_init=NATIVE_FAKE % {'shared': json.dumps(SCAM), 'ondevice': 'unavailable'})
-    a.wait('screen-scam')  # launched straight into the verdict from "select text -> SecondLook"
+    a.wait('screen-scam')  # launched straight into the verdict from "select text -> Quotekey"
     a.click('scam-done'); a.click('load-sample')
     a.js("window.__native.listeners.forEach(cb => cb({text: %s}))" % json.dumps(DEALER))
     a.wait('screen-verdict')

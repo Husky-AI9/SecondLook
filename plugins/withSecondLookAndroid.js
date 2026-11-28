@@ -1,5 +1,5 @@
 // Expo config plugin (Android):
-//  1. Adds a PROCESS_TEXT intent filter, so "SecondLook" appears in the text-selection menu
+//  1. Adds a PROCESS_TEXT intent filter, so "Quotekey" appears in the text-selection menu
 //     of every app next to Copy and Share.
 //  2. Writes meta-data the native module reads: whether to use the App Check debug provider,
 //     an optional fixed debug token (from the APPCHECK_DEBUG_TOKEN_ANDROID secret, never from

@@ -5,7 +5,7 @@ export type SendOutcome = 'opened-messages' | 'copied' | 'failed';
 
 /**
  * Hands the chosen reply to the user's messaging app with the text filled in.
- * The user presses send. SecondLook never sends anything itself.
+ * The user presses send. Quotekey never sends anything itself.
  */
 export async function openInMessages(body: string): Promise<SendOutcome> {
   const copied = await writeClipboard(body);

@@ -1,4 +1,4 @@
-// The side panel: the SecondLook web app in a frame, plus the hand-off of page text and replies.
+// The side panel: the Quotekey web app in a frame, plus the hand-off of page text and replies.
 const APP = 'https://secondlook-7b7d5.web.app/';
 
 // The automated test points the panel at a local build; nothing else may change the address.

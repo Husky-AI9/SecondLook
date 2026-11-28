@@ -96,7 +96,7 @@ export function Keyboard() {
   const page = useStore((s) => s.page);
   const [pageTheirs, setPageTheirs] = useState<string | null>(null);
   const [autoCheck, setAutoCheck] = useState(false);
-  // Android: whether the SecondLook keyboard is turned on / in use (refreshed on return from Settings).
+  // Android: whether the Quotekey keyboard is turned on / in use (refreshed on return from Settings).
   const [kb, setKb] = useState<{ enabled: boolean; selected: boolean } | null>(null);
   useEffect(() => {
     if (Platform.OS !== 'android' || !nativeAi?.keyboardStatus) return;
@@ -139,7 +139,7 @@ export function Keyboard() {
   const doCheck = async () => {
     // Text typed in the box is the user's own reply: run the leak guard on it.
     if (message.trim() && !filled) {
-      if (!deal?.limits) return setPanel({ kind: 'needs-setup', why: 'Set your limits in the SecondLook app so replies can be checked against them.' });
+      if (!deal?.limits) return setPanel({ kind: 'needs-setup', why: 'Set your limits in the Quotekey app so replies can be checked against them.' });
       setPanel({ kind: 'busy', label: 'Checking your wording' });
       const own = await checkOwnDraft(message.trim(), deal, latestOffer(deal), pipelineCtx(deal));
       return setPanel(own.guard.ok ? { kind: 'ok-own', own } : { kind: 'leak', own });
@@ -155,8 +155,8 @@ export function Keyboard() {
     setPanel({ kind: 'busy', label: 'Writing three replies' });
     const result = await checkMessage(theirs, pipelineCtx(deal));
     if (result.kind === 'scam') return setPanel({ kind: 'scam', result, help: false });
-    if (!deal) return setPanel({ kind: 'needs-setup', why: 'No deal matches this message. Add one in the SecondLook app.' });
-    if (!deal.limits || !hasPin) return setPanel({ kind: 'needs-setup', why: 'Set your limits in the SecondLook app. Replies are written to stay inside them.' });
+    if (!deal) return setPanel({ kind: 'needs-setup', why: 'No deal matches this message. Add one in the Quotekey app.' });
+    if (!deal.limits || !hasPin) return setPanel({ kind: 'needs-setup', why: 'Set your limits in the Quotekey app. Replies are written to stay inside them.' });
     const c = await draftCounter(deal, result.offer, theirs, pipelineCtx(deal));
     setPanel({ kind: 'drafts', result, drafts: c.drafts, source: c.source === 'offline-rules' ? 'offline-rules' : c.source });
   };
@@ -283,7 +283,7 @@ export function Keyboard() {
                 {pageTheirs ? 'Selected on the page' : `${sample.sub} · practice chat`}
               </T>
             </View>
-            <Pressable testID="kb-setup" accessibilityRole="button" accessibilityLabel="How to use SecondLook where you type" onPress={() => setShowSetup(!showSetup)} hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: t.card, borderWidth: 1, borderColor: t.border, alignItems: 'center', justifyContent: 'center' }}>
+            <Pressable testID="kb-setup" accessibilityRole="button" accessibilityLabel="How to use Quotekey where you type" onPress={() => setShowSetup(!showSetup)} hitSlop={8} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: t.card, borderWidth: 1, borderColor: t.border, alignItems: 'center', justifyContent: 'center' }}>
               <Icon name="help" size={18} color={t.text} />
             </Pressable>
           </Row>
@@ -319,9 +319,9 @@ export function Keyboard() {
               </T>
               {keyboardExtensionEnabled && Platform.OS === 'ios' ? (
                 <>
-                  <T size={13} lh={1.45}>1. Settings → General → Keyboard → Keyboards → Add New Keyboard → SecondLook.</T>
-                  <T size={13} lh={1.45}>2. Tap SecondLook → Allow Full Access. This lets the keyboard read your locked limits and reach the redacted cloud fallback. Their message and your limits still stay on this phone.</T>
-                  <T size={13} lh={1.45}>3. In Messages, copy their text, hold the globe key and pick SecondLook.</T>
+                  <T size={13} lh={1.45}>1. Settings → General → Keyboard → Keyboards → Add New Keyboard → Quotekey.</T>
+                  <T size={13} lh={1.45}>2. Tap Quotekey → Allow Full Access. This lets the keyboard read your locked limits and reach the redacted cloud fallback. Their message and your limits still stay on this phone.</T>
+                  <T size={13} lh={1.45}>3. In Messages, copy their text, hold the globe key and pick Quotekey.</T>
                   <Row between gap={8}>
                     <T size={12} color={t.muted} style={{ flex: 1 }}>
                       {packShared === false ? 'Keychain sharing is off in this build. Copy the pack code and import it in the keyboard.' : 'Your limits pack is shared with the keyboard through the keychain.'}
@@ -333,9 +333,9 @@ export function Keyboard() {
                 </>
               ) : Platform.OS === 'android' ? (
                 <>
-                  <T size={13} lh={1.45}>1. Tap "Turn on the keyboard" and switch on SecondLook. Android warns that any keyboard could collect what you type. SecondLook reads only your reply box and the message you copied, and only when you tap a key. Nothing is sent.</T>
-                  <T size={13} lh={1.45}>2. In any chat, press and hold their message, tap Copy, then tap the keyboard button at the bottom of the screen and pick SecondLook. The globe key takes you back.</T>
-                  <T size={13} lh={1.45}>3. Or press and hold their message: "SecondLook" is next to Copy and Share, and opens the verdict in the app.</T>
+                  <T size={13} lh={1.45}>1. Tap "Turn on the keyboard" and switch on Quotekey. Android warns that any keyboard could collect what you type. Quotekey reads only your reply box and the message you copied, and only when you tap a key. Nothing is sent.</T>
+                  <T size={13} lh={1.45}>2. In any chat, press and hold their message, tap Copy, then tap the keyboard button at the bottom of the screen and pick Quotekey. The globe key takes you back.</T>
+                  <T size={13} lh={1.45}>3. Or press and hold their message: "Quotekey" is next to Copy and Share, and opens the verdict in the app.</T>
                   <Row gap={8} style={{ flexWrap: 'wrap' }}>
                     <Pressable testID="kb-enable" accessibilityRole="button" accessibilityLabel="Turn on the keyboard" onPress={() => nativeAi?.openKeyboardSettings?.()} hitSlop={6}>
                       <Pill label="Turn on the keyboard" icon="settings" />
@@ -343,17 +343,17 @@ export function Keyboard() {
                     <Pressable testID="kb-pick" accessibilityRole="button" accessibilityLabel="Switch keyboard" onPress={() => nativeAi?.showKeyboardPicker?.()} hitSlop={6}>
                       <Pill label="Switch keyboard" icon="globe" />
                     </Pressable>
-                    {kb ? <Pill testID="kb-status" label={kb.selected ? 'SecondLook keyboard in use' : kb.enabled ? 'Keyboard on' : 'Keyboard off'} tone={kb.enabled ? 'ok' : 'warn'} /> : null}
+                    {kb ? <Pill testID="kb-status" label={kb.selected ? 'Quotekey keyboard in use' : kb.enabled ? 'Keyboard on' : 'Keyboard off'} tone={kb.enabled ? 'ok' : 'warn'} /> : null}
                   </Row>
-                  <T size={12} color={t.muted} lh={1.45}>Try it here: tap the message above to copy it, tap the message box below, and switch to SecondLook.</T>
+                  <T size={12} color={t.muted} lh={1.45}>Try it here: tap the message above to copy it, tap the message box below, and switch to Quotekey.</T>
                 </>
               ) : Platform.OS === 'ios' ? (
-                <T size={13} lh={1.45}>Copy their message in Messages, open SecondLook and tap "Check copied text". After you pick a reply, Messages reopens with it filled in.</T>
+                <T size={13} lh={1.45}>Copy their message in Messages, open Quotekey and tap "Check copied text". After you pick a reply, Messages reopens with it filled in.</T>
               ) : inExtension ? (
                 <>
-                  <T size={13} lh={1.45}>1. On any page (Gmail, Messages for web, Facebook Marketplace…), select the lender's message, right-click and choose "SecondLook: check their message". The verdict shows here.</T>
-                  <T size={13} lh={1.45}>2. Tap Counter and pick a reply. SecondLook types it into the reply box on the page. You press send.</T>
-                  <T size={13} lh={1.45}>3. Before you send your own words, select them and choose "SecondLook: check my reply before sending".</T>
+                  <T size={13} lh={1.45}>1. On any page (Gmail, Messages for web, Facebook Marketplace…), select the lender's message, right-click and choose "Quotekey: check their message". The verdict shows here.</T>
+                  <T size={13} lh={1.45}>2. Tap Counter and pick a reply. Quotekey types it into the reply box on the page. You press send.</T>
+                  <T size={13} lh={1.45}>3. Before you send your own words, select them and choose "Quotekey: check my reply before sending".</T>
                   <T size={12} color={t.muted} lh={1.45}>Your limits stay in this browser. With Chrome's built-in Gemini Nano, the message is read on this computer.</T>
                 </>
               ) : (
@@ -372,7 +372,7 @@ export function Keyboard() {
             accessibilityRole="button"
             accessibilityLabel={`Message: ${theirs}. Tap to copy.`}
             onPress={() => {
-              // A real copy, so the SecondLook keyboard can practise on it too.
+              // A real copy, so the Quotekey keyboard can practise on it too.
               void writeClipboard(theirs);
               setCopied(true);
               if (panel.kind === 'needs-setup') setPanel({ kind: 'ready' });
@@ -400,7 +400,7 @@ export function Keyboard() {
             <Row testID="kb-filled" gap={8} style={{ paddingVertical: 10, paddingHorizontal: 14, borderRadius: 16, backgroundColor: t.okBg }}>
               <Icon name="check" size={16} color={t.okText} stroke={2.5} />
               <T size={13} w={700} color={t.okText} style={{ flex: 1 }}>
-                Filled in by SecondLook. Read it, then press send.
+                Filled in by Quotekey. Read it, then press send.
               </T>
             </Row>
           ) : null}
