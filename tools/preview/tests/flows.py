@@ -413,6 +413,24 @@ def keyboard_panel_practice(browser):
 
 
 @scenario
+def judge_mode_one_click(browser):
+    """?judge=1: sample deals and locked limits, so Counter and the leak guard work at once."""
+    a = App(browser)
+    a.pg.goto(a.url + '?judge=1')
+    a.pg.wait_for_selector('#root > *')
+    a.wait('judge-banner')
+    assert '2468' in a.text('judge-banner'), a.text('judge-banner')
+    a.wait('hero')
+    a.click('nav-keyboard'); a.wait('kb-panel')
+    assert a.text('kb-deal') == 'Refi · Summit'
+    a.click('kb-bubble'); a.click('kb-counter'); a.wait('kb-draft-0')
+    a.fill('kb-input', 'The highest I can go is six and a quarter.'); a.click('kb-check', 0); a.wait('kb-leak')
+    assert 'Hold on before you send' in a.text('kb-leak')
+    a.no_toast(); a.shot('j01-judge-leak')
+    a.finish()
+
+
+@scenario
 def erase_everything(browser):
     a = App(browser)
     a.click('load-sample'); a.click('nav-limits'); a.fill('pin-input', '4821'); a.click('lock-limits'); a.wait('unlock')
@@ -580,7 +598,7 @@ def main():
         browser = p.chromium.launch(executable_path=CHROME, args=['--no-sandbox'])
         for s in [full_negotiation_on_device, cloud_fallback_is_redacted, offline_uses_rules, bad_model_output_falls_back, leaky_model_drafts_are_replaced,
                   scam_never_reaches_a_model, own_wording_is_guarded, cloud_fallback_can_be_switched_off, remote_config_changes_rules_and_model,
-                  keyboard_panel_practice, erase_everything, erase_wins_a_race_with_a_pending_save, firebase_not_configured, ios_native_adapter, ios_keyboard_test_bench, android_select_text_and_cloud_fallback,
+                  keyboard_panel_practice, judge_mode_one_click, erase_everything, erase_wins_a_race_with_a_pending_save, firebase_not_configured, ios_native_adapter, ios_keyboard_test_bench, android_select_text_and_cloud_fallback,
                   layouts_fit_small_and_large_screens, every_control_has_a_name, dark_mode_screens]:
             if only and s.__name__ not in only:
                 continue

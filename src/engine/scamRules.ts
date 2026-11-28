@@ -29,9 +29,14 @@ export const DEFAULT_RULES: ScamRuleSet = {
     {
       id: 'upfront-fee',
       label: 'Asks for a fee before any money is paid out',
-      weight: 3,
+      weight: 4,
+      // Appraisal and credit-report fees are often paid up front to real lenders, so they don't count.
       pattern:
-        '(pay|send|wire|deposit|remit)\\b.{0,50}\\b(fee|deposit|insurance|tax|charge)s?\\b.{0,70}\\b(release|unlock|receive|claim|activate|before|to get|first)|\\b(processing|advance|insurance|release|activation|verification|transfer)\\s+fee\\b.{0,50}\\b(today|now|first|before|release|upfront|up front)|upfront (fee|payment)|up-front (fee|payment)',
+        '(pay|send|wire|deposit|remit|purchase|buy|need|requires?|required)\\b.{0,50}\\b(?<!appraisal |credit report )(fee|deposit|insurance|bond|tax|charge)s?\\b.{0,70}\\b(release|unlock|receive|claim|activate|proceed|process|fund|funding|hold|before|to get|first)' +
+        '|\\b(processing|advance|insurance|release|activation|verification|transfer|reservation|enrollment)\\s+fee\\b.{0,50}\\b(today|now|first|before|release|upfront|up front)' +
+        '|\\b(fee|deposit)s?\\b.{0,20}\\b(is |are )?(due|required|needed)\\b.{0,30}\\b(before|to (release|unlock|fund|lock|receive))' +
+        '|\\b(pay|send|wire|deposit)\\s+(a |the |an )?\\$\\s?\\d[\\d,]*.{0,40}\\bto (activate|release|unlock|receive|get|claim)\\b' +
+        '|upfront (fee|payment)|up-front (fee|payment)|payments? in advance',
       flags: 'is',
     },
     {
@@ -39,7 +44,7 @@ export const DEFAULT_RULES: ScamRuleSet = {
       label: 'Pressure to pay today',
       weight: 2,
       pattern:
-        '\\b(pay|send|act|respond|claim|confirm|click)\\b.{0,40}\\b(today|now|immediately|right away|within \\d+ ?(hours?|hrs?|minutes?|mins?))|expires in \\d+ ?(min|hour)|last chance|final notice|act fast|urgent',
+        '\\b(pay|send|act|respond|claim|confirm|click)\\b.{0,40}\\b(today|now|immediately|right away|within \\d+ ?(hours?|hrs?|minutes?|mins?))|expires in \\d+ ?(min|hour)|before it expires|expires (soon|today|tonight)|(today|tonight|this week) only|limited (time|spots)|last chance|final notice|act fast|urgent',
       flags: 'is',
     },
     { id: 'no-licence', label: 'No lender name or licence number', weight: 1, builtin: 'no-licence' },
@@ -55,24 +60,31 @@ export const DEFAULT_RULES: ScamRuleSet = {
       id: 'payment-method',
       label: 'Wants payment by gift card, crypto or wire',
       weight: 4,
-      pattern: 'gift ?cards?|bitcoin|\\bcrypto|\\busdt\\b|western union|moneygram|\\bzelle\\b|cash ?app|wire transfer|prepaid (debit )?card',
+      pattern: 'gift ?cards?|bitcoin|\\bcrypto|\\busdt\\b|western union|moneygram|\\bzelle\\b|cash ?app|wire transfer|\\b(by|via) wire\\b|prepaid (debit )?card',
       flags: 'i',
     },
     {
       id: 'sensitive',
       label: 'Asks for your SSN, PIN or bank login by text',
-      weight: 3,
+      weight: 4,
       pattern:
-        '(send|reply with|text|confirm|verify|provide|share|enter)\\b.{0,40}\\b(ssn|social security|bank (login|password|username)|online banking|routing number|account number|debit card|\\bpin\\b|one[- ]time (code|passcode)|verification code|\\botp\\b)',
+        '(send|reply with|text|confirm|verify|provide|share|enter|need|give us|what is|what\'s|photo of)\\b.{0,40}\\b(ssn|social security|bank (login|password|username)|(username|login) and password|online banking|routing number|account number|debit card|\\bpin\\b|one[- ]time (code|passcode)|verification code|\\botp\\b)',
       flags: 'is',
     },
     { id: 'too-good', label: 'Rate is far below anything on the market', weight: 2, builtin: 'too-good' },
     {
+      id: 'foreclosure-rescue',
+      label: 'Offers to stop a foreclosure if you pay them instead',
+      weight: 4,
+      pattern: '(stop|save|prevent) (your )?foreclosure|payments? to us instead|instead of (paying )?your (lender|bank|servicer)|stop (making |paying )?your (mortgage |bank )?payments|stop paying your (bank|lender|mortgage)',
+      flags: 'i',
+    },
+    {
       id: 'shouting',
       label: 'Prize-style language',
       weight: 1,
-      pattern: "\\bCONGRAT|\\bWINNER\\b|YOU('| HA)VE WON|you(’|'| ha)ve been selected|pre-?approved.{0,40}(claim|click|release)",
-      flags: '',
+      pattern: "\\bCONGRAT|\\bWINNER\\b|YOU('| HA)VE WON|you(’|'| ha)ve been selected|you (were|are) selected|pre-?approved.{0,40}(claim|click|release)",
+      flags: 'i',
     },
   ],
 };
@@ -149,6 +161,18 @@ export interface ScamCheck {
   links: string[];
 }
 
+// "We will never ask for a gift card" is a warning, not a request. A match counts only if the
+// words just before it, in the same sentence, don't say never / do not / won't.
+function matchesNotNegated(re: RegExp, text: string): boolean {
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    const before = text.slice(Math.max(0, m.index - 40), m.index).split(/[.!?\n]/).pop() ?? '';
+    if (!/\b(never|not|no one|nobody|won'?t|don'?t|doesn'?t)\b/i.test(before)) return true;
+    if (m[0].length === 0) re.lastIndex++;
+  }
+  return false;
+}
+
 export function checkScam(text: string, rules: ScamRuleSet = DEFAULT_RULES, ctx: ScamContext = {}): ScamCheck {
   const reasons: ScamReason[] = [];
   const links = findLinks(text);
@@ -166,10 +190,10 @@ export function checkScam(text: string, rules: ScamRuleSet = DEFAULT_RULES, ctx:
       const o = extractOffer(text);
       const rate = o.apr ?? o.rate;
       const floor = ctx.marketLow !== undefined ? Math.min(rules.tooGoodApr, ctx.marketLow - 2) : rules.tooGoodApr;
-      hit = rate !== undefined && rate <= floor;
+      hit = (rate !== undefined && rate <= floor) || /\b0(?:\.0+)?\s?%\s*(apr|interest|financing)\b/i.test(text);
     } else if (r.pattern) {
       try {
-        hit = new RegExp(r.pattern, r.flags ?? 'i').test(text);
+        hit = matchesNotNegated(new RegExp(r.pattern, (r.flags ?? 'i').replace('g', '') + 'g'), text);
       } catch {
         hit = false;
       }

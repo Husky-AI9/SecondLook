@@ -1,0 +1,83 @@
+[
+ {
+  "text": "Hi Alex, this is Dana from Summit. 6.35% fixed for 30 years with $1,600 in fees.",
+  "expect": {
+   "rate": 6.35,
+   "termMonths": 360,
+   "fees": 1600
+  }
+ },
+ {
+  "text": "Ridgeline Auto: we can do 7.9% APR for 60 months, $455/mo.",
+  "expect": {
+   "apr": 7.9,
+   "termMonths": 60,
+   "monthlyPayment": 455
+  }
+ },
+ {
+  "text": "We can do 6.25% with 0.5 points. Lender fees $1,350.",
+  "expect": {
+   "rate": 6.25,
+   "points": 0.5,
+   "fees": 1350
+  }
+ },
+ {
+  "text": "Your credit union auto loan: 6.74% APR, 60 months, no fees.",
+  "expect": {
+   "apr": 6.74,
+   "termMonths": 60
+  }
+ },
+ {
+  "text": "Quote: 30-year fixed\nRate 6.5%\nAPR 6.61%\nClosing costs $2,250",
+  "expect": {
+   "rate": 6.5,
+   "apr": 6.61,
+   "termMonths": 360,
+   "fees": 2250
+  }
+ },
+ {
+  "text": "Your current rate is 7.5%; we can get you to 6.375% on a 15-yr, fees $1,100.",
+  "expect": {
+   "rate": 6.375,
+   "termMonths": 180,
+   "fees": 1100
+  }
+ },
+ {
+  "text": "$400,000 at 6.45% for 30 years, 1 point, $1,995 in fees.",
+  "expect": {
+   "rate": 6.45,
+   "termMonths": 360,
+   "points": 1,
+   "fees": 1995,
+   "amount": 400000
+  }
+ },
+ {
+  "text": "Payment of $612 per month at 9.4% APR for 72 months.",
+  "expect": {
+   "apr": 9.4,
+   "termMonths": 72,
+   "monthlyPayment": 612
+  }
+ },
+ {
+  "text": "Rates improved today: 30-yr fixed at 6.3%.",
+  "expect": {
+   "rate": 6.3,
+   "termMonths": 360
+  }
+ },
+ {
+  "text": "With 10% down we can do 6.875%, 30 years, $2,900 closing costs.",
+  "expect": {
+   "rate": 6.875,
+   "termMonths": 360,
+   "fees": 2900
+  }
+ }
+]

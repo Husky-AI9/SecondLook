@@ -107,24 +107,114 @@ enum Rules {
     }
   }
 
+  // Scam rules: the same rules and weights as src/engine/scamRules.ts.
+  // Appraisal and credit-report fees are often paid up front to real lenders, so they don't count.
+  static let upfrontFee: String = [
+    #"(pay|send|wire|deposit|remit|purchase|buy|need|requires?|required)\b.{0,50}\b(?<!appraisal |credit report )(fee|deposit|insurance|bond|tax|charge)s?\b.{0,70}\b(release|unlock|receive|claim|activate|proceed|process|fund|funding|hold|before|to get|first)"#,
+    #"\b(processing|advance|insurance|release|activation|verification|transfer|reservation|enrollment)\s+fee\b.{0,50}\b(today|now|first|before|release|upfront|up front)"#,
+    #"\b(fee|deposit)s?\b.{0,20}\b(is |are )?(due|required|needed)\b.{0,30}\b(before|to (release|unlock|fund|lock|receive))"#,
+    #"\b(pay|send|wire|deposit)\s+(a |the |an )?\$\s?\d[\d,]*.{0,40}\bto (activate|release|unlock|receive|get|claim)\b"#,
+    #"upfront (fee|payment)|up-front (fee|payment)|payments? in advance"#,
+  ].joined(separator: "|")
   static let scamSigns: [(String, String, Int)] = [
-    (#"(pay|send|wire|deposit)\b.{0,50}\b(fee|deposit|insurance|tax)s?\b.{0,70}\b(release|unlock|receive|claim|before|first)|(processing|advance|release|activation) fee"#, "Asks for a fee before any money is paid out", 3),
-    (#"\b(pay|send|act|respond|claim|click)\b.{0,40}\b(today|now|immediately)|last chance|final notice|urgent"#, "Pressure to pay today", 2),
-    (#"https?://|www\.|\b[a-z0-9-]+\.(com|net|org|info|biz|xyz|top|site|online|click|example)\b"#, "Link goes to a site that isn't a known lender", 2),
-    (#"gift ?cards?|bitcoin|crypto|western union|moneygram|zelle|cash ?app|wire transfer"#, "Wants payment by gift card, crypto or wire", 4),
-    (#"guaranteed approval|no credit check|100% approv"#, "Promises approval with no credit check", 3),
+    (upfrontFee, "Asks for a fee before any money is paid out", 4),
+    (#"\b(pay|send|act|respond|claim|confirm|click)\b.{0,40}\b(today|now|immediately|right away|within \d+ ?(hours?|hrs?|minutes?|mins?))|expires in \d+ ?(min|hour)|before it expires|expires (soon|today|tonight)|(today|tonight|this week) only|limited (time|spots)|last chance|final notice|act fast|urgent"#,
+     "Pressure to pay today", 2),
+    (#"https?://|www\.|\b[a-z0-9-]+\.(com|net|org|io|co|info|biz|us|loans?|finance|xyz|top|site|online|click|link|example|app)\b"#, "Link goes to a site that isn't a known lender", 2),
+    (#"guaranteed approval|no credit check|100% approv|approval guaranteed|bad credit ok|everyone (is )?approved"#, "Promises approval with no credit check", 3),
+    (#"gift ?cards?|bitcoin|\bcrypto|\busdt\b|western union|moneygram|\bzelle\b|cash ?app|wire transfer|\b(by|via) wire\b|prepaid (debit )?card"#, "Wants payment by gift card, crypto or wire", 4),
+    (#"(send|reply with|text|confirm|verify|provide|share|enter|need|give us|what is|what's|photo of)\b.{0,40}\b(ssn|social security|bank (login|password|username)|(username|login) and password|online banking|routing number|account number|debit card|\bpin\b|one[- ]time (code|passcode)|verification code|\botp\b)"#,
+     "Asks for your SSN, PIN or bank login by text", 4),
+    (#"(stop|save|prevent) (your )?foreclosure|payments? to us instead|instead of (paying )?your (lender|bank|servicer)|stop (making |paying )?your (mortgage |bank )?payments|stop paying your (bank|lender|mortgage)"#,
+     "Offers to stop a foreclosure if you pay them instead", 4),
+    (#"\bCONGRAT|\bWINNER\b|YOU('| HA)VE WON|you(’|'| ha)ve been selected|you (were|are) selected|pre-?approved.{0,40}(claim|click|release)"#, "Prize-style language", 1),
   ]
-  /// Same scoring as src/engine/scamRules.ts, including "too good": a rate far below the market.
   static let tooGoodApr = 3.5
-  static func scamReasons(_ text: String, marketLow: Double? = nil) -> [String] {
-    var score = 0; var reasons: [String] = []
-    for (pattern, label, weight) in scamSigns where text.range(of: pattern, options: [.regularExpression, .caseInsensitive]) != nil {
-      score += weight; reasons.append(label)
+
+  /// "We will never ask for a gift card" is a warning, not a request.
+  static func matchesNotNegated(_ pattern: String, _ text: String) -> Bool {
+    guard let re = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive, .dotMatchesLineSeparators]) else { return false }
+    let ns = text as NSString
+    for m in re.matches(in: text, range: NSRange(location: 0, length: ns.length)) {
+      let b0 = max(0, m.range.location - 40)
+      let before = ns.substring(with: NSRange(location: b0, length: m.range.location - b0))
+      let sentence = before.components(separatedBy: CharacterSet(charactersIn: ".!?\n")).last ?? before
+      if !has(#"\b(never|not|no one|nobody|won'?t|don'?t|doesn'?t)\b"#, sentence) { return true }
     }
-    let floor = marketLow.map { min(tooGoodApr, $0 - 2) } ?? tooGoodApr
-    if let r = rate(text), r <= floor { score += 2; reasons.append("Rate is far below anything on the market") }
-    return score >= 5 ? reasons : []
+    return false
   }
+
+  /// Same scoring as src/engine/scamRules.ts, including "too good": a rate far below the market.
+  static func scamReasons(_ text: String, marketLow: Double? = nil, knownNames: [String] = []) -> [String] {
+    var strong: [(String, Int)] = []
+    for (pattern, label, weight) in scamSigns where matchesNotNegated(pattern, text) { strong.append((label, weight)) }
+    let floor = marketLow.map { min(tooGoodApr, $0 - 2) } ?? tooGoodApr
+    if let r = rate(text), r <= floor { strong.append(("Rate is far below anything on the market", 2)) }
+    else if has(#"\b0(?:\.0+)?\s?%\s*(apr|interest|financing)\b"#, text) { strong.append(("Rate is far below anything on the market", 2)) }
+    if strong.isEmpty { return [] }
+    // "No licence number" alone is normal for a text from a loan officer: it only counts with another sign.
+    let lower = text.lowercased()
+    let fromKnown = knownNames.contains { $0.count >= 3 && lower.contains($0.lowercased()) }
+    let hasLicence = has(#"\bnmls\b|licen[cs]e\s*(no\.?|number|#)?\s*:?\s*\d{3,}"#, text)
+    let all = (!hasLicence && !fromKnown) ? strong + [("No lender name or licence number", 1)] : strong
+    return all.reduce(0) { $0 + $1.1 } >= 5 ? all.map { $0.0 } : []
+  }
+
+  // Rate mentions (port of src/engine/rates.ts): the walk-away rate however it is typed:
+  // "6.25%", "6.25", "six and a quarter", "six point two five", "6¼%", "6 1/4%", "625 bps".
+  static let ones: [String: Int] = [
+    "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+    "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17,
+    "eighteen": 18, "nineteen": 19, "twenty": 20,
+  ]
+  static let digitWords: [String: Int] = ["zero": 0, "oh": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9]
+  static let fractionWords: [String: Double] = [
+    "a quarter": 0.25, "one quarter": 0.25, "a half": 0.5, "one half": 0.5, "three quarters": 0.75,
+    "an eighth": 0.125, "one eighth": 0.125, "three eighths": 0.375, "five eighths": 0.625, "seven eighths": 0.875,
+  ]
+  static let fractionChars: [String: Double] = ["¼": 0.25, "½": 0.5, "¾": 0.75, "⅛": 0.125, "⅜": 0.375, "⅝": 0.625, "⅞": 0.875]
+  static let percentRE = #"\s?(?:%|percent\b|per cent\b)"#
+  static let notRateAfter = #"^\s?(?:k\b|dollars?|bucks|a month|per month|/\s?mo|months?|mos?\b|years?|yrs?|points?|pts?\b|square|sq\b|miles?|hours?|hrs?|days?|weeks?|minutes?|mins?|am\b|pm\b|o'?clock)"#
+
+  static func groups(_ pattern: String, _ text: String) -> [[String]] {
+    guard let re = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) else { return [] }
+    let ns = text as NSString
+    return re.matches(in: text, range: NSRange(location: 0, length: ns.length)).map { m in
+      (0..<m.numberOfRanges).map { i in m.range(at: i).location == NSNotFound ? "" : ns.substring(with: m.range(at: i)) }
+        + [String(m.range.location + m.range.length)]
+    }
+  }
+
+  static func rateMentions(_ text: String) -> [Double] {
+    var out: [Double] = []
+    func add(_ n: Double) { if n > 0 && n < 30 { out.append((n * 1000).rounded() / 1000) } }
+    for g in groups(#"(\d{1,2})\s?([¼½¾⅛⅜⅝⅞])"#, text) { add((Double(g[1]) ?? 0) + (fractionChars[g[2]] ?? 0)) }
+    for g in groups(#"(?<![\d/])(\d{1,2})\s+(?:and\s+)?([1357])/([248])(?![\d/])"#, text) {
+      add((Double(g[1]) ?? 0) + (Double(g[2]) ?? 0) / (Double(g[3]) ?? 1))
+    }
+    for g in groups(#"(?<![\d.,$])(\d{3,4})\s?(?:basis points?|bps|bp)\b"#, text) { add((Double(g[1]) ?? 0) / 100) }
+    let onesRE = ones.keys.joined(separator: "|"), digitRE = digitWords.keys.joined(separator: "|")
+    let fracRE = "a quarter|one quarter|a half|one half|three[- ]quarters|an eighth|one[- ]eighth|three[- ]eighths|five[- ]eighths|seven[- ]eighths"
+    let wordsRE = "\\b(\(onesRE))(?:\\s+and\\s+(\(fracRE))|\\s+point\\s+((?:\(digitRE))(?:[\\s-]+(?:\(digitRE))){0,2}))?(\(percentRE))?"
+    for g in groups(wordsRE, text) {
+      guard let whole = ones[g[1].lowercased()] else { continue }
+      if !g[2].isEmpty { add(Double(whole) + (fractionWords[g[2].lowercased().replacingOccurrences(of: "-", with: " ")] ?? 0)) }
+      else if !g[3].isEmpty {
+        let ds = g[3].lowercased().components(separatedBy: CharacterSet(charactersIn: " -")).filter { !$0.isEmpty }.map { String(digitWords[$0] ?? 0) }
+        add(Double(whole) + (Double("0." + ds.joined()) ?? 0))
+      } else if !g[4].isEmpty { add(Double(whole)) }
+    }
+    let ns = text as NSString
+    for g in groups(#"(?<![\d.,$/])(\d{1,2}(?:\.\d{1,3})?)(?![\d¼½¾⅛⅜⅝⅞]|\s?/)("# + percentRE + #")?"#, text) {
+      let hasPct = !g[2].isEmpty
+      if !hasPct && !g[1].contains(".") { continue }
+      let end = Int(g.last ?? "0") ?? 0
+      if !hasPct && has(notRateAfter, ns.substring(from: min(end, ns.length))) { continue }
+      if let v = Double(g[1]) { add(v) }
+    }
+    return out
+  }
+
   /// One sentence comparing their rate with today's range, as the web verdict says it.
   static func rangeLine(_ rate: Double, low: Double, high: Double) -> String {
     if rate > high + 0.0005 { return "Above today's \(pct(low))–\(pct(high))." }
@@ -171,7 +261,7 @@ enum Rules {
   /// The number check from the leak guard: does this text name the walk-away rate?
   static func leaksWalkAway(_ text: String, limits: PackLimits) -> Bool {
     guard abs(limits.maxRate - limits.targetRate) > 0.0005 else { return false }
-    return percents(text).contains { abs($0 - limits.maxRate) < 0.0005 }
+    return rateMentions(text).contains { abs($0 - limits.maxRate) < 0.0005 }
   }
 }
 
@@ -300,7 +390,7 @@ final class KeyboardViewController: UIInputViewController {
       return show("Hold on before you send. This gives away your walk-away rate. Once a lender knows the highest number you'll accept, that is usually the number you get.", source: "Offline rules")
     }
     guard let text = copied() else { return }
-    let scam = Rules.scamReasons(text, marketLow: deal?.range?.low)
+    let scam = Rules.scamReasons(text, marketLow: deal?.range?.low, knownNames: [deal?.lender, deal?.contact].compactMap { $0 })
     if !scam.isEmpty { return show("Likely a scam. Don't reply.\n• " + scam.joined(separator: "\n• "), source: "Offline rules") }
     guard let rate = Rules.rate(text) else { return show("No rate in this message. Ask for the rate, APR, fees and term in writing.", source: "Offline rules") }
     var parts: [String] = []
@@ -315,7 +405,7 @@ final class KeyboardViewController: UIInputViewController {
 
   @objc func tapCounter() {
     guard let text = copied() else { return }
-    if !Rules.scamReasons(text, marketLow: deal?.range?.low).isEmpty { return show("Likely a scam. No reply is offered for scam messages. Don't tap the link.", source: "Offline rules") }
+    if !Rules.scamReasons(text, marketLow: deal?.range?.low, knownNames: [deal?.lender, deal?.contact].compactMap { $0 }).isEmpty { return show("Likely a scam. No reply is offered for scam messages. Don't tap the link.", source: "Offline rules") }
     guard let d = deal, d.limits != nil else { return show("Set your limits in the Quotekey app first.", source: "") }
     let replies = Rules.replies(deal: d, theirFees: Rules.fees(text))
     show("Tap a reply to put it in the message box. You press send.", source: "Offline rules")

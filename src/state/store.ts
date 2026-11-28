@@ -49,7 +49,12 @@ export interface AppState {
   packShared: boolean | null;
   /** Chrome extension: the latest text the user sent from a web page (see src/platform/extension.ts). */
   page: { kind: 'theirs' | 'own'; text: string; at: number } | null;
+  /** Judge mode ("?judge=1" on the web): the PIN that locks the sample limits, shown on Home. */
+  judgePin: string | null;
 }
+
+/** The PIN judge mode locks the sample limits with. Shown on screen, so it protects nothing real. */
+export const JUDGE_PIN = '2468';
 
 const MAIN_KEY = 'secondlook.v1';
 const SECRET_KEY = 'secondlook.secret.v1';
@@ -71,6 +76,7 @@ let state: AppState = {
   ai: { configured: false, onDevice: 'unknown' },
   packShared: null,
   page: null,
+  judgePin: null,
 };
 
 const listeners = new Set<() => void>();
@@ -269,6 +275,18 @@ export const actions = {
     return 'ok';
   },
 
+  /**
+   * "?judge=1" on the web: loads the two made-up deals and locks their limits with JUDGE_PIN,
+   * shown on Home, so Check, Counter and the leak guard work at once. It never replaces a PIN
+   * someone chose: if a different PIN is already set, the limits stay locked with that one.
+   */
+  judgeMode() {
+    if (!state.deals.some((d) => d.id.startsWith('sample-'))) actions.loadSample();
+    else set({ activeDealId: 'sample-summit' });
+    if (!state.pin) set({ pin: makePin(JUDGE_PIN, uid('s')), judgePin: JUDGE_PIN });
+    else set({ judgePin: checkPin(JUDGE_PIN, state.pin) ? JUDGE_PIN : null });
+  },
+
   loadSample() {
     const samples = sampleDeals();
     const keep = state.deals.filter((d) => !d.id.startsWith('sample-'));
@@ -278,7 +296,7 @@ export const actions = {
     if (timer) clearTimeout(timer);
     timer = null;
     // Memory first, then storage, in the same queue as saves.
-    set({ profile: { name: '' }, deals: [], activeDealId: undefined, pin: null, check: null, unlocked: false, remote: {}, stack: [{ name: 'home' }] });
+    set({ profile: { name: '' }, deals: [], activeDealId: undefined, pin: null, judgePin: null, check: null, unlocked: false, remote: {}, stack: [{ name: 'home' }] });
     return enqueue(async () => {
       await removeItem(MAIN_KEY);
       await removeSecret(SECRET_KEY);

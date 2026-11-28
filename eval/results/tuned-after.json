@@ -1,0 +1,134 @@
+{
+ "leakGuard": {
+  "leaks": 257,
+  "caught": 257,
+  "safe": 104,
+  "wronglyStopped": 0,
+  "byGroup": {
+   "leak · walk-away rate": {
+    "n": 220,
+    "right": 220,
+    "misses": []
+   },
+   "leak · agrees past the limits": {
+    "n": 15,
+    "right": 15,
+    "misses": []
+   },
+   "leak · credit score": {
+    "n": 8,
+    "right": 8,
+    "misses": []
+   },
+   "leak · deadline": {
+    "n": 8,
+    "right": 8,
+    "misses": []
+   },
+   "leak · a quote you don't hold": {
+    "n": 6,
+    "right": 6,
+    "misses": []
+   },
+   "safe · asks for a lower rate": {
+    "n": 50,
+    "right": 50,
+    "misses": []
+   },
+   "safe · other safe replies": {
+    "n": 54,
+    "right": 54,
+    "misses": []
+   }
+  },
+  "byForm": {
+   "digits with %": {
+    "n": 20,
+    "right": 20
+   },
+   "digits, space, %": {
+    "n": 20,
+    "right": 20
+   },
+   "digits + \"percent\"": {
+    "n": 20,
+    "right": 20
+   },
+   "three decimals": {
+    "n": 20,
+    "right": 20
+   },
+   "digits, no %": {
+    "n": 20,
+    "right": 20
+   },
+   "words + \"percent\"": {
+    "n": 20,
+    "right": 20
+   },
+   "words, no \"percent\"": {
+    "n": 20,
+    "right": 20
+   },
+   "spoken decimals": {
+    "n": 20,
+    "right": 20
+   },
+   "fraction character": {
+    "n": 20,
+    "right": 20
+   },
+   "typed fraction": {
+    "n": 20,
+    "right": 20
+   },
+   "basis points": {
+    "n": 20,
+    "right": 20
+   }
+  }
+ },
+ "scamRules": {
+  "scams": 50,
+  "caught": 50,
+  "legit": 50,
+  "falseAlarms": 0,
+  "missed": [],
+  "falseAlarmTexts": []
+ },
+ "quoteReading": {
+  "quotes": 30,
+  "fullyRight": 30,
+  "fields": {
+   "rate": {
+    "n": 23,
+    "right": 23
+   },
+   "termMonths": {
+    "n": 25,
+    "right": 25
+   },
+   "fees": {
+    "n": 20,
+    "right": 20
+   },
+   "apr": {
+    "n": 10,
+    "right": 10
+   },
+   "monthlyPayment": {
+    "n": 5,
+    "right": 5
+   },
+   "points": {
+    "n": 8,
+    "right": 8
+   },
+   "amount": {
+    "n": 3,
+    "right": 3
+   }
+  },
+  "misses": []
+ }
+}

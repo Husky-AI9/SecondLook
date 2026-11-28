@@ -1,0 +1,277 @@
+[
+ {
+  "text": "Look, six and a quarter is the top of my budget.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Realistically I'm done at 6.25.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Max I can justify is 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Over 6¼ and I walk.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Between us, 6 and 1/4% is my number.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Our cutoff is six point two five.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "If it's 6.25% or under I'm in.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Can't do more than 625 bps.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Meet me at 6.25 and I'll sign tonight.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "I'd sign at six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Not a basis point over 6.250.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Anything north of 6.25% doesn't work for us.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "We budgeted for 6.25% max.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Top end for me is 6.25%, honestly.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "6.25 is the ceiling, Dana.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "I'm okay up to six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "I'll go as high as 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "6¼ and we're done negotiating.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "We could swing 6.25 if fees drop.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "My walk-away number is 6.25.",
+  "expect": "block",
+  "group": "walk-away rate"
+ },
+ {
+  "text": "Fine, 6.4% then.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Let's lock it at six and three quarters.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Deal at 6.5 with your fees.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Ok with $2,000 in closing costs.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "I'll take the 6⅝%.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Sounds good, 6.35 and $1,200 in fees.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "My FICO is 812.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "I've got really good credit, mid 700s.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "My credit score is excellent.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "We need to close before the end of the month.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "I have to sign by Wednesday.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "Our rate lock elsewhere expires Friday, so I need an answer.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "Another lender is offering 5.99%.",
+  "expect": "block",
+  "group": "a quote you don't hold"
+ },
+ {
+  "text": "I was quoted six flat by a credit union.",
+  "expect": "block",
+  "group": "a quote you don't hold"
+ },
+ {
+  "text": "A competing bank offered 5.875% in writing.",
+  "expect": "block",
+  "group": "a quote you don't hold"
+ },
+ {
+  "text": "Could you sharpen the pencil on that 6.40%?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "Is six and an eighth doable?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "What would 6.125% look like with $1,000 in fees?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "I have 6.15% in writing from another lender.",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "Thanks! Can you send the itemized fees?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "How much is the lock extension?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "We're also comparing a 20-year term.",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "Can you do 6⅛ with no points?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "Your offer of 6.4% is noted. Can you improve it?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "Is the $1,850 negotiable at all?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "Could we see a quote at 6.1 percent?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "I'll take 6.15% if the fees are $1,200.",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "What's the difference in payment between 6.4 and 6.15?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "The house was built in 1962.",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "Escrow should be about $625 a month.",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "My daughter is six and a half, she loves your logo.",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "We have 25 years left on the current loan.",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "Points would be 1.5 at that rate, right?",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "Please send the Closing Disclosure three days early.",
+  "expect": "allow",
+  "group": "safe replies"
+ },
+ {
+  "text": "No rush on my side, take your time.",
+  "expect": "allow",
+  "group": "safe replies"
+ }
+]

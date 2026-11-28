@@ -1,0 +1,402 @@
+[
+ {
+  "text": "CONGRATS! You're pre-approved for a $50,000 loan at 2.9% APR. Pay the $250 processing fee today to release your funds: fastfunds.example/claim",
+  "expect": "scam"
+ },
+ {
+  "text": "Your loan of $25,000 is approved! Pay a $199 processing fee to release funds: quickcash-now.info",
+  "expect": "scam"
+ },
+ {
+  "text": "To finalize your loan, buy $300 in Google Play gift cards and text us the codes.",
+  "expect": "scam"
+ },
+ {
+  "text": "Send the $400 insurance deposit in Bitcoin to activate your loan today.",
+  "expect": "scam"
+ },
+ {
+  "text": "Guaranteed approval, no credit check! Get up to $10,000 now: loans4all.xyz",
+  "expect": "scam"
+ },
+ {
+  "text": "Reply with your SSN and bank login to verify your refinance application.",
+  "expect": "scam"
+ },
+ {
+  "text": "Refinance today at 1.9% APR! Limited spots. Click rate-drop.info now.",
+  "expect": "scam"
+ },
+ {
+  "text": "FINAL NOTICE: your mortgage is in default. Pay $480 by Zelle within 24 hours to stop foreclosure.",
+  "expect": "scam"
+ },
+ {
+  "text": "You have been selected for student loan forgiveness. Pay the $99 activation fee today: forgive-now.org",
+  "expect": "scam"
+ },
+ {
+  "text": "Debt relief approved! Wire the $350 transfer fee first and we cancel your balance.",
+  "expect": "scam"
+ },
+ {
+  "text": "URGENT: confirm your account number to receive your $15,000 loan deposit.",
+  "expect": "scam"
+ },
+ {
+  "text": "Your personal loan is ready. A $150 verification fee is required before release. Pay via Cash App.",
+  "expect": "scam"
+ },
+ {
+  "text": "Bad credit OK! Everyone approved. Apply now: easymoney.click",
+  "expect": "scam"
+ },
+ {
+  "text": "WINNER! You have won a 0.99% mortgage rate. Claim now at bestrate.top",
+  "expect": "scam"
+ },
+ {
+  "text": "Loan approved for $8,000. Send a $200 refundable deposit to unlock your funds.",
+  "expect": "scam"
+ },
+ {
+  "text": "Pay the release fee of $299 today and your $30,000 loan funds tonight. Text YES.",
+  "expect": "scam"
+ },
+ {
+  "text": "Hi, your $5,000 advance is approved. Upfront fee of $120 is required. Pay with a prepaid card.",
+  "expect": "scam"
+ },
+ {
+  "text": "Mortgage relief program: stop your payments now. Send $500 via MoneyGram to enroll.",
+  "expect": "scam"
+ },
+ {
+  "text": "Your refinance at 2.5% APR is locked. Confirm with the one-time code we just sent you.",
+  "expect": "scam"
+ },
+ {
+  "text": "Get a $20,000 loan in 1 hour, no credit check. Visit fastloan.biz",
+  "expect": "scam"
+ },
+ {
+  "text": "Act now! 1.5% APR auto loans for everyone. Click autodeal.site",
+  "expect": "scam"
+ },
+ {
+  "text": "Your account is suspended. Verify your online banking password to keep your loan: secure-verify.online",
+  "expect": "scam"
+ },
+ {
+  "text": "You qualify for a government grant loan. Pay $75 processing fee by gift card to receive it.",
+  "expect": "scam"
+ },
+ {
+  "text": "Congratulations, pre-approved for $40,000! Claim at loanoffer.top before it expires.",
+  "expect": "scam"
+ },
+ {
+  "text": "Send your debit card number and PIN to receive the loan deposit.",
+  "expect": "scam"
+ },
+ {
+  "text": "Last chance: lock 1.75% on your mortgage today, pay the $250 lock fee in USDT.",
+  "expect": "scam"
+ },
+ {
+  "text": "Approved! To release your $12,000, deposit the $300 insurance fee first.",
+  "expect": "scam"
+ },
+ {
+  "text": "Pay $99 now to activate your credit line of $5,000. Reply STOP to opt out.",
+  "expect": "scam"
+ },
+ {
+  "text": "Your student loan is in default. Pay $199 today to avoid wage garnishment: studentaid-help.net",
+  "expect": "scam"
+ },
+ {
+  "text": "Easy cash: guaranteed approval, funds today. Fee of $50 via Cash App.",
+  "expect": "scam"
+ },
+ {
+  "text": "Hello, your loan application is approved at 2.2% APR. Please wire the $500 transfer fee to proceed.",
+  "expect": "scam"
+ },
+ {
+  "text": "Final notice from loan services: respond now or lose your approved $25,000. lnk.example/r",
+  "expect": "scam"
+ },
+ {
+  "text": "We buy your house for cash! Pay a $250 inspection fee first: cashhomes.xyz",
+  "expect": "scam"
+ },
+ {
+  "text": "You were selected for a 0% APR loan. Click to claim: promo-loans.site",
+  "expect": "scam"
+ },
+ {
+  "text": "Your auto loan has been approved at 1.9%. Send the $350 delivery fee by Zelle.",
+  "expect": "scam"
+ },
+ {
+  "text": "This is the bank. We need your account number and routing number to send your refund.",
+  "expect": "scam"
+ },
+ {
+  "text": "Get approved today, no credit check, money in minutes: quickloans.online",
+  "expect": "scam"
+ },
+ {
+  "text": "Pay your $180 activation fee today with Apple gift cards to receive your loan.",
+  "expect": "scam"
+ },
+ {
+  "text": "You won a $5,000 loan bonus! Claim now: winloan.click",
+  "expect": "scam"
+ },
+ {
+  "text": "Refinance grant approved. Send $125 processing fee before we release the grant.",
+  "expect": "scam"
+ },
+ {
+  "text": "Hi Alex, Mark from Pinnacle Lending. Your pre-approval at 4.1% is ready. A $95 application fee is due before we can lock.",
+  "expect": "scam"
+ },
+ {
+  "text": "Good news, your loan is approved. We just need a $300 good-faith deposit before funding.",
+  "expect": "scam"
+ },
+ {
+  "text": "Hi, this is Sarah with loan services. Can you verify your Social Security number so we can finish your refi?",
+  "expect": "scam"
+ },
+ {
+  "text": "Your rate of 2.75% is reserved for 24 hours. Pay the $199 reservation fee to hold it.",
+  "expect": "scam"
+ },
+ {
+  "text": "Approved for $15,000 at 3.2% APR. Please purchase a $200 insurance bond to release funds.",
+  "expect": "scam"
+ },
+ {
+  "text": "We can stop your foreclosure. Make all payments to us instead of your lender.",
+  "expect": "scam"
+ },
+ {
+  "text": "Your loan is ready to fund. Please send a photo of your debit card, front and back.",
+  "expect": "scam"
+ },
+ {
+  "text": "Hi! Loan officer here. Rates as low as 1.99% this week only, text back to lock.",
+  "expect": "scam"
+ },
+ {
+  "text": "To unlock your loan, pay the first two payments in advance by wire.",
+  "expect": "scam"
+ },
+ {
+  "text": "Pre-approved home equity line, 2.49% APR. Confirm your bank login to fund it.",
+  "expect": "scam"
+ },
+ {
+  "text": "Hi Alex, good news. I can get you 6.40% on a 30-yr fixed, $1,850 in fees. Lock ends Friday.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Okay Alex, best I can do is 6.20% with $1,200 in fees. Lock ends Friday.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hello, we are from Summit Home Loans. You requested a refinance quote, and here is our rate: 6.40% on a 30-yr fixed, $1,850 in fees. Lock ends Friday.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, Dana at Summit Home Loans (NMLS 401822). Your Loan Estimate is in your portal. Rate 6.375%, APR 6.52%.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your Loan Estimate is ready. Log in at portal.summithomeloans.com to review it.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Rates moved up a bit today. If you want to lock at 6.25%, let me know by 5pm.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Please upload your last two pay stubs and W-2s to the portal when you can.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, the appraisal is scheduled for Tuesday at 10am. The $650 appraisal fee is paid at closing.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "We can do 6.125% with 1 discount point, or 6.5% with no points. Fees are $1,495 either way.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your rate is locked at 6.25% through Dec 19. Next step is underwriting.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Thanks for applying with Desert Valley Credit Union. Your auto loan is approved at 6.49% APR for 60 months.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Ridgeline Auto finance desk: 8.9% APR for 72 months, $489/mo with the protection package.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi, this is Jordan at Ridgeline Auto. We can do 7.4% APR for 60 months if you skip the add-ons.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Reminder: your closing is scheduled for Friday at 2pm at Copper Title.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, I have you pre-approved for up to $400,000. Let me know when you find a home.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Our rate today for a 30-year fixed is 6.5% with $2,100 in lender fees. Happy to walk you through it.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "The underwriter needs a letter explaining the large deposit on March 3. Can you send it?",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Rate sheet for today: 30-yr fixed 6.375%, 15-yr fixed 5.75%, 5/6 ARM 5.875%. NMLS 552190.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, Dana again. I talked to my manager and we can waive the $495 application fee.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Here's your quote: $350,000 refinance, 6.30% fixed, 30 years, $1,650 closing costs.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi, please e-sign the disclosures at docs.summithomeloans.com by Wednesday so we stay on schedule.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your rate lock expires Monday. Do you want to extend it for $250 or let it float?",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Good afternoon, I can offer 6.35% with lender credits covering $800 of your closing costs.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "We received your documents. The file goes to underwriting tomorrow.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, our credit union can do 6.2% APR on a 30-year fixed. No points, $975 in fees.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Thanks for reaching out. Can you tell me your estimated home value and loan balance?",
+  "expect": "not-scam"
+ },
+ {
+  "text": "To lock today we need your signed intent to proceed. Reply here or sign in the portal.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your monthly payment would be about $2,190 at 6.40% on $350,000.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Quick update: the title report came back clean.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, congrats on your approval! Your clear-to-close should come Thursday.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "This is Copper Title. Please do not wire any funds based on an email. Call our office to confirm instructions.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your auto refinance: 5.99% APR, 48 months, no prepayment penalty. NMLS 77821.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, I can match 6.15% if you can show me the written quote.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "For a 15-year fixed we are at 5.625% today with $1,300 in fees.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Rate is 6.4%, APR 6.55%, points 0, lender fees $1,850. Lock good through Friday.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Please pay the $650 appraisal fee before we order the appraisal: pay.summithomeloans.com",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hello from Summit Home Loans. A reminder that your rate lock ends Friday.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, can we schedule a call to go over the Closing Disclosure? Takes 15 minutes.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your HELOC is approved: prime + 0.5%, currently 8.0%, $100,000 line.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "We'd love to earn your business. 6.3% fixed with $1,400 fees, valid until Friday.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Note from Summit: we will never ask for your password or a gift card.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, the payoff statement from your current lender has arrived.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Your car loan offer: 6.9% APR for 66 months, $512/mo, $0 down.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi, following up on the quote I sent. Any questions?",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Lock confirmation: 6.25% fixed, 30 years, locked until 12/19.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hi Alex, if you can confirm today we can still get the 6.20% lock.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Our application fee is $500, credited back at closing.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Hey Alex, Dana here. I can do 6.30% with $1,500 in fees if you lock this week.",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Here is a link to compare your options: summithomeloans.com/compare",
+  "expect": "not-scam"
+ },
+ {
+  "text": "Thanks for your patience. Your loan funded this morning. Congratulations!",
+  "expect": "not-scam"
+ }
+]

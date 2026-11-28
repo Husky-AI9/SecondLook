@@ -31,13 +31,25 @@ panel in Chrome. You press send. The lender's message and your limits never leav
 Quotekey compares numbers and helps you word a reply. It is not a lender or a financial
 adviser.
 
+> **Measured** ([details](docs/EVAL.md)). These numbers come from a held-out set written before the November 28 fixes and never used to tune the rules.
+>
+> | Check (code on the phone, no model) | Before | After |
+> |---|---|---|
+> | **Leak guard** stops a reply that gives away your walk-away rate, credit or deadline | 13 / 35 | **32 / 35** |
+> | Leak guard wrongly stops a safe reply | 0 / 20 | **0 / 20** |
+> | **Scam rules** catch a scam text | 14 / 20 | **19 / 20** |
+> | Scam rules flag a real lender's text | 0 / 20 | **0 / 20** |
+> | **Quote reader** gets rate, APR, fees, term, points and payment right | 9 / 10 | **10 / 10** |
+>
+> On the larger tuned set, the leak guard now stops **257 of 257** leaks, up from 109. That includes the walk-away rate written as "6.25" with no %, "six and a quarter", "6¼%" or "625 bps", none of which it caught before. It wrongly stops **0 of 104** safe replies.
+
 ## For judges
 
 | Criterion | What to look at | Where |
 |---|---|---|
 | **Technological implementation** | All three Firebase AI Logic inference modes, chosen per prompt by one privacy router. Native adapters for Apple Foundation Models (iOS), Gemini Nano through AICore (Android) and Chrome's built-in Gemini Nano (web). The same panel ships as an iPhone keyboard, an Android keyboard and a Chrome extension. App Check on every platform, Remote Config, Anonymous Auth, Hosting. Four automated test suites in CI. | [Where AI Logic is called](#where-firebase-ai-logic-is-called) · [`src/ai/router.ts`](src/ai/router.ts) · [Tests](#tests) |
 | **Design** | One complete loop: check → verdict → counter → leak guard → rounds, with a savings counter. Every answer carries a badge saying where it ran. Light and dark. The panel appears where the negotiation actually happens, not in a separate chatbot. | [Screenshots](#screenshots) · [Where you type](#where-you-type) |
-| **Potential impact** | Quotes for a refinance or a car loan arrive by text, and people answer them alone, often against a deadline. The two costly mistakes are replying with your walk-away number and replying to a scam that looks like an offer. Quotekey catches both before you send. | [The problem](#the-problem-and-who-its-for) |
+| **Potential impact** | Almost half of mortgage borrowers seriously consider only one lender (CFPB), and similar borrowers' rates differ by about half a point, over $1,000 a year (CFPB, 2023). Quotes arrive by text and people answer them alone, against a deadline. The two costly mistakes are replying with your walk-away number and replying to a scam that looks like an offer. Quotekey catches both before you send. [Measured](docs/EVAL.md): 32 of 35 held-out leaks stopped, 19 of 20 scams caught, no false alarms. | [The problem](#the-problem-and-who-its-for) |
 | **Quality of the idea** | Hybrid inference is the privacy promise, not a cost saving: private text only ever reaches an on-device model, models write around placeholders so the walk-away rate is never in any prompt, and the cloud gets either redacted text or five coarse facts you can see. | [Why hybrid inference is the product](#why-hybrid-inference-is-the-product) · [Safety and privacy](#safety-and-privacy) |
 | **Submission requirements** | Platforms, App Check, runtime use of Firebase AI Logic, licence, hosted build, video, no secrets in the repo. | [Submission checklist](#submission-checklist) |
 
@@ -65,6 +77,20 @@ whether it is real, whether it is fair, and what to say back.
 
 **Who it's for.** People refinancing a home or financing a car who get quotes by text or email
 and negotiate them without a broker.
+
+**Why it matters, in numbers.**
+- Almost half of mortgage borrowers seriously consider only one lender or broker, and 77% apply
+  with just one ([CFPB](https://www.consumerfinance.gov/about-us/blog/nearly-half-of-mortgage-borrowers-dont-shop-around-when-they-buy-a-home/)).
+- Lenders' rates for similar borrowers differ by about half a percentage point. A 0.5-point
+  difference costs over $1,000 a year on a typical mortgage
+  ([CFPB, 2023](https://www.consumerfinance.gov/about-us/blog/mortgage-data-shows-borrowers-could-save-100-month-choosing-cheaper-lenders)).
+- Even in 2026, borrowers with nearly identical credit lock rates an average of 0.38 points
+  apart, about $76 a month on a $300,000 loan
+  ([ICE Mortgage Monitor via MPA, Aug 2026](https://www.mpamag.com/us/mortgage-industry/industry-trends/rate-dispersion-persists-for-identical-borrowers-research-shows/585680)).
+- Shopping pays most when rates are high: about $600–$1,200 a year
+  ([Freddie Mac, 2023](https://www.freddiemac.com//research/insight/20230216-when-rates-are-higher-borrowers-who-shop-around-save)).
+- Quotekey makes the second quote and the counter-offer a two-tap job, in the app where the
+  quote arrived.
 
 **What goes wrong today.**
 - Pasting the quote into a chatbot sends your situation, your lender's name and your limits to
@@ -99,24 +125,26 @@ Every result carries a badge that says where it ran: **On-device**, **Cloud**,
 
 ## Testing it as a judge
 
-**Fastest: the web app, no install.**
-1. Open **https://secondlook-7b7d5.web.app** in desktop Chrome.
-2. Home → **Load sample deals**. This adds two made-up deals with limits already filled in.
-3. Open the **Limits** tab (lock icon), type any 4-digit PIN and tap **Lock limits**.
-   Replies are only written once limits are locked.
-4. Open the **Keyboard** tab, tap the lender's message to copy it, then tap **Check**,
+**Fastest: one click, no install.** Open
+**[secondlook-7b7d5.web.app/?judge=1](https://secondlook-7b7d5.web.app/?judge=1)** in desktop
+Chrome. Judge mode loads two made-up deals and locks their limits with PIN **2468**, shown
+on Home, so every feature works at once.
+1. Open the **Keyboard** tab, tap the lender's message to copy it, then tap **Check**,
    **Counter** and **Explain**.
-5. Type "the highest I can go is 6.25%" in the message box and tap **Check**: the leak guard
-   stops it.
-6. Settings → **Where answers run** shows whether Chrome's built-in Gemini Nano is ready on
+2. Type "the highest I can go is six and a quarter" in the message box and tap **Check**:
+   the leak guard stops it.
+3. Settings → **Where answers run** shows whether Chrome's built-in Gemini Nano is ready on
    your computer.
+
+Without judge mode: Home → **Load sample deals**, then the **Limits** tab → any 4-digit PIN →
+**Lock limits**. Replies are only written once limits are locked.
 
 **Quotekey for Chrome (the web keyboard).** Download this repository, open
 `chrome://extensions`, turn on Developer mode, click **Load unpacked** and pick the
 [`extension`](extension/README.md) folder. On any page, select a lender's message →
 right-click → **Quotekey: check their message**. Tap a reply in the side panel and it is
 typed into the page's reply box. The panel keeps its own data, so load the sample deals and
-lock the limits inside the panel first (steps 2 and 3 above).
+lock the limits inside the panel first (see "Without judge mode" above).
 
 **Test builds** (latest from `main`; sign in to GitHub to download artifacts):
 
@@ -261,9 +289,10 @@ The animated diagram at the top shows one message end to end:
 
 | Suite | What it proves | Where |
 |---|---|---|
-| Engine unit tests (48) | Loan math to the cent, extraction, scam rules, redaction, leak guard, drafts, pipeline | `npm test` |
-| Browser scenarios (19) | Full negotiation, cloud fallback, offline, scam, PIN, erase, in headless Chrome | `npm run preview:test` · [Tests workflow](.github/workflows/test.yml) |
-| Android emulator (21 steps) | The APK on Android 14: select text → Quotekey, the keyboard panel, and the Android keyboard end to end, including a live Firebase AI Logic call from inside the keyboard | [`android-emulator.yml`](.github/workflows/android-emulator.yml) |
+| Engine unit tests (56) | Loan math to the cent, extraction, scam rules, redaction, leak guard, drafts, pipeline, and the published eval numbers | `npm test` |
+| Measured eval ([EVAL.md](docs/EVAL.md)) | Leak guard 257 + 35 held-out leaks and 124 safe replies; scam rules 70 scams and 70 lender texts; quote reader 40 quotes | `npx tsx tools/eval/run.ts` |
+| Browser scenarios (20) | Full negotiation, cloud fallback, offline, scam, PIN, erase, judge mode, in headless Chrome | `npm run preview:test` · [Tests workflow](.github/workflows/test.yml) |
+| Android emulator (23 steps) | The APK on Android 14: select text → Quotekey, the keyboard panel, and the Android keyboard end to end, including a live Firebase AI Logic call from inside the keyboard | [`android-emulator.yml`](.github/workflows/android-emulator.yml) |
 | Chrome extension (8 checks) | Right-click → verdict → reply typed into the page; leak guard and safer version | [`extension-test.yml`](.github/workflows/extension-test.yml) |
 | Native builds | iOS app + keyboard extension and Android APK compile on every run | [`ios-unsigned.yml`](.github/workflows/ios-unsigned.yml) · [`android-apk.yml`](.github/workflows/android-apk.yml) |
 
@@ -272,10 +301,11 @@ The animated diagram at the top shows one message end to end:
 | Part | State |
 |---|---|
 | Web app and Chrome's Gemini Nano | Live; on-device message check confirmed in desktop Chrome. |
-| Android app and keyboard | Passes 21/21 emulator steps. Emulators have no Gemini Nano, so on-device on Android still needs a supported phone. |
+| Android app and keyboard | Passes 23/23 emulator steps. Emulators have no Gemini Nano, so on-device on Android still needs a supported phone. |
 | Chrome extension | Passes 10/10 checks in Chromium against a local build, including a quote that arrives by email. |
 | iPhone app and keyboard | Compile in CI. The on-phone keyboard tests ([T1–T4](docs/T1-T4.md)) are pending. |
 | Today's market range | Live on the hosted app (Blaze plan): Grounding with Google Search returns the range with its sources and Google's search suggestions, for example 6.88–7.38% from 6 sources for a 30-yr refinance on Nov 26, 2026. Gemini 3 and newer need a paid (Blaze) project for grounding. If an answer arrives without sources, the app retries once and otherwise labels it "estimate, no sources". |
+| Leak guard and scam rules | Measured on made-up messages, all in English, written by the same author ([EVAL.md](docs/EVAL.md)). Three held-out leaks and one held-out scam still get through; they are listed there. |
 | Hybrid APIs | Marked Experimental by Firebase. |
 
 ## Run it locally

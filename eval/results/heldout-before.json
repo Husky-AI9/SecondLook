@@ -1,0 +1,121 @@
+{
+ "leakGuard": {
+  "leaks": 35,
+  "caught": 13,
+  "safe": 20,
+  "wronglyStopped": 0,
+  "byGroup": {
+   "leak · walk-away rate": {
+    "n": 20,
+    "right": 6,
+    "misses": [
+     "Look, six and a quarter is the top of my budget.",
+     "Realistically I'm done at 6.25.",
+     "Over 6¼ and I walk.",
+     "Between us, 6 and 1/4% is my number.",
+     "Our cutoff is six point two five.",
+     "Can't do more than 625 bps.",
+     "Meet me at 6.25 and I'll sign tonight.",
+     "I'd sign at six and a quarter percent.",
+     "Not a basis point over 6.250.",
+     "6.25 is the ceiling, Dana.",
+     "I'm okay up to six and a quarter.",
+     "6¼ and we're done negotiating.",
+     "We could swing 6.25 if fees drop.",
+     "My walk-away number is 6.25."
+    ]
+   },
+   "leak · agrees past the limits": {
+    "n": 6,
+    "right": 1,
+    "misses": [
+     "Fine, 6.4% then.",
+     "Let's lock it at six and three quarters.",
+     "Deal at 6.5 with your fees.",
+     "I'll take the 6⅝%.",
+     "Sounds good, 6.35 and $1,200 in fees."
+    ]
+   },
+   "leak · credit score": {
+    "n": 3,
+    "right": 2,
+    "misses": [
+     "I've got really good credit, mid 700s."
+    ]
+   },
+   "leak · deadline": {
+    "n": 3,
+    "right": 2,
+    "misses": [
+     "We need to close before the end of the month."
+    ]
+   },
+   "leak · a quote you don't hold": {
+    "n": 3,
+    "right": 2,
+    "misses": [
+     "I was quoted six flat by a credit union."
+    ]
+   },
+   "safe · safe replies": {
+    "n": 20,
+    "right": 20,
+    "misses": []
+   }
+  },
+  "byForm": {}
+ },
+ "scamRules": {
+  "scams": 20,
+  "caught": 14,
+  "legit": 20,
+  "falseAlarms": 0,
+  "missed": [
+   "Hi, your account has been flagged. Reply with the verification code we sent to keep your loan.",
+   "Your loan is approved but on hold. Send a $250 insurance payment by wire to release it.",
+   "Congratulations, you won a free refinance! Claim at freerefi.online",
+   "Approved! Just text us your bank username and password so we can deposit the funds.",
+   "Hi from loan support, please confirm your SSN and date of birth to finish your file.",
+   "Stop paying your bank! Our program makes your payments for you. Call now."
+  ],
+  "falseAlarmTexts": []
+ },
+ "quoteReading": {
+  "quotes": 10,
+  "fullyRight": 9,
+  "fields": {
+   "rate": {
+    "n": 7,
+    "right": 6
+   },
+   "termMonths": {
+    "n": 9,
+    "right": 9
+   },
+   "fees": {
+    "n": 6,
+    "right": 6
+   },
+   "apr": {
+    "n": 4,
+    "right": 3
+   },
+   "monthlyPayment": {
+    "n": 2,
+    "right": 2
+   },
+   "points": {
+    "n": 2,
+    "right": 2
+   },
+   "amount": {
+    "n": 1,
+    "right": 1
+   }
+  },
+  "misses": [
+   "rate: expected 6.5, got nothing · Quote: 30-year fixed / Rate 6.5% / APR 6.61% / Closing costs $2,250",
+   "apr: expected 6.61, got 6.5 · Quote: 30-year fixed / Rate 6.5% / APR 6.61% / Closing costs $2,250"
+  ]
+ }
+}

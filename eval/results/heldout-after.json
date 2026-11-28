@@ -1,0 +1,92 @@
+{
+ "leakGuard": {
+  "leaks": 35,
+  "caught": 32,
+  "safe": 20,
+  "wronglyStopped": 0,
+  "byGroup": {
+   "leak · walk-away rate": {
+    "n": 20,
+    "right": 20,
+    "misses": []
+   },
+   "leak · agrees past the limits": {
+    "n": 6,
+    "right": 5,
+    "misses": [
+     "Fine, 6.4% then."
+    ]
+   },
+   "leak · credit score": {
+    "n": 3,
+    "right": 3,
+    "misses": []
+   },
+   "leak · deadline": {
+    "n": 3,
+    "right": 2,
+    "misses": [
+     "We need to close before the end of the month."
+    ]
+   },
+   "leak · a quote you don't hold": {
+    "n": 3,
+    "right": 2,
+    "misses": [
+     "I was quoted six flat by a credit union."
+    ]
+   },
+   "safe · safe replies": {
+    "n": 20,
+    "right": 20,
+    "misses": []
+   }
+  },
+  "byForm": {}
+ },
+ "scamRules": {
+  "scams": 20,
+  "caught": 19,
+  "legit": 20,
+  "falseAlarms": 0,
+  "missed": [
+   "Congratulations, you won a free refinance! Claim at freerefi.online"
+  ],
+  "falseAlarmTexts": []
+ },
+ "quoteReading": {
+  "quotes": 10,
+  "fullyRight": 10,
+  "fields": {
+   "rate": {
+    "n": 7,
+    "right": 7
+   },
+   "termMonths": {
+    "n": 9,
+    "right": 9
+   },
+   "fees": {
+    "n": 6,
+    "right": 6
+   },
+   "apr": {
+    "n": 4,
+    "right": 4
+   },
+   "monthlyPayment": {
+    "n": 2,
+    "right": 2
+   },
+   "points": {
+    "n": 2,
+    "right": 2
+   },
+   "amount": {
+    "n": 1,
+    "right": 1
+   }
+  },
+  "misses": []
+ }
+}
