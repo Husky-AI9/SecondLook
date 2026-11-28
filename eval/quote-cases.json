@@ -1,0 +1,246 @@
+[
+ {
+  "text": "Hi Alex, good news. I can get you 6.40% on a 30-yr fixed, $1,850 in fees. Lock ends Friday.",
+  "expect": {
+   "rate": 6.4,
+   "termMonths": 360,
+   "fees": 1850
+  }
+ },
+ {
+  "text": "Okay Alex, best I can do is 6.20% with $1,200 in fees. Lock ends Friday.",
+  "expect": {
+   "rate": 6.2,
+   "fees": 1200
+  }
+ },
+ {
+  "text": "Ridgeline Auto finance desk: 8.9% APR for 72 months, $489/mo with the protection package.",
+  "expect": {
+   "apr": 8.9,
+   "termMonths": 72,
+   "monthlyPayment": 489
+  }
+ },
+ {
+  "text": "Rate 6.375%, APR 6.52%, 30-year fixed, lender fees $1,495.",
+  "expect": {
+   "rate": 6.375,
+   "apr": 6.52,
+   "termMonths": 360,
+   "fees": 1495
+  }
+ },
+ {
+  "text": "We can do 6.125% with 1 discount point. Fees are $1,495.",
+  "expect": {
+   "rate": 6.125,
+   "points": 1,
+   "fees": 1495
+  }
+ },
+ {
+  "text": "Here's your quote: $350,000 refinance, 6.30% fixed, 30 years, $1,650 closing costs.",
+  "expect": {
+   "rate": 6.3,
+   "termMonths": 360,
+   "fees": 1650,
+   "amount": 350000
+  }
+ },
+ {
+  "text": "Your auto loan is approved at 6.49% APR for 60 months.",
+  "expect": {
+   "apr": 6.49,
+   "termMonths": 60
+  }
+ },
+ {
+  "text": "Our rate today for a 30-year fixed is 6.5% with $2,100 in lender fees.",
+  "expect": {
+   "rate": 6.5,
+   "termMonths": 360,
+   "fees": 2100
+  }
+ },
+ {
+  "text": "Your current rate is 7.125%. We can refinance you to 6.25% on a 30-year, $1,300 in fees.",
+  "expect": {
+   "rate": 6.25,
+   "termMonths": 360,
+   "fees": 1300
+  }
+ },
+ {
+  "text": "With 20% down, the rate is 6.625% on a 30-yr fixed. Closing costs $3,200.",
+  "expect": {
+   "rate": 6.625,
+   "termMonths": 360,
+   "fees": 3200
+  }
+ },
+ {
+  "text": "Rate is 6.4%, APR 6.55%, points 0, lender fees $1,850.",
+  "expect": {
+   "rate": 6.4,
+   "apr": 6.55,
+   "points": 0,
+   "fees": 1850
+  }
+ },
+ {
+  "text": "Points: 0.5. Rate: 6.25%. Term: 30 years. Origination fee: $995.",
+  "expect": {
+   "rate": 6.25,
+   "points": 0.5,
+   "termMonths": 360,
+   "fees": 995
+  }
+ },
+ {
+  "text": "6.9% APR for 66 months, $512/mo, $0 down.",
+  "expect": {
+   "apr": 6.9,
+   "termMonths": 66,
+   "monthlyPayment": 512
+  }
+ },
+ {
+  "text": "15-year fixed at 5.625% with $1,300 in fees.",
+  "expect": {
+   "rate": 5.625,
+   "termMonths": 180,
+   "fees": 1300
+  }
+ },
+ {
+  "text": "Your auto refinance: 5.99% APR, 48 months, no prepayment penalty.",
+  "expect": {
+   "apr": 5.99,
+   "termMonths": 48
+  }
+ },
+ {
+  "text": "I can offer 6.35% on a 30-year fixed. No points.",
+  "expect": {
+   "rate": 6.35,
+   "termMonths": 360,
+   "points": 0
+  }
+ },
+ {
+  "text": "Our credit union can do 6.2% APR on a 30-year fixed. No points, $975 in fees.",
+  "expect": {
+   "apr": 6.2,
+   "termMonths": 360,
+   "points": 0,
+   "fees": 975
+  }
+ },
+ {
+  "text": "Loan amount $350,000 at 6.40% for 30 years. Monthly payment $2,190.",
+  "expect": {
+   "rate": 6.4,
+   "termMonths": 360,
+   "amount": 350000,
+   "monthlyPayment": 2190
+  }
+ },
+ {
+  "text": "6.3% fixed with $1,400 fees, valid until Friday.",
+  "expect": {
+   "rate": 6.3,
+   "fees": 1400
+  }
+ },
+ {
+  "text": "Payment of $2,150 per month at 6.25% on a 30-year loan.",
+  "expect": {
+   "rate": 6.25,
+   "termMonths": 360,
+   "monthlyPayment": 2150
+  }
+ },
+ {
+  "text": "Your existing rate is 7.25%. New offer: 6.5%, 30-yr, fees $1,750.",
+  "expect": {
+   "rate": 6.5,
+   "termMonths": 360,
+   "fees": 1750
+  }
+ },
+ {
+  "text": "We are at 7.4% APR for 60 months on the car if you skip the add-ons.",
+  "expect": {
+   "apr": 7.4,
+   "termMonths": 60
+  }
+ },
+ {
+  "text": "Rate 6.75% / 30 yr fixed / 0.25 points / $1,100 lender fees",
+  "expect": {
+   "rate": 6.75,
+   "termMonths": 360,
+   "points": 0.25,
+   "fees": 1100
+  }
+ },
+ {
+  "text": "Good afternoon, quote for you: 6.45%, 30 years, closing costs of $2,400.",
+  "expect": {
+   "rate": 6.45,
+   "termMonths": 360,
+   "fees": 2400
+  }
+ },
+ {
+  "text": "The HELOC rate is 8.0% on a $100,000 line.",
+  "expect": {
+   "rate": 8.0,
+   "amount": 100000
+  }
+ },
+ {
+  "text": "Monthly payment would be $489 at 8.9% APR over 72 months.",
+  "expect": {
+   "apr": 8.9,
+   "termMonths": 72,
+   "monthlyPayment": 489
+  }
+ },
+ {
+  "text": "Hi Alex,\n\nThanks for applying. Here is your quote:\nRate: 6.375%\nAPR: 6.49%\nTerm: 30 years\nLender fees: $1,295\nPoints: 0\n\nBest,\nDana Ruiz\nSummit Home Loans, NMLS 401822",
+  "expect": {
+   "rate": 6.375,
+   "apr": 6.49,
+   "termMonths": 360,
+   "fees": 1295,
+   "points": 0
+  }
+ },
+ {
+  "text": "With 75% LTV you qualify for 6.25% on a 20-year fixed, $1,000 fees.",
+  "expect": {
+   "rate": 6.25,
+   "termMonths": 240,
+   "fees": 1000
+  }
+ },
+ {
+  "text": "6.875% on a 30-year, 2 points, $3,000 in closing costs.",
+  "expect": {
+   "rate": 6.875,
+   "termMonths": 360,
+   "points": 2,
+   "fees": 3000
+  }
+ },
+ {
+  "text": "Average rate is 6.9% but we can do 6.6%, 30-yr fixed, $1,200 fees.",
+  "expect": {
+   "rate": 6.6,
+   "termMonths": 360,
+   "fees": 1200
+  }
+ }
+]

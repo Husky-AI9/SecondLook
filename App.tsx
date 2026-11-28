@@ -81,6 +81,8 @@ export default function App() {
     void actions.load().then(() => {
       // Warm up: ask Firebase AI Logic what this device can do, and fetch Remote Config.
       void getAi().status(true);
+      // Judge mode on the web: sample deals with locked limits, so Counter works at once.
+      if (Platform.OS === 'web' && typeof window !== 'undefined' && /[?&]judge=1\b/.test(window.location.search)) actions.judgeMode();
       // Android "select text → Quotekey": the selected text may have launched the app.
       const incoming = takeIncomingText();
       if (incoming) void runCheck(incoming);

@@ -31,7 +31,8 @@ export function extractOffer(text: string): Offer {
   // Percentages: "8.9% APR" is an APR, anything else is the note rate. Emails often mention
   // other percentages first ("your current rate is 7.125%", "20% down", "75% LTV"): those
   // are not the offer, so they are skipped.
-  const pctRe = /(\d{1,2}(?:\.\d{1,3})?)\s?(?:%|percent)(\s*(?:apr|a\.p\.r\.))?/gi;
+  // [ \t]* (not \s*): "Rate: 6.375%" on one line and "APR: 6.49%" on the next are two numbers.
+  const pctRe = /(\d{1,2}(?:\.\d{1,3})?)\s?(?:%|percent)([ \t]*(?:apr|a\.p\.r\.))?/gi;
   let m: RegExpExecArray | null;
   while ((m = pctRe.exec(t))) {
     const v = parseFloat(m[1]);
@@ -42,7 +43,7 @@ export function extractOffer(text: string): Offer {
     if (/\b(current(ly)?|existing|old|previous|prior|average|paying( about)?)( (interest )?rate| loan| mortgage| apr)?( is| was| of| at| sits at|:)?( (about|around|roughly))?\s*$/.test(line)) continue;
     if (/^\s*(down|ltv|loan[- ]to[- ]value|of (the )?(home|purchase|price|value)|equity|cash back|off)\b/.test(after)) continue;
     if (/(down payment|ltv|loan[- ]to[- ]value)( of| is| at|:)?\s*$/.test(line)) continue;
-    const isApr = !!m[2] || /apr( of| is| at)?\s*$/.test(before);
+    const isApr = !!m[2] || /apr( of| is| at)?:?\s*$/.test(before);
     if (isApr) {
       if (offer.apr === undefined) offer.apr = v;
     } else if (offer.rate === undefined) {
@@ -64,7 +65,7 @@ export function extractOffer(text: string): Offer {
     const v = num(m[1] + (m[2] || ''), m[3]);
     const after = t.slice(m.index + m[0].length, m.index + m[0].length + 28).toLowerCase();
     const before = t.slice(Math.max(0, m.index - 28), m.index).toLowerCase();
-    if (/^\s?(\/\s?mo|per month|a month|monthly|\/month)/.test(after) || /(payment of|payments of)\s*$/.test(before)) {
+    if (/^\s?(\/\s?mo|per month|a month|monthly|\/month)/.test(after) || /(payments? (of|is|would be|will be)|monthly payment( of| is| would be| will be|:)?)\s*$/.test(before)) {
       if (offer.monthlyPayment === undefined) offer.monthlyPayment = v;
     } else if (
       /^\s?(in |of )?(total )?(lender |closing |origination |doc(ument)? )?(fees?|closing costs?|costs)/.test(after) ||
@@ -78,7 +79,10 @@ export function extractOffer(text: string): Offer {
     }
   }
 
-  const pts = /(\d(?:\.\d{1,3})?)\s?(?:discount )?points?\b/i.exec(t) || /\b(?:discount )?points?\s*[:=]\s*(\d(?:\.\d{1,3})?)\b/i.exec(t);
+  // [ \t] (not \s): a number at the end of one line is not the points on the next line.
+  const pts =
+    /(?<![\d,.$])(\d(?:\.\d{1,3})?)[ \t]?(?:discount )?points?\b/i.exec(t) ||
+    /\b(?:discount )?points?[ \t]*[:=]?[ \t]*(\d(?:\.\d{1,3})?)\b(?!\d|,\d|\s*(?:-|%|years?|yrs?))/i.exec(t);
   if (pts) offer.points = parseFloat(pts[1]);
   else if (/\bno points\b|\bzero points\b/i.test(t)) offer.points = 0;
 

@@ -1,0 +1,2027 @@
+[
+ {
+  "text": "Honestly, the highest I can go is 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "The most I'll pay is 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "My max is 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "I can't go above 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "I won't go over 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "Anything above 6.25% is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "6.25% is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "I'm capped at 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "If you can get to 6.25% I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "Get me to 6.25% and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "I could live with 6.25%, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "My ceiling is 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "I'd walk away at anything over 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "6.25% is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "Bring it down to 6.25% and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "I can stretch to 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "We set our limit at 6.25%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "Do 6.25% and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "I'll accept 6.25% if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "Okay, 6.25% works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits with %"
+ },
+ {
+  "text": "Honestly, the highest I can go is 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "The most I'll pay is 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "My max is 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "I can't go above 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "I won't go over 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "Anything above 6.25 % is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "6.25 % is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "I'm capped at 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "If you can get to 6.25 % I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "Get me to 6.25 % and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "I could live with 6.25 %, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "My ceiling is 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "I'd walk away at anything over 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "6.25 % is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "Bring it down to 6.25 % and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "I can stretch to 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "We set our limit at 6.25 %.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "Do 6.25 % and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "I'll accept 6.25 % if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "Okay, 6.25 % works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, space, %"
+ },
+ {
+  "text": "Honestly, the highest I can go is 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "The most I'll pay is 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "My max is 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "I can't go above 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "I won't go over 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "Anything above 6.25 percent is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "6.25 percent is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "I'm capped at 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "If you can get to 6.25 percent I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "Get me to 6.25 percent and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "I could live with 6.25 percent, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "My ceiling is 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "I'd walk away at anything over 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "6.25 percent is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "Bring it down to 6.25 percent and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "I can stretch to 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "We set our limit at 6.25 percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "Do 6.25 percent and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "I'll accept 6.25 percent if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "Okay, 6.25 percent works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits + \"percent\""
+ },
+ {
+  "text": "Honestly, the highest I can go is 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "The most I'll pay is 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "My max is 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "I can't go above 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "I won't go over 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "Anything above 6.250% is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "6.250% is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "I'm capped at 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "If you can get to 6.250% I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "Get me to 6.250% and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "I could live with 6.250%, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "My ceiling is 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "I'd walk away at anything over 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "6.250% is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "Bring it down to 6.250% and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "I can stretch to 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "We set our limit at 6.250%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "Do 6.250% and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "I'll accept 6.250% if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "Okay, 6.250% works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "three decimals"
+ },
+ {
+  "text": "Honestly, the highest I can go is 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "The most I'll pay is 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "My max is 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "I can't go above 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "I won't go over 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "Anything above 6.25 is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "6.25 is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "I'm capped at 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "If you can get to 6.25 I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "Get me to 6.25 and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "I could live with 6.25, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "My ceiling is 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "I'd walk away at anything over 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "6.25 is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "Bring it down to 6.25 and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "I can stretch to 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "We set our limit at 6.25.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "Do 6.25 and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "I'll accept 6.25 if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "Okay, 6.25 works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "digits, no %"
+ },
+ {
+  "text": "Honestly, the highest I can go is six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "The most I'll pay is six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "My max is six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "I can't go above six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "I won't go over six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "Anything above six and a quarter percent is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "Six and a quarter percent is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "I'm capped at six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "If you can get to six and a quarter percent I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "Get me to six and a quarter percent and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "I could live with six and a quarter percent, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "My ceiling is six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "I'd walk away at anything over six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "Six and a quarter percent is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "Bring it down to six and a quarter percent and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "I can stretch to six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "We set our limit at six and a quarter percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "Do six and a quarter percent and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "I'll accept six and a quarter percent if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "Okay, six and a quarter percent works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words + \"percent\""
+ },
+ {
+  "text": "Honestly, the highest I can go is six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "The most I'll pay is six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "My max is six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "I can't go above six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "I won't go over six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "Anything above six and a quarter is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "Six and a quarter is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "I'm capped at six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "If you can get to six and a quarter I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "Get me to six and a quarter and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "I could live with six and a quarter, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "My ceiling is six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "I'd walk away at anything over six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "Six and a quarter is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "Bring it down to six and a quarter and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "I can stretch to six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "We set our limit at six and a quarter.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "Do six and a quarter and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "I'll accept six and a quarter if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "Okay, six and a quarter works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "words, no \"percent\""
+ },
+ {
+  "text": "Honestly, the highest I can go is six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "The most I'll pay is six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "My max is six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "I can't go above six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "I won't go over six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "Anything above six point two five percent is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "Six point two five percent is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "I'm capped at six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "If you can get to six point two five percent I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "Get me to six point two five percent and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "I could live with six point two five percent, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "My ceiling is six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "I'd walk away at anything over six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "Six point two five percent is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "Bring it down to six point two five percent and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "I can stretch to six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "We set our limit at six point two five percent.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "Do six point two five percent and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "I'll accept six point two five percent if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "Okay, six point two five percent works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "spoken decimals"
+ },
+ {
+  "text": "Honestly, the highest I can go is 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "The most I'll pay is 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "My max is 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "I can't go above 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "I won't go over 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "Anything above 6¼% is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "6¼% is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "I'm capped at 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "If you can get to 6¼% I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "Get me to 6¼% and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "I could live with 6¼%, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "My ceiling is 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "I'd walk away at anything over 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "6¼% is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "Bring it down to 6¼% and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "I can stretch to 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "We set our limit at 6¼%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "Do 6¼% and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "I'll accept 6¼% if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "Okay, 6¼% works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "fraction character"
+ },
+ {
+  "text": "Honestly, the highest I can go is 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "The most I'll pay is 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "My max is 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "I can't go above 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "I won't go over 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "Anything above 6 1/4% is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "6 1/4% is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "I'm capped at 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "If you can get to 6 1/4% I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "Get me to 6 1/4% and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "I could live with 6 1/4%, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "My ceiling is 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "I'd walk away at anything over 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "6 1/4% is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "Bring it down to 6 1/4% and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "I can stretch to 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "We set our limit at 6 1/4%.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "Do 6 1/4% and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "I'll accept 6 1/4% if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "Okay, 6 1/4% works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "typed fraction"
+ },
+ {
+  "text": "Honestly, the highest I can go is 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "The most I'll pay is 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "My max is 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "I can't go above 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "I won't go over 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "Anything above 625 basis points is a no for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "625 basis points is my absolute limit.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "I'm capped at 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "If you can get to 625 basis points I'll sign.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "Get me to 625 basis points and we have a deal.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "I could live with 625 basis points, but nothing more.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "My ceiling is 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "I'd walk away at anything over 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "625 basis points is where I draw the line.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "Bring it down to 625 basis points and it's yours.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "I can stretch to 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "We set our limit at 625 basis points.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "Do 625 basis points and I'll lock.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "I'll accept 625 basis points if that's the best you can do.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "Okay, 625 basis points works for me.",
+  "expect": "block",
+  "group": "walk-away rate",
+  "form": "basis points"
+ },
+ {
+  "text": "I'd take 6.3% if you drop the fees.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "6.375% works for me.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Okay, I can do 6.5% with $1,200 in fees.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Fine with $1,500 in fees if the rate is 6.2%.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Let's lock at 6.4%.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Sounds good, 6.40% it is.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "I accept 6.3% and $1,400 in closing costs.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Happy with 6.15% if fees are $1,850.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Go ahead and lock 6.375%.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "I'm good with six and three-eighths.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Agreed to 6⅜% with your fees.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "We accept the $1,850 in fees.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "That works, 6.45% and $1,100 in fees.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "I'd take six and a half percent.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "Let's do 6.3 then.",
+  "expect": "block",
+  "group": "agrees past the limits"
+ },
+ {
+  "text": "My credit score is 790.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "FICO is 805, so I expect your best rate.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "I have excellent credit.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "My score is 760.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "My credit is great, around 780.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "With my 750 credit score you should do better.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "My credit's in the high 700s.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "Our FICO scores are both above 780.",
+  "expect": "block",
+  "group": "credit score"
+ },
+ {
+  "text": "I need to lock by Friday.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "We have to close by the 15th.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "My lease ends next month, so I need this done.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "I'm in a hurry, can we finish this week?",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "We're running out of time on this.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "Our closing date is December 12.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "I must decide by tomorrow.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "I need it done by Friday.",
+  "expect": "block",
+  "group": "deadline"
+ },
+ {
+  "text": "I have a quote at 5.9% from another lender.",
+  "expect": "block",
+  "group": "a quote you don't hold"
+ },
+ {
+  "text": "Another bank offered me 6.0%.",
+  "expect": "block",
+  "group": "a quote you don't hold"
+ },
+ {
+  "text": "A credit union quoted me 5.875%.",
+  "expect": "block",
+  "group": "a quote you don't hold"
+ },
+ {
+  "text": "I've got 6.1% elsewhere.",
+  "expect": "block",
+  "group": "a quote you don't hold"
+ },
+ {
+  "text": "My other lender is at six percent flat.",
+  "expect": "block",
+  "group": "a quote you don't hold"
+ },
+ {
+  "text": "Another lender offered 6%.",
+  "expect": "block",
+  "group": "a quote you don't hold"
+ },
+ {
+  "text": "Can you do 6.15%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Could you get me to 6.15%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Is 6.15% possible?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Would you match 6.15%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "What would it take to get 6.15%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'm hoping for 6.15%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Can we talk about 6.15%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Any chance of 6.15%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'd like to see 6.15%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Please price it at 6.15%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Can you do 6.125%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Could you get me to 6.125%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Is 6.125% possible?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Would you match 6.125%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "What would it take to get 6.125%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'm hoping for 6.125%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Can we talk about 6.125%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Any chance of 6.125%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'd like to see 6.125%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Please price it at 6.125%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Can you do six and an eighth percent?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Could you get me to six and an eighth percent?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Is six and an eighth percent possible?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Would you match six and an eighth percent?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "What would it take to get six and an eighth percent?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'm hoping for six and an eighth percent.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Can we talk about six and an eighth percent?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Any chance of six and an eighth percent?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'd like to see six and an eighth percent.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Please price it at six and an eighth percent.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Can you do 6⅛%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Could you get me to 6⅛%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Is 6⅛% possible?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Would you match 6⅛%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "What would it take to get 6⅛%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'm hoping for 6⅛%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Can we talk about 6⅛%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Any chance of 6⅛%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'd like to see 6⅛%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Please price it at 6⅛%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Can you do 6.1%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Could you get me to 6.1%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Is 6.1% possible?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Would you match 6.1%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "What would it take to get 6.1%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'm hoping for 6.1%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Can we talk about 6.1%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Any chance of 6.1%?",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I'd like to see 6.1%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "Please price it at 6.1%.",
+  "expect": "allow",
+  "group": "asks for a lower rate"
+ },
+ {
+  "text": "I have a written quote at 6.15% from another lender. Can you match it?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Another lender offered me 6.15% in writing.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "I've got 6.15% elsewhere, in writing. Can you beat it?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "A credit union quoted me 6.15%. Can you match that?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "I have a competing offer at 6.15%.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "You quoted 6.40%, which is above the range I am seeing.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Your 6.40% with $1,850 in fees is high.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Why is it 6.4% when rates are lower this week?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Can you beat 6.40%?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "The $1,850 in fees seems high for a refinance.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "I'd take 6.15% with $1,200 in fees.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "If you can do 6.125% and $1,000 in fees, let's lock.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "6.2% with $1,200 in fees works for me.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Happy with 6.1% and $900 in fees.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Okay, 6.15% and $1,150 in closing costs works.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Can you send the Loan Estimate?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "What are your lender fees versus third-party fees?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Is the rate locked yet?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "How many points is that?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Is there a prepayment penalty?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Can you waive the application fee?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "What's the APR on that?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Does that include the appraisal?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Can you itemize the $1,850?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Is that rate with or without points?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "What is the rate with zero points?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "How long is the lock good for?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Can you send that in writing?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Who is the underwriter?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Is the origination fee negotiable?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Thanks, let me think about it.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "I'm comparing a few offers.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "I'm not ready to lock yet.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Thanks Dana, I'll get back to you.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Appreciate the quick reply. I'll review the numbers tonight.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Please hold off until I review the Loan Estimate.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Sounds good, send the details by email.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Got it, thanks.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "It's a 30-year fixed on $350,000.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "I plan to stay about 6 years.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "We put 25 percent down when we bought.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "My current rate is 7.125%.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Can we do six months of escrow?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Can you cover a quarter point of the fees?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "My unit number is 625.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "The appraisal was $625.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "That's only $6.25 a month difference.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Can we talk at six tomorrow?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "The house is 2,500 square feet.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "I can pay 1 point if it brings the rate down.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Let's compare the 15-year and the 30-year.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Is 0.5 points worth it at this amount?",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Our loan balance is about $347,000.",
+  "expect": "allow",
+  "group": "other safe replies"
+ },
+ {
+  "text": "Payment would be around $2,150 a month, right?",
+  "expect": "allow",
+  "group": "other safe replies"
+ }
+]

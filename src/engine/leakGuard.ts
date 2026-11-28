@@ -1,4 +1,5 @@
 import type { Deal, GuardResult, Offer, Violation } from './types';
+import { rateMentions } from './rates';
 
 // The leak guard is code. It checks every reply (ours or the user's own wording) against the
 // PIN-locked limits before it can be sent. A model may add a second opinion on wording, but a
@@ -7,16 +8,14 @@ import type { Deal, GuardResult, Offer, Violation } from './types';
 const ACCEPT = /\b(i can do|i could do|i'?ll take|i will take|i accept|we accept|accept(ed)?\b|works for me|that works|ok(ay)? with|fine with|agree(d)? to|let'?s (do|lock|go)|go ahead|deal at|i'?m good with|sounds good|happy with|i'?d take|would take)\b/i;
 const CEILING = /\b(highest|most|max(imum)?|top|ceiling|walk[- ]?away|limit|cap|no higher than|can'?t go (above|over|higher)|won'?t go (above|over|higher))\b/i;
 const QUOTE = /\b(another|other|different|competing|second) (lender|bank|offer|quote|dealer|broker|credit union)|\belsewhere\b|\boffered me\b|\bquote from\b|\bquoted me\b|\bpre-?approv(ed|al)\b.{0,30}\b(at|for)\b|\bbeat(s|ing)? (it|that|you)/i;
-const CREDIT = /\b(credit score|fico|my credit|my score)\b/i;
-const DEADLINE = /\b(need|have|must|got|want) to (close|decide|sign|lock|buy|move|be done)\b[^.!?]{0,30}\bby\b|\bmy deadline\b|\bclosing (date )?(is|on)\b|\blease (is up|ends|expires)\b|\b(need|want) (it|this|the car|the loan|to close) by\b|\bbefore (my|our) (closing|lease|move)\b|\brunning out of time\b|\bin a hurry\b/i;
+const CREDIT = /\b(credit score|credit rating|fico|my credit|our credit|my score|our scores?)\b/i;
+// "excellent credit" says your band even without a number.
+const CREDIT_BAND_WORDS = /\b(excellent|great|perfect|strong|solid|good|fair|poor|bad) (credit|fico)\b/i;
+const CREDIT_NUMBER = /\b[3-8]\d{2}s?\b|\b(high|mid|low)[- ]?[5-8]00s\b/i;
+const DEADLINE = /\b(need|have|must|got|want)( to)? (close|decide|sign|lock|buy|move|be done)\b[^.!?]{0,30}\bby\b|\bmy deadline\b|\bclosing (date )?(is|on)\b|\blease (is up|ends|expires)\b|\b(need|want) (it|this|the car|the loan|to close) by\b|\bbefore (my|our) (closing|lease|move)\b|\brunning out of time\b|\bin a hurry\b/i;
 
-function percents(text: string): number[] {
-  const out: number[] = [];
-  const re = /(\d{1,2}(?:\.\d{1,3})?)\s?(?:%|percent)/gi;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text))) out.push(parseFloat(m[1]));
-  return out;
-}
+// Rates however they are written: "6.25%", "6.25", "six and a quarter", "6¼%", "625 bps".
+const percents = rateMentions;
 
 function dollars(text: string): number[] {
   const out: number[] = [];
@@ -102,7 +101,8 @@ export function guardDraft(text: string, deal: Deal, latestOffer?: Offer): Guard
   }
 
   // 4. Credit score.
-  if (CREDIT.test(text) && (/\b[3-8]\d{2}\b/.test(text) || /\b(excellent|good|fair|poor|bad) credit\b/i.test(text) || /\bcredit (is|score is)\b/i.test(text))) {
+  const credit = (CREDIT.test(text) && (CREDIT_NUMBER.test(text) || /\b(excellent|great|good|fair|poor|bad)\b/i.test(text) || /\bcredit('s| is| score is)\b/i.test(text))) || CREDIT_BAND_WORDS.test(text);
+  if (credit) {
     if (!deal.reveal.creditBand) {
       violations.push({ kind: 'reveal-credit', title: 'You chose not to mention this', why: 'Your limits say a reply may not mention your credit score band.' });
     } else {
