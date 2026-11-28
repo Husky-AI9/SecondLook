@@ -1,0 +1,261 @@
+[
+  {
+    "step": "Install the APK",
+    "status": "PASS",
+    "detail": "versionCode=1 minSdk=26 targetSdk=36     versionName=1.0.0",
+    "shots": [],
+    "seconds": 32.9,
+    "t0": 1795880252.8489926,
+    "t1": 1795880285.7319744
+  },
+  {
+    "step": "Launch: home screen appears, no crash",
+    "status": "PASS",
+    "detail": "home visible",
+    "shots": [
+      "01-home.png"
+    ],
+    "seconds": 9.9,
+    "t0": 1795880285.732025,
+    "t1": 1795880295.5935695
+  },
+  {
+    "step": "Settings: where answers run (on-device / cloud)",
+    "status": "PASS",
+    "detail": "Where answers run | The phone knows you. The cloud knows the market. | On this device | This phone has no on-device Gemini Nano. | Not on this device | Cloud (Firebase AI Logic) | Used for today's market range, and as a redacted fallback. | Connected | Allow the redacted cloud fallback | When there is no on-device model, send the message with names, numbers that identify you and links removed. Your limits and Deal File are never sent.",
+    "shots": [
+      "02-settings.png",
+      "03-settings-status.png"
+    ],
+    "seconds": 17.0,
+    "t0": 1795880295.636636,
+    "t1": 1795880312.593356
+  },
+  {
+    "step": "Select text \u2192 Quotekey is registered in the text-selection menu",
+    "status": "PASS",
+    "detail": "listed: com.secondlook.app/.MainActivity",
+    "shots": [],
+    "seconds": 0.1,
+    "t0": 1795880312.6407235,
+    "t1": 1795880312.7078993
+  },
+  {
+    "step": "Selected lender text (app already open) \u2192 verdict",
+    "status": "PASS",
+    "detail": "screen-verdict; rate: 7.4%; source-chip: Cloud \u00b7 redacted; redacted-note: This phone has no on-device model, so details that identify you were removed before the cloud check. Removed: licence numbers, names.; verdict-pill: Real offer, not compared yet",
+    "shots": [
+      "04-process-text-busy.png",
+      "05-process-text-verdict.png"
+    ],
+    "seconds": 46.8,
+    "t0": 1795880312.7437446,
+    "t1": 1795880359.5310194
+  },
+  {
+    "step": "Selected scam text (app closed first, cold start) \u2192 scam warning",
+    "status": "PASS",
+    "detail": "scam screen shown; source-chip: Offline rules",
+    "shots": [
+      "06-process-text-scam.png"
+    ],
+    "seconds": 12.0,
+    "t0": 1795880359.5572712,
+    "t1": 1795880371.5524487
+  },
+  {
+    "step": "Load sample deals",
+    "status": "PASS",
+    "detail": "sample deals loaded",
+    "shots": [
+      "07-sample-deals.png"
+    ],
+    "seconds": 21.9,
+    "t0": 1795880373.0731647,
+    "t1": 1795880395.0148435
+  },
+  {
+    "step": "Lock limits with a PIN (needed for Counter)",
+    "status": "PASS",
+    "detail": "limits locked",
+    "shots": [
+      "08-limits.png",
+      "09-limits-pin-entered.png",
+      "10-limits-locked.png"
+    ],
+    "seconds": 59.3,
+    "t0": 1795880395.0394838,
+    "t1": 1795880454.2985892
+  },
+  {
+    "step": "Keyboard panel: Check a lender message",
+    "status": "PASS",
+    "detail": "6.40% | Real offer, but overpriced | Above today's 6.05\u20136.30%. The rate is over your limit. Fees are $650 over your limit. || source-chip: Cloud \u00b7 redacted",
+    "shots": [
+      "11-keyboard.png",
+      "12-kb-check.png"
+    ],
+    "seconds": 46.7,
+    "t0": 1795880454.322999,
+    "t1": 1795880501.0224135
+  },
+  {
+    "step": "Keyboard panel: Counter \u2192 three replies inside the limits",
+    "status": "PASS",
+    "detail": "3 drafts; none mention 6.25%. Friendly. Hi Dana, I have a written quote for 6.15% and would love it if you could match that. Can you also do $1,200 in fees?. Reveals: nothing private. Tap to put it in the message box. | FRIENDLY | Hi Dana, I have a w || Firm. Hi Dana, I am ready to lock today at 6.15% with $1,200 in fees.. Reveals: nothing private. Tap to put it in the message box. | FIRM | Hi Dana, I am ready to lock today at 6.15% with $1,200 in fees. | Reveals: nothi || Final offer. Hi Dana, 6.20% with $1,200 in fees is as far as I can go.. Reveals: nothing private. Tap to put it in the message box. | FINAL OFFER | Hi Dana, 6.20% with $1,200 in fees is as far as I can go. | Reveals: not",
+    "shots": [
+      "13-kb-counter.png",
+      "14-kb-draft-filled.png"
+    ],
+    "seconds": 19.8,
+    "t0": 1795880501.0458298,
+    "t1": 1795880520.845691
+  },
+  {
+    "step": "Keyboard panel: Explain",
+    "status": "PASS",
+    "detail": "A lender is offering you a mortgage with a 6.40% interest rate and $1,850 in upfront fees over 30 years. | \"6.40%\" is the yearly cost to borrow, \"30-yr fixed\" means the rate never changes for 30 years, and \"fees\" are lender costs. | \"Lock ends Friday\" means you must accept this specific interest rate before this week ends. | Ask the lender if these fees include all closing costs or just the lender",
+    "shots": [
+      "15-kb-explain.png"
+    ],
+    "seconds": 15.8,
+    "t0": 1795880520.874321,
+    "t1": 1795880536.657424
+  },
+  {
+    "step": "Keyboard panel: leak guard stops \"the highest I can go is 6.25%\"",
+    "status": "PASS",
+    "detail": "Hold on before you send | This gives away your walk-away rate. Once a lender knows the highest number you'll accept, that is usually the number you get. || safer: SAFER VERSION | I'm looking for 6.15% with $1,200 in fees. Can you get there? | Reveals: nothing private",
+    "shots": [
+      "16-kb-leak.png"
+    ],
+    "seconds": 35.1,
+    "t0": 1795880536.6829693,
+    "t1": 1795880571.7593021
+  },
+  {
+    "step": "Keyboard panel: scam message",
+    "status": "PASS",
+    "detail": "Likely a scam. Don't reply. | Asks for a fee before any money is paid out | Pressure to pay today | No lender name or licence number | Link goes to a site that isn't a known lender",
+    "shots": [
+      "17-kb-scam.png"
+    ],
+    "seconds": 20.5,
+    "t0": 1795880571.790775,
+    "t1": 1795880592.305627
+  },
+  {
+    "step": "Text-selection menu shows \"Quotekey\" (long-press in a text box)",
+    "status": "PASS",
+    "detail": "\"Quotekey\" found in the overflow menu (uiautomator); tapping it opened screen-verdict. source-chip: Cloud \u00b7 redacted; redacted-note: This phone has no on-device model, so details that identify you were removed before the cloud check.; verdict-pill: Not enough to judge yet",
+    "shots": [
+      "18-selection-menu.png",
+      "19-selection-menu-more.png",
+      "20-selection-menu-result.png"
+    ],
+    "seconds": 46.6,
+    "t0": 1795880592.3293338,
+    "t1": 1795880638.954635
+  },
+  {
+    "step": "Android keyboard: turn on, switch to Quotekey, panel appears",
+    "status": "PASS",
+    "detail": "selected com.secondlook.app/expo.modules.secondlookai.SecondLookKeyboardService; panel: \ud83d\udd12 Refi \u00b7 Summit | Copy their message, then pick one. | \ud83c\udf10 | Switch keyboard | Check | Counter | Explain | Back | Switch input method",
+    "shots": [
+      "21-ime-ready.png"
+    ],
+    "seconds": 78.5,
+    "t0": 1795880638.9760227,
+    "t1": 1795880717.4409
+  },
+  {
+    "step": "Android keyboard: Check the copied lender message",
+    "status": "PASS",
+    "detail": "\ud83d\udd12 Refi \u00b7 Summit | Offline rules | 6.40% \u00b7 Real offer, but overpriced\nAbove today's 6.05%\u20136.30%. The rate is over your limit. Fees are $650 over your limit. | \ud83c\udf10 | Switch keyboard | Check | Counter | Explain | Back | Switch input method",
+    "shots": [
+      "22-ime-check.png"
+    ],
+    "seconds": 9.9,
+    "t0": 1795880717.5024064,
+    "t1": 1795880727.4077802
+  },
+  {
+    "step": "Android keyboard: Counter, then tap a reply into the box",
+    "status": "PASS",
+    "detail": "box now has: Thanks Dana! I have a written 6.15% elsewhere. Can you match it and bring fees to $1,200?",
+    "shots": [
+      "23-ime-counter.png",
+      "24-ime-reply-typed.png"
+    ],
+    "seconds": 20.3,
+    "t0": 1795880727.4401278,
+    "t1": 1795880747.7268112
+  },
+  {
+    "step": "Android keyboard: leak guard on my own reply (\"highest I can go is 6.25%\")",
+    "status": "PASS",
+    "detail": "warning shown; box now has: I'm looking for 6.15% with $1,200 in fees. Can you get there?",
+    "shots": [
+      "25-ime-leak.png",
+      "26-ime-safer-typed.png"
+    ],
+    "seconds": 35.8,
+    "t0": 1795880747.781175,
+    "t1": 1795880783.5608485
+  },
+  {
+    "step": "Android keyboard: leak guard on the walk-away rate in words (\"six and a quarter\", no %)",
+    "status": "PASS",
+    "detail": "warning shown for \"six and a quarter\"",
+    "shots": [
+      "27-ime-leak-words.png"
+    ],
+    "seconds": 21.9,
+    "t0": 1795880783.5859895,
+    "t1": 1795880805.4659796
+  },
+  {
+    "step": "Android keyboard: Explain (Firebase AI Logic)",
+    "status": "PASS",
+    "detail": "source: Cloud \u00b7 redacted; \ud83d\udd12 Refi \u00b7 Summit | Cloud \u00b7 redacted | \u2022 A lender is offering you a mortgage with a 6.40% interest rate over 30 years and $1,850 in closing fees.\n\u2022 The 6.40% rate is the yearly cost of borrowing, while the 30-year fixed term means your monthly principal and interest payment never changes.\n\u2022 Fees are the upfront costs charged by the lender to process your loan, and the rate lock guarantees this offer",
+    "shots": [
+      "28-ime-explain.png"
+    ],
+    "seconds": 17.3,
+    "t0": 1795880805.4914732,
+    "t1": 1795880822.7660375
+  },
+  {
+    "step": "Android keyboard: a rate below today's range says \"Below\", not \"Inside\"",
+    "status": "PASS",
+    "detail": "5.5%: \ud83d\udd12 Refi \u00b7 Summit | Offline rules | 5.50% \u00b7 Competitive offer\nBelow today's 6.05%\u20136.30%. Check the fees and points. | \ud83c\udf10 | Switch keyboard | Check | Counter | Explain | Back | Switch input method",
+    "shots": [
+      "29-ime-below.png"
+    ],
+    "seconds": 24.5,
+    "t0": 1795880822.7990627,
+    "t1": 1795880847.325704
+  },
+  {
+    "step": "Android keyboard: scam message",
+    "status": "PASS",
+    "detail": "\ud83d\udd12 Refi \u00b7 Summit | Offline rules | Likely a scam. Don't reply.\n\u2022 Asks for a fee before any money is paid out\n\u2022 Pressure to pay today\n\u2022 Link goes to a site that isn't a known lender\n\u2022 Prize-style language\n\u2022 Rate is far below anything on the market\n\u2022 No lender name or licence number | \ud83c\udf10 | Switch keyboa",
+    "shots": [
+      "30-ime-scam.png"
+    ],
+    "seconds": 75.8,
+    "t0": 1795880847.3503206,
+    "t1": 1795880923.1153963
+  },
+  {
+    "step": "Android keyboard: globe key switches back to the normal keyboard",
+    "status": "PASS",
+    "detail": "now using com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME",
+    "shots": [
+      "31-ime-globe.png"
+    ],
+    "seconds": 6.4,
+    "t0": 1795880923.139451,
+    "t1": 1795880929.526142
+  }
+]
