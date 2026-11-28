@@ -109,7 +109,7 @@ cloud fallback badge, as your plan expects.
 developer preview (developers.google.com/ml-kit/genai/aicore-dev-preview). Not enrolled?
 Set `ANDROID_ONDEVICE_OPTION=STABLE` and rebuild.
 
-☐ Try the shortcut: select text in any app → **SecondLook** in the pop-up menu.
+☐ Try the shortcut: select text in any app → **Quotekey** in the pop-up menu.
 
 ☐ APK for judges: GitHub → Actions → "Android APK" → Run workflow.
 Secret: `GOOGLE_SERVICES_JSON_B64` (`base64 -w0 google-services.json`).

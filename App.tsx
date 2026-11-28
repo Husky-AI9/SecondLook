@@ -81,7 +81,7 @@ export default function App() {
     void actions.load().then(() => {
       // Warm up: ask Firebase AI Logic what this device can do, and fetch Remote Config.
       void getAi().status(true);
-      // Android "select text → SecondLook": the selected text may have launched the app.
+      // Android "select text → Quotekey": the selected text may have launched the app.
       const incoming = takeIncomingText();
       if (incoming) void runCheck(incoming);
       // Chrome extension side panel: open on the keyboard panel and ask for the page's text.

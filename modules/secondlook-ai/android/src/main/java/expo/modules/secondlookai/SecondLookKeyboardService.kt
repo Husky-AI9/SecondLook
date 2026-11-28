@@ -1,4 +1,4 @@
-// SecondLook keyboard for Android: Check · Counter · Explain, in any app.
+// Quotekey keyboard for Android: Check · Counter · Explain, in any app.
 //
 // The Android twin of the iPhone keyboard (targets/keyboard). It follows the same rules from
 // implementation.md:
@@ -453,7 +453,7 @@ class SecondLookKeyboardService : InputMethodService() {
 
   private fun showReady() {
     if (deal == null) {
-      return show("Set your limits in the SecondLook app. They are shared with this keyboard so it can keep replies inside them.", "")
+      return show("Set your limits in the Quotekey app. They are shared with this keyboard so it can keep replies inside them.", "")
     }
     show("Copy their message, then pick one.", "")
   }
@@ -505,7 +505,7 @@ class SecondLookKeyboardService : InputMethodService() {
     // Text the user typed in the box is their own reply: run the leak guard on it.
     val own = fieldText().trim()
     if (own.isNotEmpty() && own != lastInserted?.trim()) {
-      val l = deal?.limits ?: return show("Set your limits in the SecondLook app so your replies can be checked against them.", "")
+      val l = deal?.limits ?: return show("Set your limits in the Quotekey app so your replies can be checked against them.", "")
       if (KRules.leaksWalkAway(own, l)) {
         show(
           "Hold on before you send\nThis gives away your walk-away rate. Once a lender knows the highest number you'll accept, that is usually the number you get.",
@@ -545,7 +545,7 @@ class SecondLookKeyboardService : InputMethodService() {
       return show("Likely a scam. Don't reply.\nNo reply is offered for scam messages. Don't tap the link.", "Offline rules", Tone.SCAM)
     }
     val d = deal
-    if (d?.limits == null) return show("Set your limits in the SecondLook app first. Replies are written to stay inside them.", "")
+    if (d?.limits == null) return show("Set your limits in the Quotekey app first. Replies are written to stay inside them.", "")
     val list = KRules.replies(d, KRules.fees(text))
     show("Tap a reply to put it in the message box. You press send.", "Offline rules")
     list.forEachIndexed { i, r -> addReply(r, i == 0) { insert(it) } }
@@ -556,7 +556,7 @@ class SecondLookKeyboardService : InputMethodService() {
     val l = deal?.limits
     if (l != null && KRules.leaksWalkAway(text, l)) return
     replaceField(text)
-    show("Filled in by SecondLook. Read it, then press send.", badge.text?.toString() ?: "", Tone.OK)
+    show("Filled in by Quotekey. Read it, then press send.", badge.text?.toString() ?: "", Tone.OK)
   }
 
   private fun tapExplain() {

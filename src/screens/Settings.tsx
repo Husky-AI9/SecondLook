@@ -58,10 +58,10 @@ function KeyboardTestBench() {
       ) : null}
       <TextInput
         testID="kb-bench-box"
-        accessibilityLabel="Test box for the SecondLook keyboard"
+        accessibilityLabel="Test box for the Quotekey keyboard"
         value={box}
         onChangeText={setBox}
-        placeholder="Tap here, hold the globe key, pick SecondLook"
+        placeholder="Tap here, hold the globe key, pick Quotekey"
         placeholderTextColor={t.muted}
         multiline
         style={[font(500), { minHeight: 84, paddingHorizontal: 14, paddingVertical: 12, borderRadius: 16, backgroundColor: t.surface, color: t.text, fontSize: 15, textAlignVertical: 'top' }]}
@@ -217,7 +217,7 @@ export function Settings() {
       </Card>
 
       <T size={12} color={t.muted} lh={1.5}>
-        SecondLook compares offers and helps you word a reply. It is not a lender or a financial adviser, and a range from the web is a guide, not a quote. You always press send yourself.
+        Quotekey compares offers and helps you word a reply. It is not a lender or a financial adviser, and a range from the web is a guide, not a quote. You always press send yourself.
       </T>
       <T size={12} color={t.muted}>
         Version {APP_VERSION} · Built with Firebase AI Logic hybrid inference

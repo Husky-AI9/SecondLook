@@ -1,6 +1,6 @@
 name: Android emulator test
 # Builds the APK from this commit, installs it on an Android emulator and walks through the app:
-# Settings, select text → SecondLook, the keyboard panel (check, counter, explain, leak guard,
+# Settings, select text → Quotekey, the keyboard panel (check, counter, explain, leak guard,
 # scam) and the text-selection menu. Screenshots and a redacted log are uploaded.
 on:
   workflow_dispatch:

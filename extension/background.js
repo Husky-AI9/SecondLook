@@ -1,12 +1,12 @@
-// SecondLook for Chrome: the right-click menu, the side panel, and typing a reply into the page.
+// Quotekey for Chrome: the right-click menu, the side panel, and typing a reply into the page.
 //
-// The side panel hosts the SecondLook web app (panel.html → iframe). This worker only moves
+// The side panel hosts the Quotekey web app (panel.html → iframe). This worker only moves
 // text: what the user selected goes to the panel, and a reply the user taps comes back and is
 // typed into the page's reply box. Nothing is ever sent on the user's behalf.
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({ id: 'theirs', title: 'SecondLook: check their message', contexts: ['selection'] });
-  chrome.contextMenus.create({ id: 'own', title: 'SecondLook: check my reply before sending', contexts: ['selection', 'editable'] });
+  chrome.contextMenus.create({ id: 'theirs', title: 'Quotekey: check their message', contexts: ['selection'] });
+  chrome.contextMenus.create({ id: 'own', title: 'Quotekey: check my reply before sending', contexts: ['selection', 'editable'] });
   chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
 });
 

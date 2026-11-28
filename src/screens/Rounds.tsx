@@ -187,7 +187,7 @@ export function Rounds({ dealId }: { dealId: string }) {
       {confirmAccept && rate !== undefined ? (
         <Sheet testID="accept-sheet" title={`Accept ${pct(rate, isAuto)}?`} onClose={() => setConfirmAccept(false)}>
           <T size={15} lh={1.45} color={t.muted}>
-            This marks the deal as accepted in SecondLook. It does not send anything. Get the final terms in writing before you sign.
+            This marks the deal as accepted in Quotekey. It does not send anything. Get the final terms in writing before you sign.
           </T>
           <Row gap={10}>
             <Button flex={1} variant="secondary" label="Not yet" onPress={() => setConfirmAccept(false)} />

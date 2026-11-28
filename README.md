@@ -1,6 +1,8 @@
-# SecondLook
+# Quotekey
 
-**A second look at a loan quote before you reply to it.**
+**The loan negotiator in your keyboard: check the quote, counter it, and never give away your number.**
+
+<sub>Formerly SecondLook. The repository, app ID and Firebase project keep that name.</sub>
 
 Built for [#BuildHybridAI 2026](https://firebasehybridaihackathon.devpost.com/) · Firebase AI Logic hybrid inference · iPhone, Android and Chrome from one codebase
 
@@ -16,17 +18,17 @@ Built for [#BuildHybridAI 2026](https://firebasehybridaihackathon.devpost.com/) 
 
 <a href="docs/architecture/secondlook-architecture.svg"><img src="docs/architecture/secondlook-architecture.svg" width="100%" alt="Animated architecture: a lender's text is checked by rules and loan math on the phone, read by an on-device model through Firebase AI Logic, and turned into three replies by code that fills in the numbers and blocks leaks. Only what the phone allows out goes to the cloud model and Google Search for today's range."></a>
 
-<sub>Animated diagram (opens full size): one lender message moving through SecondLook. Green is your phone, blue is the cloud. A static copy is in [docs/architecture](docs/architecture/secondlook-architecture.png).</sub>
+<sub>Animated diagram (opens full size): one lender message moving through Quotekey. Green is your phone, blue is the cloud. A static copy is in [docs/architecture](docs/architecture/secondlook-architecture.png).</sub>
 
 **The cloud knows the market. The phone knows you.**
 
 A lender or car dealer texts you a rate. Is it real? Is it a fair price? What do you say back
-without giving away the highest rate you would accept? SecondLook reads the message on your
+without giving away the highest rate you would accept? Quotekey reads the message on your
 device, checks it against limits you locked with a PIN, and writes three replies that stay
 inside those limits. It works where you type: a keyboard on iPhone and Android, and a side
 panel in Chrome. You press send. The lender's message and your limits never leave the device.
 
-SecondLook compares numbers and helps you word a reply. It is not a lender or a financial
+Quotekey compares numbers and helps you word a reply. It is not a lender or a financial
 adviser.
 
 ## For judges
@@ -35,13 +37,13 @@ adviser.
 |---|---|---|
 | **Technological implementation** | All three Firebase AI Logic inference modes, chosen per prompt by one privacy router. Native adapters for Apple Foundation Models (iOS), Gemini Nano through AICore (Android) and Chrome's built-in Gemini Nano (web). The same panel ships as an iPhone keyboard, an Android keyboard and a Chrome extension. App Check on every platform, Remote Config, Anonymous Auth, Hosting. Four automated test suites in CI. | [Where AI Logic is called](#where-firebase-ai-logic-is-called) · [`src/ai/router.ts`](src/ai/router.ts) · [Tests](#tests) |
 | **Design** | One complete loop: check → verdict → counter → leak guard → rounds, with a savings counter. Every answer carries a badge saying where it ran. Light and dark. The panel appears where the negotiation actually happens, not in a separate chatbot. | [Screenshots](#screenshots) · [Where you type](#where-you-type) |
-| **Potential impact** | Quotes for a refinance or a car loan arrive by text, and people answer them alone, often against a deadline. The two costly mistakes are replying with your walk-away number and replying to a scam that looks like an offer. SecondLook catches both before you send. | [The problem](#the-problem-and-who-its-for) |
+| **Potential impact** | Quotes for a refinance or a car loan arrive by text, and people answer them alone, often against a deadline. The two costly mistakes are replying with your walk-away number and replying to a scam that looks like an offer. Quotekey catches both before you send. | [The problem](#the-problem-and-who-its-for) |
 | **Quality of the idea** | Hybrid inference is the privacy promise, not a cost saving: private text only ever reaches an on-device model, models write around placeholders so the walk-away rate is never in any prompt, and the cloud gets either redacted text or five coarse facts you can see. | [Why hybrid inference is the product](#why-hybrid-inference-is-the-product) · [Safety and privacy](#safety-and-privacy) |
 | **Submission requirements** | Platforms, App Check, runtime use of Firebase AI Logic, licence, hosted build, video, no secrets in the repo. | [Submission checklist](#submission-checklist) |
 
 ## Submission checklist
 
-| Requirement | How SecondLook meets it |
+| Requirement | How Quotekey meets it |
 |---|---|
 | Gen AI app with Firebase AI Logic and supported Firebase products | Firebase AI Logic hybrid inference, plus App Check, Remote Config, Anonymous Auth and Hosting ([table](#firebase-products-used)). |
 | Web (Chrome): Gemini Nano via Firebase AI Logic | [`src/ai/platform.web.ts`](src/ai/platform.web.ts) uses `getGenerativeModel(ai, { mode: InferenceMode… })` with Chrome's built-in Gemini Nano. Hosted at **https://secondlook-7b7d5.web.app**, and packaged as a [Chrome extension](extension/README.md). |
@@ -71,7 +73,7 @@ and negotiate them without a broker.
   and that is usually the rate you end up paying.
 - "Pre-approved, pay the $250 processing fee to release your funds" texts look like real offers.
 
-**What SecondLook does instead.**
+**What Quotekey does instead.**
 - A verdict in one tap: scam, needs more detail, overpriced or competitive, with the money first.
 - Three replies (friendly, firm, final offer) that stay inside the limits you locked, each
   labelled with what it reveals.
@@ -109,10 +111,10 @@ Every result carries a badge that says where it ran: **On-device**, **Cloud**,
 6. Settings → **Where answers run** shows whether Chrome's built-in Gemini Nano is ready on
    your computer.
 
-**SecondLook for Chrome (the web keyboard).** Download this repository, open
+**Quotekey for Chrome (the web keyboard).** Download this repository, open
 `chrome://extensions`, turn on Developer mode, click **Load unpacked** and pick the
 [`extension`](extension/README.md) folder. On any page, select a lender's message →
-right-click → **SecondLook: check their message**. Tap a reply in the side panel and it is
+right-click → **Quotekey: check their message**. Tap a reply in the side panel and it is
 typed into the page's reply box. The panel keeps its own data, so load the sample deals and
 lock the limits inside the panel first (steps 2 and 3 above).
 
@@ -120,7 +122,7 @@ lock the limits inside the panel first (steps 2 and 3 above).
 
 | Platform | Build | Notes |
 |---|---|---|
-| Android | [Android APK](https://github.com/Husky-AI9/SecondLook/actions/workflows/android-apk.yml) → newest run → `secondlook-android` | Keyboard tab → **Turn on the keyboard**, then switch to SecondLook in any app. On-device needs a phone with Gemini Nano; otherwise the redacted cloud fallback runs. |
+| Android | [Android APK](https://github.com/Husky-AI9/SecondLook/actions/workflows/android-apk.yml) → newest run → `secondlook-android` | Keyboard tab → **Turn on the keyboard**, then switch to Quotekey in any app. On-device needs a phone with Gemini Nano; otherwise the redacted cloud fallback runs. |
 | iPhone | [iOS unsigned .ipa](https://github.com/Husky-AI9/SecondLook/actions/workflows/ios-unsigned.yml) → newest run → `secondlook-ios-unsigned` | Install with Sideloadly ([SETUP.md §5](SETUP.md#5-iphone)). On-device needs an iPhone 15 Pro or newer with Apple Intelligence on. |
 
 Both builds include an App Check debug token (accepted by the hackathon rules), added at build
@@ -132,7 +134,7 @@ time from a GitHub secret.
 
 1. The problem: a rate quote arrives by text. Is it good, and what do you say back?
 2. Set limits, lock them with a PIN, fetch today's range.
-3. In a chat: copy the lender's text, switch to the SecondLook keyboard, tap Counter. Verdict and three replies, on-device.
+3. In a chat: copy the lender's text, switch to the Quotekey keyboard, tap Counter. Verdict and three replies, on-device.
 4. The leak guard blocks a reply that would reveal the walk-away rate.
 5. Tap a reply, send. Second round; the savings counter moves.
 6. A scam "pre-approved, pay $250" text: red banner, no reply offered.
@@ -150,7 +152,7 @@ time from a GitHub secret.
 
 <img src="docs/screenshots/web-live-range.jpg" width="300" alt="Verdict for a 6.40% quote: today's range 6.88–7.38% from a live Google Search, Cloud · 6 sources, with Google's search suggestions and the source links listed">
 
-**SecondLook for Chrome** (from the [extension test](#tests), Chromium):
+**Quotekey for Chrome** (from the [extension test](#tests), Chromium):
 
 | ![Verdict in the side panel](docs/screenshots/chrome-panel-verdict.jpg) | ![Three replies](docs/screenshots/chrome-panel-replies.jpg) | ![Reply typed into the page](docs/screenshots/chrome-reply-typed.jpg) | ![Leak guard](docs/screenshots/chrome-panel-leak-guard.jpg) |
 |:-:|:-:|:-:|:-:|
@@ -186,9 +188,9 @@ The same Check · Counter · Explain panel on every platform:
 
 | Platform | How you reach it | Lives in |
 |---|---|---|
-| iPhone | **SecondLook keyboard**: switch with the globe key in any app. Also "Check copied text"; Send reopens Messages with the reply filled in. | [`targets/keyboard`](targets/keyboard) |
-| Android | **SecondLook keyboard**, an Android keyboard: turn it on from the Keyboard tab. Also highlight text in any app → "SecondLook" next to Copy and Share. | [`SecondLookKeyboardService.kt`](modules/secondlook-ai/android/src/main/java/expo/modules/secondlookai/SecondLookKeyboardService.kt) |
-| Web / Chrome | **SecondLook for Chrome**: select a lender's message on any site → right-click → SecondLook. The side panel shows the verdict and types the reply you pick into the page. A website cannot install a keyboard, so this is the web's equivalent. | [`extension/`](extension/README.md) |
+| iPhone | **Quotekey keyboard**: switch with the globe key in any app. Also "Check copied text"; Send reopens Messages with the reply filled in. | [`targets/keyboard`](targets/keyboard) |
+| Android | **Quotekey keyboard**, an Android keyboard: turn it on from the Keyboard tab. Also highlight text in any app → "Quotekey" next to Copy and Share. | [`SecondLookKeyboardService.kt`](modules/secondlook-ai/android/src/main/java/expo/modules/secondlookai/SecondLookKeyboardService.kt) |
+| Web / Chrome | **Quotekey for Chrome**: select a lender's message on any site → right-click → Quotekey. The side panel shows the verdict and types the reply you pick into the page. A website cannot install a keyboard, so this is the web's equivalent. | [`extension/`](extension/README.md) |
 
 In every case you press send yourself, and the walk-away rate is never typed or sent.
 
@@ -261,7 +263,7 @@ The animated diagram at the top shows one message end to end:
 |---|---|---|
 | Engine unit tests (48) | Loan math to the cent, extraction, scam rules, redaction, leak guard, drafts, pipeline | `npm test` |
 | Browser scenarios (19) | Full negotiation, cloud fallback, offline, scam, PIN, erase, in headless Chrome | `npm run preview:test` · [Tests workflow](.github/workflows/test.yml) |
-| Android emulator (21 steps) | The APK on Android 14: select text → SecondLook, the keyboard panel, and the Android keyboard end to end, including a live Firebase AI Logic call from inside the keyboard | [`android-emulator.yml`](.github/workflows/android-emulator.yml) |
+| Android emulator (21 steps) | The APK on Android 14: select text → Quotekey, the keyboard panel, and the Android keyboard end to end, including a live Firebase AI Logic call from inside the keyboard | [`android-emulator.yml`](.github/workflows/android-emulator.yml) |
 | Chrome extension (8 checks) | Right-click → verdict → reply typed into the page; leak guard and safer version | [`extension-test.yml`](.github/workflows/extension-test.yml) |
 | Native builds | iOS app + keyboard extension and Android APK compile on every run | [`ios-unsigned.yml`](.github/workflows/ios-unsigned.yml) · [`android-apk.yml`](.github/workflows/android-apk.yml) |
 
@@ -309,7 +311,7 @@ Keyboard tab is a practice chat with a made-up lender, dealer and scam message.
 Everything in this repository was created during the submission period (Nov 11–30, 2026):
 
 - The TypeScript engine (scam rules, redactor, loan math, leak guard, drafts) and its tests.
-- The Expo app for iPhone, Android and the web, following the "SecondLook" app concept.
+- The Expo app for iPhone, Android and the web, following the original app concept (made under the working name SecondLook).
 - The privacy router and the three Firebase AI Logic adapters (Swift, Kotlin, web).
 - The iPhone keyboard extension, the Android keyboard and the Chrome extension.
 - Firebase setup: AI Logic, App Check on every platform, Remote Config, Anonymous Auth, Hosting.

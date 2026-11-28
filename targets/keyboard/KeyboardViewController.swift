@@ -1,4 +1,4 @@
-// SecondLook keyboard panel (Plan A-lite): Check · Counter · Explain, above the keys.
+// Quotekey keyboard panel (Plan A-lite): Check · Counter · Explain, above the keys.
 //
 // STATUS: starting point, NOT compiled. It follows the design rules in implementation.md:
 //   - a panel, not a typing keyboard; the globe key returns to the normal keyboard
@@ -280,14 +280,14 @@ final class KeyboardViewController: UIInputViewController {
       if let clip = UIPasteboard.general.string, clip.hasPrefix("SL1."), PackStore.importCode(clip) {
         pack = PackStore.load()
       } else {
-        return show("Set your limits in the SecondLook app. They are shared with this keyboard so it can keep replies inside them.", source: "")
+        return show("Set your limits in the Quotekey app. They are shared with this keyboard so it can keep replies inside them.", source: "")
       }
     }
     show("Copy their message, then pick one.", source: "")
   }
 
   func copied() -> String? {
-    guard hasFullAccess else { show("Turn on Allow Full Access for SecondLook so it can read the message you copied. Nothing is sent anywhere.", source: ""); return nil }
+    guard hasFullAccess else { show("Turn on Allow Full Access for Quotekey so it can read the message you copied. Nothing is sent anywhere.", source: ""); return nil }
     guard let t = UIPasteboard.general.string, !t.isEmpty, !t.hasPrefix("SL1.") else { show("Copy their message first.", source: ""); return nil }
     return t
   }
@@ -316,7 +316,7 @@ final class KeyboardViewController: UIInputViewController {
   @objc func tapCounter() {
     guard let text = copied() else { return }
     if !Rules.scamReasons(text, marketLow: deal?.range?.low).isEmpty { return show("Likely a scam. No reply is offered for scam messages. Don't tap the link.", source: "Offline rules") }
-    guard let d = deal, d.limits != nil else { return show("Set your limits in the SecondLook app first.", source: "") }
+    guard let d = deal, d.limits != nil else { return show("Set your limits in the Quotekey app first.", source: "") }
     let replies = Rules.replies(deal: d, theirFees: Rules.fees(text))
     show("Tap a reply to put it in the message box. You press send.", source: "Offline rules")
     for (i, r) in replies.enumerated() {
@@ -341,7 +341,7 @@ final class KeyboardViewController: UIInputViewController {
     // Final gate: nothing that names the walk-away rate is ever typed for the user.
     if let l = deal?.limits, Rules.leaksWalkAway(text, limits: l) { return }
     textDocumentProxy.insertText(text)
-    show("Filled in by SecondLook. Read it, then press send.", source: badge.text ?? "")
+    show("Filled in by Quotekey. Read it, then press send.", source: badge.text ?? "")
   }
 
   @objc func tapExplain() {

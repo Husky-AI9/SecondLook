@@ -10,7 +10,7 @@ export interface AiStatus {
 }
 
 /**
- * The three ways SecondLook uses Firebase AI Logic hybrid inference:
+ * The three ways Quotekey uses Firebase AI Logic hybrid inference:
  *  - only-on-device: private prompts. The SDK itself refuses to use the cloud.
  *  - prefer-on-device: redacted or generic prompts. The SDK picks, and reports which it used.
  *  - only-cloud: the market range, which needs Grounding with Google Search.

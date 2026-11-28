@@ -5,7 +5,7 @@
 module.exports = (config) => ({
   type: 'keyboard',
   name: 'SecondLookKeyboard',
-  displayName: 'SecondLook',
+  displayName: 'Quotekey',
   deploymentTarget: '17.0',
   frameworks: ['UIKit', 'Security'],
   entitlements: {
